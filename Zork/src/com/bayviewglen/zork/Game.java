@@ -5,12 +5,15 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Scanner;
 
-/**
- * Class Game - the main class of the "Zork" game.
- *
- * Author:  Michael Kolling
- * Version: 1.1
- * Date:    March 2000
+/** "Game" Class - the main class of the "Zork" game.
+ * 
+ * Original Author:  Michael Kolling
+ * Original Version: 1.0
+ * Original Date:    July 1999
+ * 
+ * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ * Current Version: 0.1-alpha
+ * Current Date: March 2018
  * 
  *  This class is the main class of the "Zork" application. Zork is a very
  *  simple, text based adventure game.  Users can walk around some scenery.

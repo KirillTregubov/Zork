@@ -1,10 +1,13 @@
 package com.bayviewglen.zork;
-/*
- * Class Room - a room in an adventure game.
+/** "Room" Class - a class manipulating rooms in the game.
  *
- * Author:  Michael Kolling
- * Version: 1.1
- * Date:    August 2000
+ * Original Author:  Michael Kolling
+ * Original Version: 1.0
+ * Original Date:    July 1999
+ * 
+ * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ * Current Version: 0.1-alpha
+ * Current Date: March 2018
  * 
  * This class is part of Zork. Zork is a simple, text based adventure game.
  *

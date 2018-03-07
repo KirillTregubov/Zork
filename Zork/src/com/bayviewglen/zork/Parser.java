@@ -1,8 +1,13 @@
 package com.bayviewglen.zork;
-/*
- * Author:  Michael Kolling
- * Version: 1.0
- * Date:    July 1999
+/** "Parser" Class - part of the "Zork" game.
+ * 
+ * Original Author:  Michael Kolling
+ * Original Version: 1.0
+ * Original Date:    July 1999
+ * 
+ * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ * Current Version: 0.1-alpha
+ * Current Date: March 2018
  * 
  * This class is part of Zork. Zork is a simple, text based adventure game.
  *

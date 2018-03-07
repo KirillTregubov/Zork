@@ -1,8 +1,13 @@
 package com.bayviewglen.zork;
-/*
- * Author:  Michael Kolling.
- * Version: 1.0
- * Date:    July 1999
+/** "Command Words" Class - part of the "Zork" game.
+ * 
+ * Original Author:  Michael Kolling
+ * Original Version: 1.0
+ * Original Date:    July 1999
+ * 
+ * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ * Current Version: 0.1-alpha
+ * Current Date: March 2018
  * 
  * This class holds an enumeration of all command words known to the game.
  * It is used to recognise commands as they are typed in.
@@ -18,7 +23,7 @@ class CommandWords
     };
 
     /**
-     * Constructor - initialise the command words.
+     * Constructor - initialize the command words.
      */
     public CommandWords()
     {
