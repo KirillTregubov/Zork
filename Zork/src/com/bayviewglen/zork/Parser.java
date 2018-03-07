@@ -7,7 +7,7 @@ package com.bayviewglen.zork;
  * 
  * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
  * Current Version: 0.1-alpha
- * Current Date: 	March 2018
+ * Current Date:	March 2018
  * 
  * This class is part of Zork. Zork is a simple, text based adventure game.
  *

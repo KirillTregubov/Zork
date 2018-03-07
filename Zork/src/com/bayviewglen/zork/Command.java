@@ -7,7 +7,7 @@ package com.bayviewglen.zork;
  * 
  * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
  * Current Version: 0.1-alpha
- * Current Date: 	March 2018
+ * Current Date:	March 2018
  *
  * This class holds information about a command that was issued by the user.
  * A command currently consists of two strings: a command word and a second
