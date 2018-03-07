@@ -7,7 +7,7 @@ package com.bayviewglen.zork;
  * 
  * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
  * Current Version: 0.1-alpha
- * Current Date:	March 2018
+ * Current Date:    March 2018
  * 
  * This class holds an enumeration of all command words known to the game.
  * It is used to recognise commands as they are typed in.

@@ -13,7 +13,7 @@ import java.util.Scanner;
  * 
  * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
  * Current Version: 0.1-alpha
- * Current Date:	March 2018
+ * Current Date:    March 2018
  * 
  *  This class is the main class of the "Zork" application. Zork is a very
  *  simple, text based adventure game.  Users can walk around some scenery.
