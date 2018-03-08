@@ -15,29 +15,25 @@ package com.bayviewglen.zork;
  * This class is part of the "Zork" game.
  */
 
-class CommandWords
-{
+class CommandWords {
     // a constant array that holds all valid command words
     private static final String validCommands[] = {
-        "go", "quit", "help", "eat"
+        "go", "quit", "help", "eat", "show", "give", "save", "load"
     };
 
     /**
      * Constructor - initialize the command words.
      */
-    public CommandWords()
-    {
-        // nothing to do at the moment...
+    public CommandWords() {
+        // empty for now
     }
 
     /**
      * Check whether a given String is a valid command word. 
      * Return true if it is, false if it isn't.
      **/
-    public boolean isCommand(String aString)
-    {
-        for(int i = 0; i < validCommands.length; i++)
-        {
+    public boolean isCommand(String aString) {
+        for(int i = 0; i < validCommands.length; i++) {
             if(validCommands[i].equals(aString))
                 return true;
         }
@@ -48,10 +44,8 @@ class CommandWords
     /*
      * Print all valid commands to System.out.
      */
-    public void showAll() 
-    {
-        for(int i = 0; i < validCommands.length; i++)
-        {
+    public void showAll() {
+        for(int i = 0; i < validCommands.length; i++) {
             System.out.print(validCommands[i] + "  ");
         }
         System.out.println();
