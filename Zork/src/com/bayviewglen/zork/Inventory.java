@@ -37,7 +37,7 @@ class Inventory {
             if (inventory.get(i) != null)
             	System.out.print(inventory.get(i) + "  ");
         }
-        System.out.println();
+    	System.out.println();
     }
 
     public void addToInventory(String item) {

@@ -24,6 +24,7 @@ import java.util.Iterator;
 class Room {
 	private String roomName;
     private String description;
+    private String[] items;
     private HashMap<String, Room> exits;        // stores exits of this room.
 
     /**
@@ -87,7 +88,7 @@ class Room {
      * Returns the name, description, and exits related to the current room.
      */
     public String longDescription() {
-        return "Currently in: " + roomName +"\n" + description + "\n" + exitString();
+        return "Currently in: " + roomName +"\n" + description + "\n" + exitString() + "\n" + itemString();
     }
     
     
@@ -95,7 +96,7 @@ class Room {
      * Returns the name, description, and exits related to the room being travelled to.
      */
     public String travelDescription() {
-        return "Going to: " + roomName +"\n" + description + "\n" + exitString();
+        return "Going to: " + roomName +"\n" + description + "\n" + exitString() + "\n" + itemString();
     }
 
     /**
@@ -107,6 +108,22 @@ class Room {
 		Set keys = exits.keySet();
         for(Iterator iter = keys.iterator(); iter.hasNext(); )
             returnString += " " + iter.next();
+        return returnString;
+    }
+    
+    /**
+     * Return a string describing the room's exits, for example
+     * "Exits: north west ".
+     */
+    private String itemString() {
+        String returnString = "Items in this room:";
+        for (int i = 0; i < items.length; i++) {
+        	returnString += " " + items[i];
+        	if (i < items.length-1)
+        		returnString += ",";
+        	else
+        		returnString += ".";
+        }
         return returnString;
     }
 
@@ -132,5 +149,31 @@ class Room {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public String getItem(int index) {	// Gets item at specific index
+    	if (index < items.length)
+    		return items[index];
+    	else
+    		return null;
+    }
+	
+	public int getItemAmount() { // Gets amount of items
+    	return items.length;
+    }
+	
+	public void getItems() {
+		for(int i = 0; i < items.length; i++) {
+            System.out.print(items[i] + "  ");
+        }
+        System.out.println();
+	}
+
+	public void setItems(String[] roomItems) {
+		items = new String[roomItems.length];
+		for (int i = 0; i < roomItems.length; i++) {
+    		if (Items.isItem(roomItems[i]))
+    			items[i] = roomItems[i];
+    	}
 	}
 }

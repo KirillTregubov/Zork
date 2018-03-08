@@ -12,5 +12,7 @@ public class Zork {
 		Game game = new Game();
 		game.play();
 	}
+	
+	
 
 }

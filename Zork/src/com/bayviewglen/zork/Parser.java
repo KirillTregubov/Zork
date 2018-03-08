@@ -23,7 +23,6 @@ package com.bayviewglen.zork;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.StringTokenizer;
 
 class Parser {
 
@@ -34,89 +33,68 @@ class Parser {
     }
 
     public Command getCommand() {
-        String inputLine = "";   // will hold the full input line
-        String word1;
-        String word2;
-        String word3;
+        String inputLine = ""; // will hold the full input line
+        String word1 = "";
+        String word2 = "";
+        String word3 = "";
 
-        System.out.print("> ");     // print prompt
+        System.out.print("> "); // print prompt
 
-        BufferedReader reader = 
-            new BufferedReader(new InputStreamReader(System.in));
+        // Take input
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
-            inputLine = reader.readLine();
+        	inputLine = reader.readLine();
+        } catch(java.io.IOException exc) {
+        	System.out.println ("There was an error reading input: " + exc.getMessage());
         }
-        catch(java.io.IOException exc) {
-            System.out.println ("There was an error during reading: "
-                                + exc.getMessage());
-        }
-
-        StringTokenizer tokenizer = new StringTokenizer(inputLine);
-
-        if(tokenizer.hasMoreTokens())
-            word1 = tokenizer.nextToken();      // get first word
+        // Assign input to 3 different variables
+        String[] input;
+        input = inputLine.split(" ", 3);
+        word1 = input[0];
+        if (input.length > 1)
+        	word2 = input[1];
         else
-            word1 = null;
-        if(tokenizer.hasMoreTokens())
-            word2 = tokenizer.nextToken();      // get second word
+        	word2 = null;
+        if (input.length > 2)
+        	word3 = input[2];
         else
-            word2 = null;
-        if(tokenizer.hasMoreTokens())
-            word3 = tokenizer.nextToken();      // get third word
-        else
-            word3 = null;
-
-        // note: we just ignore the rest of the input line.
-
-        // Now check whether this word is known. If so, create a command
-        // with it. If not, create a "nil" command (for unknown command).
-
+        	word3 = null;
+        // Check if the word is a known command. If not, create a "null" command.
         if(commands.isCommand(word1))
             return new Command(word1, word2, word3);
         else
-            return new Command(null, word2, word3);
+            return new Command(null, null, null);
     }
     
     public Command getSecondaryCommand() {
-        String inputLine = "";   // will hold the full input line
+        String inputLine = ""; // will hold the full input line
         String word1;
         String word2;
         String word3;
 
-        System.out.print("> ");     // print prompt
+        System.out.print("> ");  // print prompt
 
-        BufferedReader reader = 
-            new BufferedReader(new InputStreamReader(System.in));
+        // Take input
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
-            inputLine = reader.readLine();
+        	inputLine = reader.readLine();
+        } catch(java.io.IOException exc) {
+        	System.out.println ("There was an error reading input: " + exc.getMessage());
         }
-        catch(java.io.IOException exc) {
-            System.out.println ("There was an error during reading: "
-                                + exc.getMessage());
-        }
-
-        StringTokenizer tokenizer = new StringTokenizer(inputLine);
-
-        if(tokenizer.hasMoreTokens())
-            word1 = tokenizer.nextToken();      // get first word
+        // Assign input to 3 different variables
+        String[] input;
+        input = inputLine.split(" ", 3);
+        word1 = input[0];
+        if (input.length > 1)
+        	word2 = input[1];
         else
-            word1 = null;
-        if(tokenizer.hasMoreTokens())
-            word2 = tokenizer.nextToken();      // get second word
+        	word2 = null;
+        if (input.length > 2)
+        	word3 = input[2];
         else
-            word2 = null;
-        if(tokenizer.hasMoreTokens())
-            word3 = tokenizer.nextToken();      // get second word
-        else
-            word3 = null;
-
-        // note: we just ignore the rest of the input line.
-
-        // Now check whether this word is known. If so, create a command
-        // with it. If not, create a "nil" command (for unknown command).
-
+        	word3 = null;
+        // Return command
         return new Command(word1, word2, word3);
-        
     }
 
     /**

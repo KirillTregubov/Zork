@@ -16,6 +16,15 @@ class Items {
         // empty for now
     }
     
+    public static boolean isItem(String aString) {
+        for(int i = 0; i < items.length; i++) {
+            if(items[i].equals(aString))
+                return true;
+        }
+        // if we get here, the string was not found in the items array
+        return false;
+    }
+    
     public static void listItems() {			// List all items in the game
         for(int i = 0; i < items.length; i++) {
             System.out.print(items[i] + "  ");
