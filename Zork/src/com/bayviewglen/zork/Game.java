@@ -177,6 +177,7 @@ class Game {
 			continueCommand(commandWord);
 		} else if (commandWord.equals("eat")) {
 			System.out.println("Do you really think you should be eating at a time like this?");
+			continueCommand(commandWord);
 		} else if (commandWord.equals("show")) {
 			if(command.hasSecondWord()) {
 				if (secondWord.equals("items"))
@@ -237,6 +238,8 @@ class Game {
 		if (originalCommand.equals("give")) {
 			inventory.addToInventory(Items.getItem(Integer.parseInt(commandWord)));
 			System.out.println("Item given!");
+		} else if (originalCommand.equals("eat")) {
+			System.out.println("Whatever you say... You still can't eat right now.");
 		}
 	}
 
