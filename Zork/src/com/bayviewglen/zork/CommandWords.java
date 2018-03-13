@@ -16,38 +16,54 @@ package com.bayviewglen.zork;
  */
 
 class CommandWords {
-    // a constant array that holds all valid command words
-    private static final String validCommands[] = {
-        "go", "quit", "help", "eat", "show", "give", "save", "load", "pick"
-    };
+	// a constant array that holds all valid command words
+	private static final String validCommands[][] = {
+			{"help", "", "Prints the help message. Usage: \"help\""},
+			{"list", "", "Lists things. Usage: \"list commands\""}, // add an example if list gains more uses
+			{"go", "2", "Allows you to go places. Usage: \"go west\", \"go down\""}, {"walk", "2", "Allows you to walk places. Usage: \"walk west\", \"walkT down\""},
+			{"give", "", "\"Cheater\" command. Remove before final release!"},
+			{"eat", "2", "Allows you to eat stuff. Usage: \"eat apple\", \"eat sword\""}, {"consume", "2", "Allows you to consume stuff. Usage: \"consume apple\", \"consume sword\""},
+			{"look", "3", "Allows you to look at things. Usage: \"look at inventory\", \"look at red apple\""}, {"inspect", "2", "Allows you to inspect things. Usage: \"inspect inventory\", \"inspect red apple\""},
+			{"take", "2", "Allows you to take things. Usage: \"take red apple\", \"take sword\""}, {"pick", "3", "Allows you to pick up things. Usage: \"pick up red apple\", \"pick up basic sword\""},
+			{"save", "", "Saves the current state of your playthrough. Usage: \"save\""},
+			{"quit", "2", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}, {"stop", "2", "Stops playing the game. Usage: \"stop game\", \"stop playing\""}
+	};
 
-    /**
-     * Constructor - initialize the command words.
-     */
-    public CommandWords() {
-        // empty for now
-    }
+	/**
+	 * Constructor - initialize the command words.
+	 */
+	public CommandWords() {
+		// empty for now
+	}
 
-    /**
-     * Check whether a given String is a valid command word. 
-     * Return true if it is, false if it isn't.
-     **/
-    public boolean isCommand(String aString) {
-        for(int i = 0; i < validCommands.length; i++) {
-            if(validCommands[i].equals(aString))
-                return true;
-        }
-        // if we get here, the string was not found in the commands
-        return false;
-    }
+	/**
+	 * Check whether a given String is a valid command word. 
+	 * Return true if it is, false if it isn't.
+	 **/
+	public boolean isCommand(String command) {
+		for (int i = 0; i < validCommands.length; i++)
+			if (validCommands[i][0].equalsIgnoreCase(command)) return true;
+		// if we get here, the string was not found in the commands
+		return false;
+	}
+	
+	/*
+	 * Returns true if command needs three variables.
+	 */
+	public boolean needsThreeVariables(String command) {
+		for (int i = 0; i < validCommands.length; i++)
+			if (validCommands[i][0].equalsIgnoreCase(command) && validCommands[i][1].equals("3")) return true;
+		return false;
+	}
 
-    /*
-     * Print all valid commands to System.out.
-     */
-    public void showAll() {
-        for(int i = 0; i < validCommands.length; i++) {
-            System.out.print(validCommands[i] + "  ");
-        }
-        System.out.println();
-    }
+
+	/*
+	 * Print all valid commands to System.out.
+	 */
+	public String showAll() { // assumes every command has two keywords -> alternative should be found
+		String returnString = "";
+		for(int i = 0; i < validCommands.length; i++)
+			if (validCommands[i][2] != "IGNORE") returnString = returnString + validCommands[i][0] + " - " + validCommands[i][2] + "\n";
+		return returnString;
+	}
 }

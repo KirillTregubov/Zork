@@ -23,157 +23,187 @@ import java.util.Iterator;
 
 class Room {
 	private String roomName;
-    private String description;
-    private String[] items;
-    private HashMap<String, Room> exits;        // stores exits of this room.
+	private String description;
+	private int[] items;
+	private HashMap<String, Room> exits;        // stores exits of this room.
 
-    /**
-     * Create a room described "description". Initially, it has no exits.
-     * "description" is something like "a kitchen" or "an open court yard".
-     */
-    public Room(String description) {
-        this.description = description;
-        exits = new HashMap<String, Room>();
-    }
+	/**
+	 * Create a room described "description". Initially, it has no exits.
+	 * "description" is something like "a kitchen" or "an open court yard".
+	 */
+	/*public Room(String description) {
+		this.description = description;
+		exits = new HashMap<String, Room>();
+	}*/
 
-    public Room() {
+	public Room() {
 		// default constructor.
-    	roomName = "DEFAULT ROOM";
-    	description = "DEFAULT DESCRIPTION";
-    	exits = new HashMap<String, Room>();
+		roomName = "DEFAULT ROOM";
+		description = "DEFAULT DESCRIPTION";
+		exits = new HashMap<String, Room>();
 	}
 
-    public void setExit(char direction, Room r) throws Exception{
-    	String dir= "";
-    	switch (direction){
-    		case 'E': dir = "east";break;
-    		case 'W': dir = "west";break;
-    		case 'S': dir = "south";break;
-    		case 'N': dir = "north";break;
-    		case 'U': dir = "up";break;
-    		case 'D': dir = "down";break;
-    		default: throw new Exception("Invalid Direction");
-    	}
-    	exits.put(dir, r);
-    }
-    
+	public void setExit(char direction, Room r) throws Exception{
+		String dir= "";
+		switch (direction){
+		case 'E': dir = "east";break;
+		case 'W': dir = "west";break;
+		case 'S': dir = "south";break;
+		case 'N': dir = "north";break;
+		case 'U': dir = "up";break;
+		case 'D': dir = "down";break;
+		default: throw new Exception("Invalid Direction");
+		}
+		exits.put(dir, r);
+	}
+
 	/**
-     * Define the exits of this room.  Every direction either leads to
-     * another room or is null (no exit there).
-     */
-    public void setExits(Room north, Room east, Room south, Room west, Room up, Room down) {
-        if(north != null)
-            exits.put("north", north);
-        if(east != null)
-            exits.put("east", east);
-        if(south != null)
-            exits.put("south", south);
-        if(west != null)
-            exits.put("west", west);
-        if(up != null)
-            exits.put("up", up);
-        if(up != null)
-            exits.put("down", down);   
-    }
+	 * Define the exits of this room.  Every direction either leads to
+	 * another room or is null (no exit there).
+	 */
+	public void setExits(Room north, Room east, Room south, Room west, Room up, Room down) {
+		if(north != null)
+			exits.put("north", north);
+		if(east != null)
+			exits.put("east", east);
+		if(south != null)
+			exits.put("south", south);
+		if(west != null)
+			exits.put("west", west);
+		if(up != null)
+			exits.put("up", up);
+		if(up != null)
+			exits.put("down", down);   
+	}
 
-    /** LEGACY
-     * Return the description of the room (the one that was defined in the
-     * constructor).
-     * public String shortDescription() {
-     *   return "Room: " + roomName +"\n\n" + description;
-     * }
-     */
+	/**
+	 * Returns the name, description, and exits related to the current room.
+	 */
+	public String longDescription() {
+		return "Currently in: " + roomName +"\n" + description + "\n" + exitString() + "\n" + itemString();
+	}
 
-    /**
-     * Returns the name, description, and exits related to the current room.
-     */
-    public String longDescription() {
-        return "Currently in: " + roomName +"\n" + description + "\n" + exitString() + "\n" + itemString();
-    }
-    
-    
-    /**
-     * Returns the name, description, and exits related to the room being travelled to.
-     */
-    public String travelDescription() {
-        return "Going to: " + roomName +"\n" + description + "\n" + exitString() + "\n" + itemString();
-    }
 
-    /**
-     * Return a string describing the room's exits, for example
-     * "Exits: north west ".
-     */
-    private String exitString() {
-        String returnString = "Exits:";
-		Set keys = exits.keySet();
-        for(Iterator iter = keys.iterator(); iter.hasNext(); )
-            returnString += " " + iter.next();
-        return returnString;
-    }
-    
-    /**
-     * Return a string describing the room's exits, for example
-     * "Exits: north west ".
-     */
-    private String itemString() {
-        String returnString = "Items in this room:";
-        for (int i = 0; i < items.length; i++) {
-        	returnString += " " + items[i];
-        	if (i < items.length-1)
-        		returnString += ",";
-        	else
-        		returnString += ".";
-        }
-        return returnString;
-    }
+	/**
+	 * Returns the name, description, and exits related to the room being travelled to.
+	 */
+	public String travelDescription() {
+		return "Going to: " + roomName +"\n" + description + "\n" + exitString() + "\n" + itemString();
+	}
 
-    /**
-     * Getters and Setters
-     */
-    
-    public Room nextRoom(String direction) {
-        return (Room)exits.get(direction);
-    }
+	/**
+	 * Return a string describing the room's exits, for example
+	 * "Exits: north west ".
+	 */
+	private String exitString() {
+		String returnString = "Exits:";
+		Set<String> keys = exits.keySet();
+		for(Iterator<String> iter = keys.iterator(); iter.hasNext(); )
+			returnString += " " + iter.next();
+		return returnString;
+	}
 
+	/**
+	 * Return a string describing the room's exits, for example
+	 * "Exits: north west ".
+	 */
+	private String itemString() {
+		String returnString = "Items in this room:";
+		for (int i = 0; i < items.length; i++) {
+			returnString += " " + Items.getItem(items[i]);
+			if (i < items.length-1)
+				returnString += ",";
+			else
+				returnString += ".";
+		}
+		return returnString;
+	}
+	
+	/**
+	 * Returns direction.
+	 */
+	public Room nextRoom(String direction) {
+		return exits.get(direction);
+	}
+	
+	/**
+	 * Gets name of room.
+	 */
 	public String getRoomName() {
 		return roomName;
 	}
-
+	
+	/**
+	 * Sets name of room.
+	 */
 	public void setRoomName(String roomName) {
 		this.roomName = roomName;
 	}
-
+	
+	/**
+	 * Gets description of room.
+	 */
 	public String getDescription() {
 		return description;
 	}
-
+	
+	/**
+	 * Sets description of room.
+	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
 	
-	public String getItem(int index) {	// Gets item at specific index
-    	if (index < items.length)
-    		return items[index];
-    	else
-    		return null;
-    }
-	
-	public int getItemAmount() { // Gets amount of items
-    	return items.length;
-    }
-	
-	public void getItems() {
-		for(int i = 0; i < items.length; i++) {
-            System.out.print(items[i] + "  ");
-        }
-        System.out.println();
+	/**
+	 * Returns true if the
+	 */
+	public boolean containsItem(String item) {
+		for (int i = 0; i < items.length; i++) {
+			if (Game.containsIgnoreCase(item, Items.getItem(items[i]))) {
+				return true;
+			}
+			if (Game.containsIgnoreCase(Items.getItem(items[i]), item)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	public void setItems(String[] roomItems) {
-		items = new String[roomItems.length];
+	public String getItemName(int index) {	// Gets item at specific index
+		if (index < items.length)
+			return Items.getItem(items[index]);
+		else
+			return null;
+	}
+
+	public int getItemIndex(int index) {	// Gets item at specific index
+		if (index < items.length)
+			return items[index];
+		else
+			return -1;
+	}
+
+	public int getItemAmount() { // Gets amount of items, have to change this name when I add stackable items
+		return items.length;
+	}
+
+	public void setItems(int[] roomItems) {
+		items = new int[roomItems.length];
 		for (int i = 0; i < roomItems.length; i++) {
-    		if (Items.isItem(roomItems[i]))
-    			items[i] = roomItems[i];
-    	}
+			if (Items.isItem(Items.getItem(roomItems[i])))
+				items[i] = roomItems[i];
+		}
+	}
+	
+	public boolean isRepeated(String item) {
+		int check = 0;
+		for (int i = 0; i < items.length; i++) {
+			if (Game.containsIgnoreCase(Items.getItem(items[i]),item))
+				check++;
+		}
+		if (check > 1)
+			return true;
+		else
+			return false;
 	}
 }

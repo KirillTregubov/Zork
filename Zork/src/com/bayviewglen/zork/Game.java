@@ -2,14 +2,12 @@ package com.bayviewglen.zork;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter; 
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.Scanner;
 
 /** "Game" Class - the main class of the "Zork" game.
  * 
@@ -40,7 +38,7 @@ class Game {
 	private Parser parser;
 	private BufferedWriter writer;
 	private BufferedReader reader;
-	private final String SAVE = "data\\save.dat";
+	private final String SAVE = "data/save.dat"; // Change to "data\\save.dat" if using windows
 	private Room currentRoom;
 	private String room = "ROOM_1";
 	private Inventory inventory = new Inventory();
@@ -63,26 +61,30 @@ class Game {
 					// Read the Name
 					String roomName = line;
 					room.setRoomName(roomName.split(":")[1].trim()); // ATTENTION: Why is roomName not stored the way it's read?
-					
+
 					// Read the Description
 					String roomDescription = reader.readLine();
 					room.setDescription(roomDescription.split(":")[1].replaceAll("<br>", "\n").trim());
 					// Read the Exits
 					String roomExits = reader.readLine();
-					
+
 					// An array of strings in the format "E-RoomName"
 					String[] rooms = roomExits.split(":")[1].split(",");
 					HashMap<String, String> temp = new HashMap<String, String>(); 
-					for (String s : rooms) {
-						temp.put(s.split("-")[0].trim(), s.split("-")[1]);
-					}
+					for (String s : rooms) temp.put(s.split("-")[0].trim(), s.split("-")[1]);
 					exits.put(roomName.substring(10).trim().toUpperCase().replaceAll(" ",  "_"), temp);
-					
+
 					// Read items, assign to array, and store it
 					String roomItems = reader.readLine();
 					roomItems = roomItems.split(":")[1].trim();
-					String[] items;
-					items = roomItems.split(", ");
+					String[] itemsString;
+					itemsString = roomItems.split(", ");
+					int[] items = new int[itemsString.length];
+					int index = 0;
+					for (String i : itemsString) {
+						items[index] = Integer.parseInt(i);
+						index++;
+					}
 					room.setItems(items); // assign items to the room's variable
 					masterRoomMap.put(roomName.toUpperCase().substring(10).trim().replaceAll(" ",  "_"), room);
 				}
@@ -92,8 +94,7 @@ class Game {
 				HashMap<String, String> tempExits = exits.get(key);
 				for (String s : tempExits.keySet()) {
 					// s = direction
-					// value is the room.
-
+					// value is the room
 					String roomName2 = tempExits.get(s.trim());
 					Room exitRoom = masterRoomMap.get(roomName2.toUpperCase().replaceAll(" ", "_"));
 					roomTemp.setExit(s.trim().charAt(0), exitRoom);
@@ -146,6 +147,14 @@ class Game {
 		System.out.println("Currenty Playing Version: 0.1-alpha"); // Changeme
 		System.out.println("Type 'help' if you need help.");
 		System.out.println();
+		if (gameIsSaved()) {
+			System.out.println("Automatically loaded game state from " + timeGameWasSaved());
+			System.out.println("Last known location: " + currentRoom.getRoomName());
+			System.out.print("Last known items in inventory: ");
+			if (!inventory.isEmpty()) System.out.println(inventory.getInventory());
+			else System.out.println("nothing was found...");
+			System.out.println();
+		}
 		System.out.println(currentRoom.longDescription());
 	}
 
@@ -154,93 +163,166 @@ class Game {
 	 */
 	private boolean processCommand(Command command) {
 		if(command.isUnknown()) {
-			System.out.println("I don't know what you mean...");
+			System.out.println("You cannot do that...");
 			return false;
 		}
+		// Assign parts of the command to variables, make sure useless words aren't included (should this be in parser?)
+		String commandWord = command.getCommandWord();
 		String secondWord = null;
 		String thirdWord = null;
-
-		String commandWord = command.getCommandWord();
 		if (command.hasSecondWord()) {
 			secondWord = command.getSecondWord();
-			if (command.hasThirdWord()) {
+			if (command.hasThirdWord())
 				thirdWord = command.getThirdWord();
-			}
 		}
 
-		if (commandWord.equals("help"))
-			printHelp();
-		else if (commandWord.equals("go"))
-			goRoom(command);
-		else if (commandWord.equals("give")) {
+		// help
+		if (commandWord.equalsIgnoreCase("help")) printHelp();
+		// list
+		else if (commandWord.equalsIgnoreCase("list") && containsIgnoreCase("commands", secondWord)) printCommands();
+		// go
+		else if (commandWord.equalsIgnoreCase("go") || commandWord.equalsIgnoreCase("walk")) goRoom(command, commandWord);
+		// give
+		else if (commandWord.equalsIgnoreCase("give")) {
 			System.out.println("What would you like to be receive?");
-			continueCommand(commandWord);
-		} else if (commandWord.equals("eat")) {
-			System.out.println("Do you really think you should be eating at a time like this?");
-			continueCommand(commandWord);
-		} else if (commandWord.equals("show")) {
+			continueCommand("give");
+		} // eat
+		else if (commandWord.equalsIgnoreCase("eat") || commandWord.equalsIgnoreCase("consume")) { // add check if it's consumable - add joke
+			if (command.hasSecondWord()) {
+				if (Items.isItem(secondWord)) {
+					if (inventory.containsItem(secondWord))System.out.println("Do you really think you should be eating " + Items.getItem(Items.getItemIndex(secondWord)) + " at a time like this?");
+					else System.out.println(Items.getItem(Items.getItemIndex(secondWord)) + " is not in your inventory... Even if it was, do you really think you should be eating at a time like this?");
+				} else System.out.println("That's not an item! Even if it was, do you really think you should be eating at a time like this?");
+			} else System.out.println("Do you really think you should be eating at a time like this?");
+			continueCommand("eat");
+		} // look
+		else if (commandWord.equalsIgnoreCase("look") || commandWord.equalsIgnoreCase("inspect")) {
 			if(command.hasSecondWord()) {
-				if (secondWord.equals("items"))
-					Items.listItems();
-				else if (secondWord.equals("inventory")) {
-					if (inventory.isEmpty())
-						System.out.println("Your inventory is empty!");
-					else
-						inventory.getInventory();
-				} else 
-					System.out.println("I cannot show that...");
-			} else
-				System.out.println("What would you like to be shown?");
-		} else if (commandWord.equals("pick")) {
-			if(command.hasSecondWord()) {
-				if (secondWord.equals("up")) {
-					if (command.hasThirdWord()) {
-						boolean pickedUp = false;
-						for (int i = 0; i < currentRoom.getItemAmount(); i++) {
-							if (thirdWord.equals(currentRoom.getItem(i))) {
-								inventory.addToInventory(currentRoom.getItem(i));
-								pickedUp = true;
+				if (containsIgnoreCase(secondWord, "items") || containsIgnoreCase(thirdWord, "items")) System.out.println("All items:" + Items.listItems());
+				else if (containsIgnoreCase(secondWord, "inventory") || containsIgnoreCase(thirdWord, "inventory")) {
+					if (inventory.isEmpty()) System.out.println("Your inventory is empty!");
+					else System.out.println("Your inventory contains: " + inventory.getInventory());
+				} else if (command.hasThirdWord()) {
+					if (inventory.isRepeated(thirdWord)) System.out.println("Please be more specific. There are multiple items with this name!");
+					if (Items.isItem(thirdWord) && (inventory.containsItem(thirdWord) || currentRoom.containsItem(thirdWord))) System.out.println(Items.getItemDescription(Items.getItemIndex(thirdWord)));
+					else System.out.println("That item is not in your inventory or in " + currentRoom.getRoomName() + ".");
+				} else {
+					if (commandWord.equalsIgnoreCase("look")) System.out.println("You cannot look at that...");	
+					else System.out.println("You cannot inspect that...");
+				}
+			} else {
+				System.out.print("What would you like to ");
+				if (commandWord.equalsIgnoreCase("look")) System.out.println("look at?");
+				else System.out.println(commandWord + "?");
+			}	
+		} // take
+		else if (commandWord.equalsIgnoreCase("take") || (commandWord.equalsIgnoreCase("pick") && containsIgnoreCase(secondWord, "up"))) {
+			String givenItem = "";
+			if (command.hasThirdWord()) givenItem = thirdWord;
+			else givenItem = secondWord;
+			if (command.hasSecondWord()) {
+				if (currentRoom.isRepeated(givenItem)) System.out.println("Please be more specific. There are multiple items with this name!");
+				else {
+					int pickedUp = 0;
+					String item = "";
+					for (int i = 0; i < currentRoom.getItemAmount(); i++) {
+						if (containsIgnoreCase(currentRoom.getItemName(i), givenItem)) {
+							if (inventory.containsItem(currentRoom.getItemIndex(i))) { // add fix for consumables
+								System.out.println("This item is already in your inventory!");
+								pickedUp = 2;
+							} else {
+								inventory.addToInventory(currentRoom.getItemIndex(i));
+								pickedUp = 1;
+								item = Items.getItem(currentRoom.getItemIndex(i));
 							}
 						}
-						if (pickedUp)
-							System.out.println(thirdWord + " was added to your inventory!");
-						else 
-							System.out.println("You weren't able to pick up the item.");
-					} else 
-						System.out.println("Pick up what?");
-				} else {
-					System.out.println("Pick what?");
-				 }
-			} else
-				System.out.println("Pick ..?");
-		} else if (commandWord.equals("save"))
-			save();
-		else if (commandWord.equals("quit")) {
-			if(command.hasSecondWord())
-				System.out.println("Quit what?");
-			else
-				return true;  // signal that we want to quit
-		}
+					}
+					if (pickedUp == 1) System.out.println(item + " was added to your inventory!");
+					else if (pickedUp == 0) {
+						System.out.print("You weren't able to ");
+						if (commandWord.equalsIgnoreCase("take")) System.out.print("take");
+						else System.out.print("pick up");
+						System.out.println(" the item... It probably doesn't exist.");
+					}
+				}
+			} else {
+				System.out.print("You cannot");
+				if (commandWord.equalsIgnoreCase("take")) System.out.println("take that.");
+				else System.out.println("pick up that.");
+			}
+		} // save
+		else if (commandWord.equalsIgnoreCase("save")) save();
+		// quit
+		else if (commandWord.equalsIgnoreCase("quit") || commandWord.equalsIgnoreCase("stop")) { // player wants to quit
+			if (command.hasSecondWord()) {
+				if (secondWord.equalsIgnoreCase("game") || secondWord.equalsIgnoreCase("playing")) return true;
+				else System.out.println("You cannot quit that!");
+			} else System.out.println("Quit what?");
+		} // wrong command
+		else System.out.println("You cannot do that...");
 		return false;
 	}
 
+	/**
+	 * Processes a given command, assuming a related command was previously entered
+	 */
 	private void continueCommand(String originalCommand) {
 		Command command = parser.getSecondaryCommand();
 		System.out.println("");
 		if(command.isUnknown()) {
-			System.out.println("I don't know what you mean...");
+			System.out.println("You cannot do that...");
 		}
 
+		//String secondWord = null;
+		//String thirdWord = null;
 		String commandWord = command.getCommandWord();
-		String secondWord = command.getSecondWord();
-		String thirdWord = command.getThirdWord();
+		/*if (command.hasSecondWord()) {
+			secondWord = command.getSecondWord();
+			if (command.hasThirdWord()) {
+				thirdWord = command.getThirdWord();
+			}
+		}*/
 
 		if (originalCommand.equals("give")) {
-			inventory.addToInventory(Items.getItem(Integer.parseInt(commandWord)));
+			inventory.addToInventory(Integer.parseInt(commandWord));
 			System.out.println("Item given!");
 		} else if (originalCommand.equals("eat")) {
-			System.out.println("Whatever you say... You still can't eat right now.");
+			System.out.println("Whatever you say... You still can't eat at a time like this.");
 		}
+	}
+
+	// User Commands
+
+	/**
+	 * Print list of commands used
+	 */
+	private void printHelp() {
+		System.out.println("You are lost. You are alone. You wander...");
+		System.out.println("To find out what commands are available, type in \"list commands\"");
+	}
+
+	private void printCommands() {
+		System.out.println("All available commands:");
+		System.out.print(parser.showCommands());
+	}
+
+	/** 
+	 * Go to specified room (in the specified direction)
+	 */
+	private void goRoom(Command command, String givenCommand) {
+		if (!command.hasSecondWord()) {
+			System.out.print("Please indicate a direction you would like to ");
+			if (givenCommand.equalsIgnoreCase("walk")) System.out.println("walk in.");
+			else System.out.println("go in.");
+			return;
+		}
+		String direction = command.getSecondWord();
+		// Try to leave current room.
+		Room nextRoom = currentRoom.nextRoom(direction);
+		if (nextRoom != null) {
+			currentRoom = nextRoom;
+			System.out.println(currentRoom.travelDescription());
+		} else System.out.println("That's not an option... You might be trapped.");
 	}
 
 	/*
@@ -249,12 +331,11 @@ class Game {
 	public void save() {
 		try {
 			writer = new BufferedWriter(new FileWriter(SAVE, true));
-			writer.write("Save file on " + LocalDateTime.now());
-			writer.newLine();
 			writer.write("Room: " + currentRoom.getRoomName() + "; ");	// save room currently in
 			if (!inventory.isEmpty()) { // check to make sure inventory isn't empty
-				writer.write("Inventory: " + inventory.saveInventory());	// save inventory	
+				writer.write("Inventory: " + inventory.saveInventory() + "; ");	// save inventory	
 			}
+			writer.write("Time Saved: " + LocalDateTime.now() + ".");
 			writer.newLine();
 			writer.close();
 			System.out.println("Your game has been successfully saved!");
@@ -262,7 +343,7 @@ class Game {
 			System.out.println("Error Saving: " + e);
 		}
 	}
-	
+
 	/*
 	 * Boolean that checks if game has been saved
 	 */
@@ -276,31 +357,57 @@ class Game {
 	}
 
 	/*
+	 * Returns time the last save occurred
+	 */
+	public String timeGameWasSaved() {
+		try {
+			if (gameIsSaved()) {
+				String saveFile = null, line;
+				reader = new BufferedReader(new FileReader(SAVE));
+				while ((line = reader.readLine()) != null) {
+					saveFile = line;
+				}
+				if (saveFile.substring(ordinalIndexOf(saveFile, ":", 2)-1,ordinalIndexOf(saveFile, ":", 2)).equals("y")) // check if inventory was saved
+					return saveFile.substring(ordinalIndexOf(saveFile, ":", 3)+13,ordinalIndexOf(saveFile, ":", 3)+21) + " on " + saveFile.substring(ordinalIndexOf(saveFile, ":", 3)+10,ordinalIndexOf(saveFile, ":", 3)+12) + "/" + saveFile.substring(ordinalIndexOf(saveFile, ":", 3)+7,ordinalIndexOf(saveFile, ":", 3)+9) + "/" + saveFile.substring(ordinalIndexOf(saveFile, ":", 3)+2,ordinalIndexOf(saveFile, ":", 3)+6);
+				else
+					return saveFile.substring(ordinalIndexOf(saveFile, ":", 2)+13,ordinalIndexOf(saveFile, ":", 2)+21) + " on " + saveFile.substring(ordinalIndexOf(saveFile, ":", 2)+10,ordinalIndexOf(saveFile, ":", 2)+12) + "/" + saveFile.substring(ordinalIndexOf(saveFile, ":", 2)+7,ordinalIndexOf(saveFile, ":", 2)+9) + "/" + saveFile.substring(ordinalIndexOf(saveFile, ":", 2)+2,ordinalIndexOf(saveFile, ":", 2)+6);
+			}
+		} catch(IOException e) {
+		}
+		return null;
+	}
+
+	/*
 	 * Load Method - loads save file (if it exists)
 	 */
 	public void load() {
-		String saveFile = null, counter;
+		String saveFile = null, line;
 		try {
 			if (gameIsSaved()) {
 				reader = new BufferedReader(new FileReader(SAVE));
-				while ((counter = reader.readLine()) != null) {	// while loop to determine last line in save file
-					saveFile = counter; // assigns the latest save to variable saveFile
+				while ((line = reader.readLine()) != null) {	// while loop to determine last line in save file
+					saveFile = line; // assigns the latest save to variable saveFile
 				}
 				reader.close();
+				// Assign room to the room in the save file
 				room = saveFile.substring(ordinalIndexOf(saveFile, " ", 1), ordinalIndexOf(saveFile, ";", 1)); // find saved room
 				room = room.trim().toUpperCase().replaceAll(" ",  "_");
+
+				// Find and load inventory
 				if (ordinalIndexOf(saveFile, ":", 2) != -1) { // check if inventory was saved
 					int x = 0, index = 0;
-					while (x != -1) { // find how many items are in the saved inventory
+					for (int i = 1; x != -1; i++) {
+						index = i;
 						x = ordinalIndexOf(saveFile, ",", index);
-						index++;
+						if (x == -1)
+							index--;
 					}
-					String[] savedInventory = new String[index];
-					for (int i = 0; i < index-2; i++) { // assign saved inventory to an array
+					int[] savedInventory = new int[index];
+					for (int i = 0; i < index; i++) { // assign saved inventory to an array
 						if (i == 0)
-							savedInventory[i] = saveFile.substring(ordinalIndexOf(saveFile, ":", 2)+2, ordinalIndexOf(saveFile, ",", i));
+							savedInventory[i] = Integer.parseInt(saveFile.substring(ordinalIndexOf(saveFile, ":", 2)+2, ordinalIndexOf(saveFile, ",", i)));
 						else
-							savedInventory[i] = saveFile.substring(ordinalIndexOf(saveFile, ",", i)+2, ordinalIndexOf(saveFile, ",", i+1));
+							savedInventory[i] = Integer.parseInt(saveFile.substring(ordinalIndexOf(saveFile, ",", i)+2, ordinalIndexOf(saveFile, ",", i+1)));
 					}
 					inventory.loadInventory(savedInventory);
 				}
@@ -310,36 +417,7 @@ class Game {
 		}
 	}
 
-
-	// User Commands:
-
-	/**
-	 * Print list of commands used
-	 */
-	private void printHelp() {
-		System.out.println("You are lost. You are alone. You wander...");
-		System.out.println();
-		System.out.println("Your command words are:");
-		parser.showCommands();
-	}
-
-	/** 
-	 * Go to specified room (in the specified direction)
-	 */
-	private void goRoom(Command command) {
-		if (!command.hasSecondWord()) {
-			System.out.println("Where would you like to go?");
-			return;
-		}
-		String direction = command.getSecondWord();
-		// Try to leave current room.
-		Room nextRoom = currentRoom.nextRoom(direction);
-		if (nextRoom != null) {
-			currentRoom = nextRoom;
-			System.out.println(currentRoom.travelDescription());
-		} else 
-			System.out.println("That's not an option... You might be trapped.");
-	}
+	// Public, universal methods
 
 	/** 
 	 * Find index of the specified occurrence of a character
@@ -351,4 +429,39 @@ class Game {
 		return pos;
 	}
 
+	/** 
+	 * Check if str contains searchStr (regardless of case)
+	 */
+	public static boolean containsIgnoreCase(String str, String searchStr)     {
+		if (str == null || searchStr == null)
+			return false;
+
+		final int length = searchStr.length();
+		if (length == 0)
+			return true;
+
+		for (int i = str.length() - length; i >= 0; i--) {
+			if (str.regionMatches(true, i, searchStr, 0, length))
+				return true;
+		}
+		return false;
+	}
+
+	/** 
+	 * Check if str contains searchStr (regardless of case)
+	 */
+	public static int containsFindIndex(String str, String searchStr)     {
+		if (str == null || searchStr == null)
+			return -1;
+
+		final int length = searchStr.length();
+		if (length == 0)
+			return -1;
+
+		for (int i = str.length() - length; i >= 0; i--) {
+			if (str.regionMatches(true, i, searchStr, 0, length))
+				return i;
+		}
+		return -1;
+	}
 }

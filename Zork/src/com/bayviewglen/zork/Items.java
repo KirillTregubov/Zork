@@ -7,35 +7,69 @@ package com.bayviewglen.zork;
  */
 
 class Items {
-	// an array that holds all valid command words
-    private static final String items[] = {
-        "Item 1", "Item 2", "Item 3", "Item 4", "Item 5"
-    };
-    
-    public Items() {
-        // empty for now
-    }
-    
-    public static boolean isItem(String aString) {
-        for(int i = 0; i < items.length; i++) {
-            if(items[i].equals(aString))
-                return true;
-        }
-        // if we get here, the string was not found in the items array
-        return false;
-    }
-    
-    public static void listItems() {			// List all items in the game
-        for(int i = 0; i < items.length; i++) {
-            System.out.print(items[i] + "  ");
-        }
-        System.out.println();
-    }
-    
-    public static String getItem(int index) {	// Gets item at specific index
-    	if (index < items.length)
-    		return items[index];
-    	else
-    		return null;
-    }
+	// an array that holds all items in the game and their stats
+	public static final String items[][] = { // Name, Description, Type (Consumable, Weapon)
+			{"Item 1", "This is a test item 1.", ""},
+			{"Item 2", "This is a test item 2.", ""},
+			{"Item 3", "This is a test item 3.", ""},
+			{"Item 4", "This is a test item 4.", ""},
+			{"Item 5", "This is a test item 5.", ""},
+			{"Red Apple", "This is a test apple.", "Consumable"},
+			{"Basic Sword", "This is a basic sword.", ""}
+	};
+
+	/**
+	 * Gets item at specific index
+	 */
+	public static String getItem(int index) {
+		if (index >= 0 && index < items.length) return items[index][0];
+		else throw new IllegalStateException("Specified index is not a valid item!");
+	}
+
+	/**
+	 * Gets item at specific index
+	 */
+	public static String getItemDescription(int index) {
+		if (index < items.length) return items[index][1];
+		else throw new IllegalStateException("Specified index is not a valid item description!");
+	}
+
+	/**
+	 * Returns index of a given item (returns -1 if it's not an item)
+	 */
+	public static int getItemIndex(String item) {
+		int index = -1;
+		if (Items.isItem(item)) {
+			for (int i = 0; i < items.length; i++) {
+				if (Game.containsIgnoreCase(items[i][0],item)) index = i; // try both for now
+				if (Game.containsIgnoreCase(item, items[i][0])) index = i;
+			}
+		}
+		return index;
+	}
+
+	/**
+	 * Lists all items in the game in a string
+	 */
+	public static String listItems() {
+		String returnString = "";
+		for (int i = 0; i < items.length; i++) {
+			returnString += " " + items[i][0];
+			if (i < items.length-1) returnString += ",";
+			else returnString += ".";
+		}
+		return returnString;
+	}
+
+	/**
+	 * Returns true if given string is an item
+	 */
+	public static boolean isItem(String item) { // item = "the 5"
+		for (int i = 0; i < items.length; i++) {
+			if (Game.containsIgnoreCase(items[i][0],item)) return true; // try both for now
+			if (Game.containsIgnoreCase(item,items[i][0])) return true;
+		}
+
+		return false;
+	}
 }
