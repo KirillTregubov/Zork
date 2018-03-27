@@ -38,7 +38,7 @@ class Game {
 	private Parser parser;
 	private BufferedWriter writer;
 	private BufferedReader reader;
-	private final String SAVE = "data/save.dat"; // Change to "data\\save.dat" if using windows
+	private final String SAVE = "data\\save.dat"; // Change to "data/save.dat" if using Mac
 	private Room currentRoom;
 	private String room = "ROOM_1";
 	private Inventory inventory = new Inventory();
