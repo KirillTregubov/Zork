@@ -14,6 +14,7 @@ public class Entity {
 	public final static int ACC = 5;
 	
 	public String name;
+	public boolean isAlive;
 	public int[] stats;
 	
 	//currentHP,maxHP,str,def,spd,acc;
@@ -23,6 +24,7 @@ public class Entity {
 	public Entity () {
 		name = "Generic";
 		stats = new int[NUM_STATS];
+		isAlive = true;
 		
 		for (int i=0;i<NUM_STATS;i++) {
 			stats[i] = DEFAULT_STAT_VAL;
@@ -32,6 +34,7 @@ public class Entity {
 	public Entity (String _name,int[] _stats) {
 		name = _name;
 		stats = new int[NUM_STATS];
+		isAlive = true;
 		
 		for (int i=0;i<NUM_STATS;i++) {
 			stats[i] = _stats[i];
