@@ -8,9 +8,25 @@ package com.bayviewglen.zork;
 
 public class Zork {
 
-	public static void main(String[] args) {		
+	public static void main(String[] args) {	
 		Game game = new Game();
 		game.play();
+		
+		
+		// Entity test data (Ignore)
+		/*int[] serp = new int[Entity.NUM_STATS];
+		for (int i=0;i<Entity.NUM_STATS;i++) {
+			serp[i] = 100*(i+1);
+		}
+		
+		Entity potat = new Entity();
+		Entity potato = new Entity("cheese",serp); // String _name, int[] _stats
+		potat.printStats();
+		System.out.println();
+		System.out.println();
+		potato.printStats();*/
+		
+		
 	}
 
 }

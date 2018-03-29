@@ -1,0 +1,19 @@
+Room Name: Room 1
+Room Description:  This is room<br>1
+Exit Rooms: E-Room 2
+Room Items: Item 1, Item 5, Item 3
+
+Room Name: Room 2
+Room Description:  This is Room 2
+Exit Rooms: W-Room 1, U-Room 3
+Room Items: Item 2, Item 1
+
+Room Name: Room 3
+Room Description:  You are upstairs. There is a hole in the ceiling. There are stairs leading to the main floor.
+Exit Rooms: D-Room 2, U-Room 4
+Room Items: Item 3
+
+Room Name: Room 4
+Room Description:  You are in the attic. It is dark. You are likely going to be eaten by a grue.
+Exit Rooms: D-Room 3
+Room Items: Item 4
