@@ -14,7 +14,7 @@ public class Entity {
 	public final static int ACC = 5;
 	
 	public String name;
-	public boolean isAlive;
+	
 	public int[] stats;
 	
 	//currentHP,maxHP,str,def,spd,acc;
@@ -24,7 +24,6 @@ public class Entity {
 	public Entity () {
 		name = "Generic";
 		stats = new int[NUM_STATS];
-		isAlive = true;
 		
 		for (int i=0;i<NUM_STATS;i++) {
 			stats[i] = DEFAULT_STAT_VAL;
@@ -34,19 +33,14 @@ public class Entity {
 	public Entity (String _name,int[] _stats) {
 		name = _name;
 		stats = new int[NUM_STATS];
-		isAlive = true;
 		
 		for (int i=0;i<NUM_STATS;i++) {
 			stats[i] = _stats[i];
 		}
 	}
 	
-	public void printStats () {
-		System.out.println("Name: "+name);
-		for (int i=0;i<NUM_STATS;i++) {
-			System.out.println(STAT_NAMES[i]+": "+stats[i]);
-		}
-	}
+	
+	
 	
 	public String getName() {
 		return name;
@@ -55,10 +49,10 @@ public class Entity {
 		name = _name;
 	}
 	
-	public int getCurrentHP() {
+	public int getCurrHP() {
 		return stats[CURR_HP];
 	}
-	public void setCurrentHP(int _curr_hp) {
+	public void setCurrHP(int _curr_hp) {
 		stats[CURR_HP] = _curr_hp;
 	}
 	
@@ -95,5 +89,15 @@ public class Entity {
 	}
 	public void setAccuracy(int _acc) {
 		stats[ACC] = _acc;
+	}
+	
+	public void printStats () {
+		System.out.println("Name: "+name);
+		for (int i=0;i<NUM_STATS;i++) {
+			System.out.println(STAT_NAMES[i]+": "+stats[i]);
+		}
+	}
+	public boolean isAlive() {
+		return (getCurrHP()>0);
 	}
 }
