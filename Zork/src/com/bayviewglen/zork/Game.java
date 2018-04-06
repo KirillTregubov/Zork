@@ -31,14 +31,13 @@ import java.util.HashMap;
  *  commands that the parser returns.
  */
 
-/*
- * Search terms: Teleporter, Changeme.
- */
+//Search terms: Teleporter, Changeme.
+
 class Game {
 	private Parser parser;
 	private BufferedWriter writer;
 	private BufferedReader reader;
-	private final String SAVE = "data\\save.dat"; // Change to "data/save.dat" if using Mac
+	private final String FileLocation = "data\\"; // Change to "data/save.dat" if using Mac
 	private Room currentRoom;
 	private String room = "ROOM_1";
 	private Inventory inventory = new Inventory();
@@ -111,7 +110,7 @@ class Game {
 	 */
 	public Game() {
 		try {
-			initRooms("data/Rooms.dat");
+			initRooms(FileLocation + "rooms.dat");
 			if (gameIsSaved())
 				load();
 			currentRoom = masterRoomMap.get(room); // Teleporter	
@@ -152,7 +151,7 @@ class Game {
 			System.out.println("Last known location: " + currentRoom.getRoomName());
 			System.out.print("Last known items in inventory: ");
 			if (!inventory.isEmpty()) System.out.println(inventory.getInventory());
-			else System.out.println("nothing was found...");
+			// else System.out.println("Nothing was found..."); not used?
 			System.out.println();
 		}
 		System.out.println(currentRoom.longDescription());
@@ -330,7 +329,7 @@ class Game {
 	 */
 	public void save() {
 		try {
-			writer = new BufferedWriter(new FileWriter(SAVE, true));
+			writer = new BufferedWriter(new FileWriter(FileLocation + "save.dat", true));
 			writer.write("Room: " + currentRoom.getRoomName() + "; ");	// save room currently in
 			if (!inventory.isEmpty()) { // check to make sure inventory isn't empty
 				writer.write("Inventory: " + inventory.saveInventory() + "; ");	// save inventory	
@@ -349,7 +348,7 @@ class Game {
 	 */
 	public boolean gameIsSaved() {
 		try {
-			reader = new BufferedReader(new FileReader(SAVE));
+			reader = new BufferedReader(new FileReader(FileLocation + "save.dat"));
 			return reader.readLine() != null;
 		} catch(IOException e) {
 			return false;
@@ -363,7 +362,7 @@ class Game {
 		try {
 			if (gameIsSaved()) {
 				String saveFile = null, line;
-				reader = new BufferedReader(new FileReader(SAVE));
+				reader = new BufferedReader(new FileReader(FileLocation + "save.dat"));
 				while ((line = reader.readLine()) != null) {
 					saveFile = line;
 				}
@@ -372,8 +371,7 @@ class Game {
 				else
 					return saveFile.substring(ordinalIndexOf(saveFile, ":", 2)+13,ordinalIndexOf(saveFile, ":", 2)+21) + " on " + saveFile.substring(ordinalIndexOf(saveFile, ":", 2)+10,ordinalIndexOf(saveFile, ":", 2)+12) + "/" + saveFile.substring(ordinalIndexOf(saveFile, ":", 2)+7,ordinalIndexOf(saveFile, ":", 2)+9) + "/" + saveFile.substring(ordinalIndexOf(saveFile, ":", 2)+2,ordinalIndexOf(saveFile, ":", 2)+6);
 			}
-		} catch(IOException e) {
-		}
+		} catch(IOException e) { }
 		return null;
 	}
 
@@ -384,7 +382,7 @@ class Game {
 		String saveFile = null, line;
 		try {
 			if (gameIsSaved()) {
-				reader = new BufferedReader(new FileReader(SAVE));
+				reader = new BufferedReader(new FileReader(FileLocation + "save.dat"));
 				while ((line = reader.readLine()) != null) {	// while loop to determine last line in save file
 					saveFile = line; // assigns the latest save to variable saveFile
 				}

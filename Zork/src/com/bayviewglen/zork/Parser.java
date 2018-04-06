@@ -72,12 +72,15 @@ class Parser {
 			lastWord = null;
 		}
 		
+		// not sure when this is needed
 		if (Game.containsIgnoreCase(lastWord, "the "))
 			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "the")+4);
 		else if (Game.containsIgnoreCase(lastWord, "an "))
 			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "an")+3);
 		else if (Game.containsIgnoreCase(lastWord, "a "))
 			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "a")+2);
+		else if (Game.containsIgnoreCase(lastWord, "my "))
+			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "my")+3);
 		
 		if (commands.needsThreeVariables(word1)) {
 			word3 = lastWord;
