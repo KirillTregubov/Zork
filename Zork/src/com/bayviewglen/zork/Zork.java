@@ -9,29 +9,13 @@ package com.bayviewglen.zork;
 public class Zork {
 
 	public static void main(String[] args) {	
-		//Game game = new Game();
-		//game.play();
+		Game game = new Game();
+		game.play();
 		
 		
-		// Entity test data (Ignore)
-		int[] serp = new int[Entity.NUM_STATS];
-		for (int i=0;i<Entity.NUM_STATS;i++) {
-			serp[i] = 100*(i+1);
-		}
-		
-		Entity potat = new Entity();
-		Entity potato = new Entity("cheese",serp); // String _name, int[] _stats
-		//potat.printStats();
-		System.out.println();
-		System.out.println();
-		//potato.printStats();
-		
-		int[] werp = new int[Player.NUM_STATS];
-		for (int i=0;i<Player.NUM_STATS;i++) {
-			werp[i] = 100*(i+1);
-		}
-		Player p = new Player("Guy",werp,1,0);
-		p.printStats();
+		// Andy's Test data
+		//Gooblin Goebbels = new Gooblin("Goebbels",4);
+		//Goebbels.printStats();
 	}
 
 }
