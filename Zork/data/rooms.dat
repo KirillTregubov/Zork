@@ -52,3 +52,13 @@ Room Name: Room 11 (Trial 10 Start)
 Room Description: Welcome to Trial 10. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
+
+Room Name: Room 12 (Shop)
+Room Description: Welcome to the Shop. (instructions)
+Exit Rooms: D-Room 3
+Room Items: 3
+
+Room Name: Room 13 (Trading Centre)
+Room Description: Welcome to the Trading Centre. (instructions)
+Exit Rooms: D-Room 3
+Room Items: 3
