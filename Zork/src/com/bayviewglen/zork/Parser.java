@@ -32,6 +32,69 @@ class Parser {
 		commands = new CommandWords();
 	}
 
+	@Deprecated
+	public Command legacyGetCommand() { // old implementation
+		String inputLine = null; // will hold the full input line
+		String word1 = null;
+		String word2 = null;
+		String word3 = null;
+
+		System.out.print("> "); // print prompt
+
+		// Take input
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			inputLine = reader.readLine();
+		} catch(java.io.IOException exc) {
+			System.out.println ("There was an error reading input: " + exc.getMessage());
+		}
+		// Assign input to 3 different variables
+		String[] input;
+		String lastWord = null;
+		input = inputLine.split(" ", 2);
+		word1 = input[0];
+		if (input.length > 1) {
+			word2 = input[1];
+			if (commands.needsThreeVariables(word1)) {
+				input = inputLine.split(" ", 3);
+				for (int i=0;i<input.length; i++) {
+					if (input.length > 1) {
+						word2 = input[1];
+						if (input.length > 2) { 
+							word3 = input[2];
+							lastWord = word3;
+						} else word3 = null;
+					}
+				}
+			} else lastWord = word2;
+		} else {
+			word2 = null;
+			word3 = null;
+			lastWord = null;
+		}
+
+		// not sure when this is needed
+		if (Game.containsIgnoreCase(lastWord, "the "))
+			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "the")+4);
+		else if (Game.containsIgnoreCase(lastWord, "an "))
+			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "an")+3);
+		else if (Game.containsIgnoreCase(lastWord, "a "))
+			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "a")+2);
+		else if (Game.containsIgnoreCase(lastWord, "my "))
+			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "my")+3);
+
+		if (commands.needsThreeVariables(word1)) {
+			word3 = lastWord;
+		} else word2 = lastWord;
+
+		// Check if the word is a known command. If not, create a "null" command.
+		if(commands.isCommand(word1))
+			return new Command(word1, word2, word3);
+		else
+			return new Command(null, null, null);
+
+	}
+
 	public Command getCommand() {
 		String inputLine = null; // will hold the full input line
 		String word1 = null;
@@ -71,7 +134,7 @@ class Parser {
 			word3 = null;
 			lastWord = null;
 		}
-		
+
 		// not sure when this is needed
 		if (Game.containsIgnoreCase(lastWord, "the "))
 			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "the")+4);
@@ -81,7 +144,7 @@ class Parser {
 			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "a")+2);
 		else if (Game.containsIgnoreCase(lastWord, "my "))
 			lastWord = lastWord.substring(Game.containsFindIndex(lastWord, "my")+3);
-		
+
 		if (commands.needsThreeVariables(word1)) {
 			word3 = lastWord;
 		} else word2 = lastWord;
@@ -91,7 +154,6 @@ class Parser {
 			return new Command(word1, word2, word3);
 		else
 			return new Command(null, null, null);
-
 	}
 
 	public Command getSecondaryCommand() {
