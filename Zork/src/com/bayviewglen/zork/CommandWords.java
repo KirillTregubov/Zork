@@ -21,6 +21,7 @@ class CommandWords {
 			{"help", "", "Prints the help message. Usage: \"help\""},
 			{"list", "", "Lists things. Usage: \"list commands\""}, // add an example if list gains more uses
 			{"go", "", "Allows you to go places. Usage: \"go west\", \"go down\""}, {"walk", "", "Allows you to walk places. Usage: \"walk west\", \"walkT down\""},
+			{"teleport", "", "TP LUL"},
 			{"give", "", "\"Cheater\" command. Remove before final release!"},
 			{"eat", "", "Allows you to eat stuff. Usage: \"eat apple\", \"eat sword\""}, {"consume", "", "Allows you to consume stuff. Usage: \"consume apple\", \"consume sword\""},
 			{"look", "3", "Allows you to look at things. Usage: \"look at inventory\", \"look at red apple\""}, {"inspect", "", "Allows you to inspect things. Usage: \"inspect inventory\", \"inspect red apple\""},

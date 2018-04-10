@@ -51,7 +51,8 @@ class Items {
 	/**
 	 * Lists all items in the game in a string
 	 */
-	public static String listItems() {
+	@Deprecated
+	public static String listItems() { // Don't know why this is implemented
 		String returnString = "";
 		for (int i = 0; i < items.length; i++) {
 			returnString += " " + items[i][0];

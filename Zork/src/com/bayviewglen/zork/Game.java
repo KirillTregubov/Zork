@@ -129,7 +129,7 @@ class Game {
 		// Enter the main command loop: repeatedly reads / executes commands until the game is over
 		boolean finished = false;
 		while (!finished) {
-			Command command = parser.getCommand();
+			Command command = parser.legacyGetCommand(); // legacy implementation
 			System.out.println("");
 			finished = processCommand(command);
 		}
@@ -149,9 +149,9 @@ class Game {
 		if (gameIsSaved()) {
 			System.out.println("Automatically loaded game state from " + timeGameWasSaved());
 			System.out.println("Last known location: " + currentRoom.getRoomName());
-			System.out.print("Last known items in inventory: ");
-			if (!inventory.isEmpty()) System.out.println(inventory.getInventory());
-			// else System.out.println("Nothing was found..."); not used?
+			System.out.print("Last known items in inventory:");
+			if (inventory.isEmpty()) System.out.println(" Nothing was found...");
+			else System.out.println(inventory.getInventory());
 			System.out.println();
 		}
 		System.out.println(currentRoom.longDescription());
@@ -181,6 +181,15 @@ class Game {
 		else if (commandWord.equalsIgnoreCase("list") && containsIgnoreCase("commands", secondWord)) printCommands();
 		// go
 		else if (commandWord.equalsIgnoreCase("go") || commandWord.equalsIgnoreCase("walk")) goRoom(command, commandWord);
+		// teleport
+		else if (commandWord.equalsIgnoreCase("teleport")) {
+			System.out.println(secondWord);
+			Room nextRoom = masterRoomMap.get(secondWord);
+			if (nextRoom != null) {
+				currentRoom = nextRoom;
+				System.out.println(currentRoom.travelDescription());
+			}
+		}
 		// give
 		else if (commandWord.equalsIgnoreCase("give")) {
 			System.out.println("What would you like to be receive?");
