@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Collections; // temporary
 import java.util.HashMap;
 
 /** "Game" Class - the main class of the "Zork" game.
@@ -39,7 +40,7 @@ class Game {
 	private BufferedReader reader;
 	private final String FileLocation = "data\\"; // Change to "data/save.dat" if using Mac
 	private Room currentRoom;
-	private String room = "ROOM_1";
+	private String room = "0";
 	private Inventory inventory = new Inventory();
 	// This is a MASTER object that contains all of the rooms and is easily accessible.
 	// The key will be the name of the room -> no spaces (Use all caps and underscore -> Great Room would have a key of GREAT_ROOM
@@ -54,13 +55,22 @@ class Game {
 			HashMap<String, HashMap<String, String>> exits = new HashMap<String, HashMap<String, String>>();
 			reader = new BufferedReader(new FileReader(fileName));
 			String line;
+			
 			while((line = reader.readLine()) != null) {
-				if (line.contains("Room Name: ")) {
+				if (line.contains("Room ID: ")) {
+					// Create room
 					Room room = new Room();
+					// Read the ID
+					String[] rawID = line.split(":")[1].split(" ");
+					String roomID = "";
+					for (int i = 1; i < rawID.length; i++) {
+						roomID += Integer.parseInt(rawID[i], 2);
+						if (i < rawID.length-1) roomID += "-";
+					}
+					room.setRoomID(roomID);
 					// Read the Name
-					String roomName = line;
+					String roomName = reader.readLine();
 					room.setRoomName(roomName.split(":")[1].trim()); // ATTENTION: Why is roomName not stored the way it's read?
-
 					// Read the Description
 					String roomDescription = reader.readLine();
 					room.setDescription(roomDescription.split(":")[1].replaceAll("<br>", "\n").trim());
@@ -71,7 +81,8 @@ class Game {
 					String[] rooms = roomExits.split(":")[1].split(",");
 					HashMap<String, String> temp = new HashMap<String, String>(); 
 					for (String s : rooms) temp.put(s.split("-")[0].trim(), s.split("-")[1]);
-					exits.put(roomName.substring(10).trim().toUpperCase().replaceAll(" ",  "_"), temp);
+					// LEGACY exits.put(roomName.substring(10).trim().toUpperCase().replaceAll(" ",  "_"), temp);
+					exits.put(roomID, temp);
 
 					// Read items, assign to array, and store it
 					String roomItems = reader.readLine();
@@ -85,18 +96,20 @@ class Game {
 						index++;
 					}
 					room.setItems(items); // assign items to the room's variable
-					masterRoomMap.put(roomName.toUpperCase().substring(10).trim().replaceAll(" ",  "_"), room);
+					// LEGACY masterRoomMap.put(roomName.toUpperCase().substring(10).trim().replaceAll(" ",  "_"), room);
+					masterRoomMap.put(roomID, room);
 				}
 			}
+			
 			for (String key : masterRoomMap.keySet()) {
 				Room roomTemp = masterRoomMap.get(key);
 				HashMap<String, String> tempExits = exits.get(key);
 				for (String s : tempExits.keySet()) {
 					// s = direction
 					// value is the room
-					String roomName2 = tempExits.get(s.trim());
-					Room exitRoom = masterRoomMap.get(roomName2.toUpperCase().replaceAll(" ", "_"));
-					roomTemp.setExit(s.trim().charAt(0), exitRoom);
+					String roomName2 = tempExits.get(s);
+					Room exitRoom = masterRoomMap.get(roomName2);
+					roomTemp.setExit(s.charAt(0), exitRoom);
 				}
 			}
 			reader.close();
@@ -129,9 +142,16 @@ class Game {
 		// Enter the main command loop: repeatedly reads / executes commands until the game is over
 		boolean finished = false;
 		while (!finished) {
+			//LEGACY
 			Command command = parser.legacyGetCommand(); // legacy implementation
 			System.out.println("");
+			finished = legacyProcessCommand(command); // change if making new command
+			
+			/* WORK IN PROGRESS
+			String command = parser.getCommand();
+			System.out.println("");
 			finished = processCommand(command);
+			*/
 		}
 		System.out.println("Thank you for playing. Goodbye!");
 	}
@@ -140,27 +160,37 @@ class Game {
 	 * Prints welcome message
 	 */
 	private void printWelcome() {
-		System.out.println();
-		System.out.println("Welcome to Zork!");
-		System.out.println("Zork is a new, incredibly boring adventure game.");
-		System.out.println("Currenty Playing Version: 0.1-alpha"); // Changeme
-		System.out.println("Type 'help' if you need help.");
-		System.out.println();
+		System.out.println("\n" + "Welcome to Zork!"
+		+ "\n" + "Zork is a new, incredibly boring adventure game."
+		+ "\n" + "Currenty Playing Version: 0.1-alpha"
+		+ "\n" + "Type 'help' if you need help."
+		+ "\n");
+		
 		if (gameIsSaved()) {
-			System.out.println("Automatically loaded game state from " + timeGameWasSaved());
-			System.out.println("Last known location: " + currentRoom.getRoomName());
-			System.out.print("Last known items in inventory:");
+			System.out.print("Automatically loaded game state from " + timeGameWasSaved()
+			+ "\nLast known location: " + currentRoom.getRoomName()
+			+ "\nLast known items in inventory:");
 			if (inventory.isEmpty()) System.out.println(" Nothing was found...");
 			else System.out.println(inventory.getInventory());
 			System.out.println();
 		}
+		
 		System.out.println(currentRoom.longDescription());
 	}
-
+	
+	/*
+	 * Work in Progress
+	 */
+	private boolean processCommand(String command) {
+		System.out.println(command);
+		return false;
+	}
+	
 	/**
 	 * Processes a given command (if this command ends the game, true is returned)
 	 */
-	private boolean processCommand(Command command) {
+	@Deprecated
+	private boolean legacyProcessCommand(Command command) {
 		if(command.isUnknown()) {
 			System.out.println("You cannot do that...");
 			return false;
@@ -339,7 +369,7 @@ class Game {
 	public void save() {
 		try {
 			writer = new BufferedWriter(new FileWriter(FileLocation + "save.dat", true));
-			writer.write("Room: " + currentRoom.getRoomName() + "; ");	// save room currently in
+			writer.write("Room: " + currentRoom.getRoomID() + "; ");	// save room currently in
 			if (!inventory.isEmpty()) { // check to make sure inventory isn't empty
 				writer.write("Inventory: " + inventory.saveInventory() + "; ");	// save inventory	
 			}
@@ -396,9 +426,9 @@ class Game {
 					saveFile = line; // assigns the latest save to variable saveFile
 				}
 				reader.close();
-				// Assign room to the room in the save file
-				room = saveFile.substring(ordinalIndexOf(saveFile, " ", 1), ordinalIndexOf(saveFile, ";", 1)); // find saved room
-				room = room.trim().toUpperCase().replaceAll(" ",  "_");
+				
+				// Find and assign currentRoom to the room in the save file
+				room = saveFile.substring(ordinalIndexOf(saveFile, " ", 1), ordinalIndexOf(saveFile, ";", 1)).trim();
 
 				// Find and load inventory
 				if (ordinalIndexOf(saveFile, ":", 2) != -1) { // check if inventory was saved

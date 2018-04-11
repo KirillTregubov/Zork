@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 class Room {
+	private String roomID;
 	private String roomName;
 	private String description;
 	private int[] items;
@@ -124,6 +125,20 @@ class Room {
 	 */
 	public Room nextRoom(String direction) {
 		return exits.get(direction);
+	}
+	
+	/**
+	 * Gets ID of room.
+	 */
+	public String getRoomID() {
+		return roomID;
+	}
+	
+	/**
+	 * Sets ID of room.
+	 */
+	public void setRoomID(String roomID) {
+		this.roomID = roomID;
 	}
 	
 	/**

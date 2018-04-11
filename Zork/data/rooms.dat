@@ -1,71 +1,83 @@
-Room Name: Room 1 (Contest Hall)
+Room ID: 0
+Room Name: Contest Hall
 Room Description:  This is room<br>1
-Exit Rooms: E-Room 2
+Exit Rooms: U-1
 Room Items: 0, 4, 2, 5
 
-Room Name: Room 2 (Trial 1 Start)
+Room ID: 1
+Room Name: Trial 1 Start
 Room Description:  Welcome to Trial 1. (instructions)
 Exit Rooms: W-Room 1, U-Room 3
 Room Items: 1, 0
 
-Room Name: Room 3 (Trial 2 Start)
+Room ID: 10
+Room Name: Trial 2 Start
 Room Description: Welcome to Trial 2. (instructions)
 Exit Rooms: D-Room 2, U-Room 4
 Room Items: 2
 
-Room Name: Room 4 (Trial 3 Start)
+Room ID: 11
+Room Name: Trial 3 Start
 Room Description: Welcome to Trial 3. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
 
-Room Name: Room 5 (Trial 4 Start)
+Room ID: 100
+Room Name: Trial 4 Start
 Room Description: Welcome to Trial 4. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
 
-Room Name: Room 6 (Trial 5 Start)
+Room ID: 101
+Room Name: Trial 5 Start
 Room Description: Welcome to Trial 5. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
 
-Room Name: Room 7 (Trial 6 Start)
+Room ID: 110
+Room Name: Trial 6 Start
 Room Description: Welcome to Trial 6. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
 
-Room Name: Room 8 (Trial 7 Start)
+Room ID: 111
+Room Name: Trial 7 Start
 Room Description: Welcome to Trial 7. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
 
-Room Name: Room 9 (Trial 8 Start)
+Room ID: 1000
+Room Name: Trial 8 Start
 Room Description: Welcome to Trial 8. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
 
-Room Name: Room 10 (Trial 9 Start)
+Room ID: 1001
+Room Name: Trial 9 Start
 Room Description: Welcome to Trial 9. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
 
-Room Name: Room 11 (Trial 10 Start)
+Room ID: 1010
+Room Name: Trial 10 Start
 Room Description: Welcome to Trial 10. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
 
-Room Name: Room 12 (Shop)
+Room ID: 1011
+Room Name: Shop
 Room Description: Welcome to the Shop. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
 
-Room Name: Room 13 (Trading Centre)
+Room ID: 1100
+Room Name: Trading Centre
 Room Description: Welcome to the Trading Centre. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
 
-Room Name: Room 14 (Challenge Gate)
+Room ID: 1101
+Room Name: Challenge Gate
 Room Description: Welcome to the Challenge Gate. (instructions)
 Exit Rooms: D-Room 3
 Room Items: 3
-
-

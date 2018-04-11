@@ -95,21 +95,20 @@ class Parser {
 
 	}
 
-	public Command getCommand() {
-		String inputLine = null; // will hold the full input line
-		String word1 = null;
-		String word2 = null;
-		String word3 = null;
-
+	public String getCommand() {
 		System.out.print("> "); // print prompt
-
+		
 		// Take input
+		String inputLine = null; // will hold the full input line
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		try {
 			inputLine = reader.readLine();
 		} catch(java.io.IOException exc) {
 			System.out.println ("There was an error reading input: " + exc.getMessage());
 		}
+		
+		return inputLine;
+		/*
 		// Assign input to 3 different variables
 		String[] input;
 		String lastWord = null;
@@ -154,6 +153,7 @@ class Parser {
 			return new Command(word1, word2, word3);
 		else
 			return new Command(null, null, null);
+			*/
 	}
 
 	public Command getSecondaryCommand() {
