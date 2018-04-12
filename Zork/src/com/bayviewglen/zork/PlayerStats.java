@@ -1,16 +1,16 @@
 package com.bayviewglen.zork;
 
-public class Player extends Entity {
+public class PlayerStats extends Entity {
 
 	int xp;
 	boolean battleSpeedHint;
 	
 	
-	Player() {
+	PlayerStats() {
 		super();
 		battleSpeedHint = true;
 	}
-	Player(String _name,int[] _stats,int _xp) {
+	PlayerStats(String _name,int[] _stats,int _xp) {
 		super(_name,_stats);
 		xp = _xp;
 		battleSpeedHint = true;
