@@ -7,7 +7,6 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Collections; // temporary
 import java.util.HashMap;
 
 /** "Game" Class - the main class of the "Zork" game.

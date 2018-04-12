@@ -4,16 +4,16 @@ import java.util.Scanner;
 
 public class Battle {
 	
-	public Player player;
+	public PlayerStats player;
 	public Entity entity;
 	
-	public Battle(Player p, Entity ent) {
+	public Battle(PlayerStats p, Entity ent) {
 		player = p;
 		entity = ent;
 	}
 	
 	
-	public Player getPlayer(){
+	public PlayerStats getPlayer(){
 		return player;
 		
 	}
