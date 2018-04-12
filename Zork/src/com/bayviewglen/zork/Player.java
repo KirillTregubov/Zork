@@ -3,14 +3,17 @@ package com.bayviewglen.zork;
 public class Player extends Entity {
 
 	int xp;
+	boolean battleSpeedHint;
 	
 	
 	Player() {
 		super();
+		battleSpeedHint = true;
 	}
 	Player(String _name,int[] _stats,int _xp) {
 		super(_name,_stats);
 		xp = _xp;
+		battleSpeedHint = true;
 	}
 	
 	public int getXp() {
@@ -18,6 +21,13 @@ public class Player extends Entity {
 	}
 	public void setXp(int _xp) {
 		xp = _xp;
+	}
+	
+	public boolean getSpeedHint() {
+		return battleSpeedHint;
+	}
+	public void setSpeedHint(boolean state) {
+		battleSpeedHint = state;
 	}
 	
 	public void printStats() {
@@ -31,6 +41,10 @@ public class Player extends Entity {
 				setLvl(getLvl()+1);
 			}
 		}
+	}
+	
+	public String attackText() {
+		return (this.getName()+" swings their dagger at ");
 	}
 	
 }

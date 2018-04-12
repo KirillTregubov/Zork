@@ -16,6 +16,7 @@ public class Entity {
 	public final static int ACC = 7;
 	
 	public String name;
+	public boolean isBlocking;
 	
 	public int[] stats;
 	
@@ -30,6 +31,9 @@ public class Entity {
 		for (int i=0;i<NUM_STATS;i++) {
 			stats[i] = DEFAULT_STAT_VAL;
 		}
+		
+		isBlocking = false;
+		
 	}
 	
 	public Entity (String _name,int[] _stats) {
@@ -39,6 +43,9 @@ public class Entity {
 		for (int i=0;i<NUM_STATS;i++) {
 			stats[i] = _stats[i];
 		}
+		
+		isBlocking = false;
+		
 	}
 	
 	
@@ -70,6 +77,9 @@ public class Entity {
 	}
 	public void setCurrHP(int _curr_hp) {
 		stats[CURR_HP] = _curr_hp;
+		if (getCurrHP()<0) {
+			stats[CURR_HP] = 0;
+		}
 	}
 	
 	public int getMaxHP() {
@@ -107,6 +117,14 @@ public class Entity {
 		stats[ACC] = _acc;
 	}
 	
+	public boolean getIsBlocking() {
+		return isBlocking;
+	}
+	public void setIsBlocking(boolean state) {
+		isBlocking = state;
+	}
+	
+	
 	public void printStats () {
 		System.out.println("Name: "+name);
 		for (int i=0;i<NUM_STATS;i++) {
@@ -129,7 +147,7 @@ public class Entity {
 		if (this.getAtrPoints()>0) {
 			while (0<getAtrPoints()) {
 				setAtrPoints(getAtrPoints()-1);
-				statChoice = (int) (Math.random()*5+1); 
+				statChoice = (int) (Math.random()*5+1);
 				
 				if (statChoice==1) {
 					this.setMaxHP(this.getMaxHP()+1);
@@ -152,4 +170,13 @@ public class Entity {
 			}
 		}
 	}
+	
+	public void engagementText() { // Displays what and who you are facing
+		System.out.println("Hello world");
+	}
+	
+	public String attackText() {
+		return "Unknown entity swings their sword";
+	}
+	
 }

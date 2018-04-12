@@ -14,4 +14,12 @@ public class Gooblin extends Enemy {
 		initLevelPoints();
 		autoAtrSpend();
 	}
+	
+	public void engagementText() {
+		System.out.println("You have engaged a hostile goblin called "+this.getName()+"!");
+	}
+	
+	public String attackText () {
+		return (this.getName()+" swings their sword at ");
+	}
 }
