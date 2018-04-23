@@ -1,31 +1,34 @@
 package com.bayviewglen.zork;
-/** "Room" Class - a class manipulating rooms in the game.
- *
- * Original Author:  Michael Kolling
- * Original Version: 1.0
- * Original Date:    July 1999
- * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.1-alpha
- * Current Date:    March 2018
- * 
- * This class is part of Zork. Zork is a simple, text based adventure game.
- *
- * "Room" represents one location in the scenery of the game.  It is 
- * connected to at most four other rooms via exits.  The exits are labelled
- * north, east, south, west.  For each direction, the room stores a reference
- * to the neighbouring room, or null if there is no exit in that direction.
- */
 
 import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+
+/** "Room" Class - a class manipulating rooms in the game.
+*
+* Original Author:  Michael Kolling
+* Original Version: 1.0
+* Original Date:    July 1999
+* 
+* Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+* Current Version: 0.2-alpha
+* Current Date:    April 2018
+* 
+* This class is part of Zork. Zork is a simple, text based adventure game.
+*
+* "Room" represents one location in the scenery of the game.  It is 
+* connected to at most four other rooms via exits.  The exits are labelled
+* north, east, south, west.  For each direction, the room stores a reference
+* to the neighbouring room, or null if there is no exit in that direction.
+*/
 
 class Room {
 	private String roomID;
 	private String roomName;
 	private String description;
-	private int[] items;
+	private ArrayList<Item> items;
+	private ArrayList<Integer> originalItemAmounts;
 	private HashMap<String, Room> exits;        // stores exits of this room.
 
 	/**
@@ -81,7 +84,7 @@ class Room {
 	 * Returns the name, description, and exits related to the current room.
 	 */
 	public String longDescription() {
-		return "Currently in: " + roomName +"\n" + description + "\n" + exitString() + "\n" + itemString();
+		return "Currently in: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems();
 	}
 
 
@@ -89,14 +92,14 @@ class Room {
 	 * Returns the name, description, and exits related to the room being travelled to.
 	 */
 	public String travelDescription() {
-		return "Going to: " + roomName +"\n" + description + "\n" + exitString() + "\n" + itemString();
+		return "Going to: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems();
 	}
 
 	/**
 	 * Return a string describing the room's exits, for example
 	 * "Exits: north west ".
 	 */
-	private String exitString() {
+	private String listExits() {
 		String returnString = "Exits:";
 		Set<String> keys = exits.keySet();
 		for(Iterator<String> iter = keys.iterator(); iter.hasNext(); )
@@ -108,117 +111,171 @@ class Room {
 	 * Return a string describing the room's exits, for example
 	 * "Exits: north west ".
 	 */
-	private String itemString() {
+	private String listItems() {
+		if (items.size() == 0) {
+			return "There are no items in this room.";
+		}
 		String returnString = "Items in this room:";
-		for (int i = 0; i < items.length; i++) {
-			returnString += " " + Items.getItem(items[i]);
-			if (i < items.length-1)
+		for (int i = 0; i < items.size(); i++) {
+			if (items.get(i).isStackable) {
+				returnString += " " + items.get(i).amount + " " + items.get(i).name;
+				if (items.get(i).amount > 1)
+					returnString += "s";
+			} else {
+				returnString += " " + items.get(i).name;
+			}
+			if (i < items.size()-1)
 				returnString += ",";
 			else
 				returnString += ".";
 		}
 		return returnString;
 	}
-	
+
 	/**
 	 * Returns direction.
 	 */
 	public Room nextRoom(String direction) {
 		return exits.get(direction);
 	}
-	
+
 	/**
 	 * Gets ID of room.
 	 */
 	public String getRoomID() {
 		return roomID;
 	}
-	
+
 	/**
 	 * Sets ID of room.
 	 */
 	public void setRoomID(String roomID) {
 		this.roomID = roomID;
 	}
-	
+
 	/**
 	 * Gets name of room.
 	 */
 	public String getRoomName() {
 		return roomName;
 	}
-	
+
 	/**
 	 * Sets name of room.
 	 */
 	public void setRoomName(String roomName) {
 		this.roomName = roomName;
 	}
-	
+
 	/**
 	 * Gets description of room.
 	 */
 	public String getDescription() {
 		return description;
 	}
-	
+
 	/**
 	 * Sets description of room.
 	 */
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	/**
-	 * Returns true if the
+	 * Returns true if the room contains the given item.
 	 */
-	public boolean containsItem(String item) {
-		for (int i = 0; i < items.length; i++) {
-			if (Game.containsIgnoreCase(item, Items.getItem(items[i]))) {
-				return true;
-			}
-			if (Game.containsIgnoreCase(Items.getItem(items[i]), item)) {
-				return true;
-			}
+	public boolean containsItem(Item item) {
+		for (int i = 0; i < items.size(); i++) {
+			if (Utils.containsCompareBoth(items.get(i).name, item.name)) return true;
 		}
 		return false;
 	}
 
 	public String getItemName(int index) {	// Gets item at specific index
-		if (index < items.length)
-			return Items.getItem(items[index]);
-		else
-			return null;
+		if (index < items.size());
+		//return Items.getItem(items[index]);
+		//else
+		return null;
 	}
 
-	public int getItemIndex(int index) {	// Gets item at specific index
-		if (index < items.length)
-			return items[index];
-		else
-			return -1;
+	public Item getItem(int index) {	// Gets item at specific index
+		try {
+			return items.get(index);
+		} catch (Exception e) {
+			throw new IllegalStateException("Wasn't able to find item in room at index " + index);
+		}
+	}
+
+	public Item getItem(String itemName) {
+		for (int i = 0; i < items.size(); i++) {
+			if (Utils.containsCompareBoth(items.get(i).name, itemName)) return items.get(i);
+		}
+		throw new IllegalStateException("Wasn't able to find item called " + itemName);
 	}
 
 	public int getItemAmount() { // Gets amount of items, have to change this name when I add stackable items
-		return items.length;
+		return items.size();
 	}
 
-	public void setItems(int[] roomItems) {
-		items = new int[roomItems.length];
-		for (int i = 0; i < roomItems.length; i++) {
-			if (Items.isItem(Items.getItem(roomItems[i])))
-				items[i] = roomItems[i];
+	public int getItemAmount(String itemName) {
+		Item inputItem = getItem(itemName);
+		return inputItem.amount;
+	}
+
+	public boolean hasRepeatedItems(String itemName) {
+		int check = 0;
+		for (int i = 0; i < items.size(); i++) {
+			if (Utils.containsCompareBoth(itemName, items.get(i).name)) check++;
+		}
+
+		if (check > 1) return true;
+		else return false;
+	}
+
+	public void setItems(String[] items2) {
+		items = new ArrayList<Item>();
+		originalItemAmounts = new ArrayList<Integer>();
+		for (int i = 0; i < items2.length; i++) {
+			try {
+				if (Item.isItem(Item.getItem(Integer.parseInt(items2[i])))) {
+					items.add(Item.getItem(Integer.parseInt(items2[i])));
+				} else {
+					System.out.println("Failed to add " + Item.getItem(items2[i]).name + " to inventory!");
+				}
+			} catch (Exception e) {
+				int endItemIndex = items2[i].indexOf("-");
+				int itemAmountIndex = endItemIndex + 1;
+				Item inputItem = new Item(Item.getItem(Integer.parseInt(items2[i].substring(0, endItemIndex))));
+				if (Item.isItem(inputItem)) {
+					inputItem.amount = Integer.parseInt(items2[i].substring(itemAmountIndex));
+					originalItemAmounts.add(inputItem.amount);
+					items.add(inputItem);
+				} else {
+					System.out.println("Failed to add " + Item.getItem(Integer.parseInt(items2[i].substring(0, endItemIndex))).name + " to inventory!");
+				}
+			}
 		}
 	}
-	
-	public boolean isRepeated(String item) {
-		int check = 0;
-		for (int i = 0; i < items.length; i++) {
-			if (Game.containsIgnoreCase(Items.getItem(items[i]),item))
-				check++;
+
+	public void updateItems(Player player, String roomID) {
+		for (int i = 0; i < items.size(); i++) {
+			if (player.inventory.containsItem(items.get(i).name) && player.didPickUpItem(items.get(i).name, roomID)) {
+				if (items.get(i).isStackable) {
+					Item oldItem = new Item(items.get(i));
+					oldItem.amount = originalItemAmounts.get(i) - player.inventory.getItem(items.get(i).name).pickedUpAmounts.get(player.inventory.getItem(items.get(i).name).roomID.indexOf(roomID));
+
+					items.remove(items.get(i));
+					items.add(i, oldItem);
+					if (items.get(i).amount < 1) {
+						items.remove(i);
+						originalItemAmounts.remove(i);
+						i--;
+					}
+				} else {
+					items.remove(items.get(i));
+					i--;
+				}
+			}
 		}
-		if (check > 1)
-			return true;
-		else
-			return false;
 	}
 }

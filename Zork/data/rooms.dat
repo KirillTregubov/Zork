@@ -2,13 +2,13 @@ Room ID: 0
 Room Name: Contest Hall
 Room Description:  This is room<br>1
 Exit Rooms: U-1
-Room Items: 0, 4, 2, 5
+Room Items: 5-4, 0, 1, 6
 
 Room ID: 1
 Room Name: Trial 1 Start
 Room Description:  Welcome to Trial 1. (instructions)
 Exit Rooms: D-0
-Room Items: 1, 0
+Room Items: 5-4, 0, 1
 
 Room ID: 10
 Room Name: Trial 2 Start

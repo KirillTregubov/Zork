@@ -1,4 +1,5 @@
 package com.bayviewglen.zork;
+
 /** "Command" Class - part of the "Zork" game.
  * 
  * Original Author:  Michael Kolling
@@ -6,8 +7,8 @@ package com.bayviewglen.zork;
  * Original Date:    July 1999
  * 
  * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.1-alpha
- * Current Date:    March 2018
+ * Current Version: 0.2-alpha
+ * Current Date:    April 2018
  *
  * This class holds information about a command that was issued by the user.
  * A command currently consists of two strings: a command word and a second
@@ -26,63 +27,49 @@ package com.bayviewglen.zork;
  */
 
 class Command {
-	private String commandWord;
-	private String secondWord;
-	private String thirdWord;
+	public String command;
+	public String commandType;
+	public String contextWord;
+	public Integer numbers[];
 
 	/**
 	 * Create a command object. First and second word must be supplied, but
 	 * either one (or both) can be null. The command word should be null to
 	 * indicate that this was a command that is not recognized by this game.
 	 */
-	public Command(String firstWord, String secondWord, String thirdWord) {
-		commandWord = firstWord;
-		this.secondWord = secondWord;
-		this.thirdWord = thirdWord;
+	public Command (String command, String commandType) {
+		this.command = command;
+		this.commandType = commandType;
 	}
 
-	/**
-	 * Return the command word (the first word) of this command. If the
-	 * command was not understood, the result is null.
-	 */
-	public String getCommandWord() {
-		return commandWord;
+	public Command (boolean isSecondary, String inputLine, Integer numbers[]) {
+		this.command = inputLine;
+		if (numbers.length > 0) {
+			this.numbers = numbers;
+		}
 	}
 
-	/**
-	 * Return the second word of this command. Returns null if there was no
-	 * second word.
-	 */
-	public String getSecondWord() {
-		return secondWord;
+	public Command (String command, String commandType, String contextWord) {
+		this.command = command;
+		this.commandType = commandType;
+		this.contextWord = contextWord;
 	}
 
-	/**
-	 * Return the third word of this command. Returns null if there was no
-	 * third word.
-	 */
-	public String getThirdWord() {
-		return thirdWord;
+	public Command (String command, String commandType, String contextWord, Integer numbers[]) {
+		this.command = command;
+		this.commandType = commandType;
+		this.contextWord = contextWord;
+		this.numbers = numbers;
+	}
+
+	public Integer getFirstNumber() { // is this needed?
+		return numbers[0];
 	}
 
 	/**
 	 * Return true if this command was not understood.
 	 */
 	public boolean isUnknown() {
-		return (commandWord == null);
-	}
-
-	/**
-	 * Return true if the command has a second word.
-	 */
-	public boolean hasSecondWord() {
-		return (secondWord != null);
-	}
-
-	/**
-	 * Return true if the command has a third word.
-	 */
-	public boolean hasThirdWord() {
-		return (thirdWord != null);
+		return (command == null);
 	}
 }
