@@ -10,20 +10,19 @@ import java.util.ArrayList;
  */
 
 class Item {
-	public String name;
-	public String description;
+	private String name;
+	private String description;
 	public Stats stats;
-	public int amount;
+	private int amount;
 	public boolean isStackable;
 	public ArrayList<String> roomID;
 	public ArrayList<Integer> pickedUpAmounts;
 	public String type;
-	public static final String TYPES[] = {"Base", "Consumable", "Weapon", "Armor", "Shield", "Unique"};
+	public static final String TYPES[] = {"Base", "Consumable", "Weapon", "Armor", "Unique"};
 	public final static int BASE_INDEX = 0;
 	public final static int CONSUMABLE_INDEX = 1;
 	public final static int WEAPON_INDEX = 2;
 	public final static int ARMOR_INDEX = 3;
-	public final static int SHIELD_INDEX = 4;
 	public final static int UNIQUE_INDEX = 5;
 
 	Item(String name, String description) {
@@ -45,8 +44,26 @@ class Item {
 		} catch (Exception e) {
 			System.out.println("There was an error assigning a type to " + name + "!");
 		}
+		amount = 1;
 		this.stats = new Stats(Stats.ITEM_INDEX, typeIndex, stats);
-		//amount = 2;
+		roomID = new ArrayList<String>();
+		pickedUpAmounts = new ArrayList<Integer>();
+	}
+
+	Item(String name, String description, int uniqueIndex, int typeIndex, String stats, int[] uniqueIndexes) {
+		this.name = name;
+		this.description = description;
+		try {
+			type = TYPES[typeIndex];
+			if (type.equals(TYPES[CONSUMABLE_INDEX])) isStackable = true;
+		} catch (Exception e) {
+			System.out.println("There was an error assigning a type to " + name + "!");
+		}
+
+		amount = 1;
+		if (uniqueIndex == UNIQUE_INDEX) {
+			this.stats = new Stats(Stats.ITEM_INDEX, typeIndex, stats, uniqueIndexes);
+		} else this.stats = new Stats(Stats.ITEM_INDEX, typeIndex, stats);
 		roomID = new ArrayList<String>();
 		pickedUpAmounts = new ArrayList<Integer>();
 	}
@@ -64,7 +81,21 @@ class Item {
 	}
 
 	/*
-	 * Item Methods
+	 * Getters and Setters
+	 */
+	public String getDescription() {
+		return description;
+	}
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	/*
+	 * Static Item Methods
 	 */
 
 	// Returns if item has stats
@@ -117,9 +148,9 @@ class Item {
 		}
 		return -1;
 	}
+
 	// Returns string of object name 
-	public String toString (){
-		return name+"s";
-		}
-		
+	public String toString() {
+		return name;
+	}
 }

@@ -222,7 +222,7 @@ class Game {
 			if (contextWord != null) {
 				try { 
 					if (player.inventory.containsItem(contextWord))System.out.println("Do you really think you should be eating " + Item.getItem(contextWord) + " at a time like this?");
-					else System.out.println("The " + Item.getItem(contextWord).name + " is not in your inventory... Even if it was, do you really think you should be eating at a time like this?");
+					else System.out.println("The " + Item.getItem(contextWord) + " is not in your inventory... Even if it was, do you really think you should be eating at a time like this?");
 				} catch (Exception e) {
 					System.out.println("That's not an item! Even if it was, do you really think you should be eating at a time like this?");
 				}
@@ -235,7 +235,7 @@ class Game {
 				if (commandType.equals("item")) {
 					String check = player.itemCanBeLookedAt(contextWord);
 					if (check.equals("roomrepeated")) System.out.println("Please be more specific. There are multiple items with this name!");
-					else if (check.equals("contains")) System.out.println(Item.getItem(contextWord).description);
+					else if (check.equals("contains")) System.out.println(Item.getItem(contextWord).getDescription() + "\n" + "Stats: " + Item.getItem(contextWord).stats);
 					else System.out.println("That item is not in your inventory or in the " + player.getRoomName() + ".");
 				} else if (commandType.equals("inventory")) {
 					if (player.inventory.isEmpty()) System.out.println("Your inventory is empty!");
@@ -277,20 +277,20 @@ class Game {
 					/*} else if (player.itemCanBePickedUp(givenItem).equals("inventorycontains")) { may be needed in the future
 					System.out.println("This item is already in your inventory!");*/
 				} else if (player.itemCanBePickedUp(contextWord).equals("roomnotcontains")) {
-					System.out.println(Item.getItem(contextWord).name + " is not in this room!");
+					System.out.println(Item.getItem(contextWord) + " is not in this room!");
 				} else if (player.itemCanBePickedUp(contextWord).isEmpty()) {
 					if (numbers != null) {
 						if (player.pickUpItem(contextWord, player.getRoomID(), numbers) == null) {
 							player.updateItems(player, player.getRoomID());
-							if (numbers[0] > 1) System.out.println(numbers[0] + " " + Item.getItem(contextWord).name + "s were added to your inventory!");
-							else System.out.println(numbers[0] + " " + Item.getItem(contextWord).name + " was added to your inventory!");
+							if (numbers[0] > 1) System.out.println(numbers[0] + " " + Item.getItem(contextWord) + "s were added to your inventory!");
+							else System.out.println(numbers[0] + " " + Item.getItem(contextWord) + " was added to your inventory!");
 						}
 						else if (player.pickUpItem(contextWord, player.getRoomID(), numbers) == "toomuch") System.out.println("TOO MUCH");
 						else System.out.println("Encountered an error while adding the item to your inventory!");
 					} else {
 						if (player.pickUpItem(contextWord, player.getRoomID()) == null) {
 							player.updateItems(player, player.getRoomID());
-							System.out.println("A " + Item.getItem(contextWord).name + " was added to your inventory!");
+							System.out.println("A " + Item.getItem(contextWord) + " was added to your inventory!");
 						}
 						else if (player.pickUpItem(contextWord, player.getRoomID()) == "toomuch") System.out.println("TOO MUCH");
 						else System.out.println("Encountered an error while adding the item to your inventory!");

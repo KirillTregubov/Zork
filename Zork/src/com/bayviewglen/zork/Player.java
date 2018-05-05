@@ -31,8 +31,8 @@ public class Player {
 	static Item itemFive = new Item("Item Five", "This is a test item 1.");
 	static Item redApple = new Item("Red Apple", "Apple", Item.CONSUMABLE_INDEX, "5");
 	static Item basicSword = new Item("Basic Sword", "This is a test item 1.", Item.WEAPON_INDEX, "10,0.5");
-	public static Item items[] = {itemOne, itemTwo, itemThree, itemFour, itemFive, redApple, basicSword};
-	//public static ArrayList<Item> pickedUpItems = new ArrayList<Item>();
+	static Item uniqueTest = new Item("Unique Test", "This is unique!", Item.UNIQUE_INDEX, Item.WEAPON_INDEX, "20,0.0,0.25", new int[]{ Stats.DMG_REFLECT_INDEX });
+	public static Item items[] = { itemOne, itemTwo, itemThree, itemFour, itemFive, redApple, basicSword, uniqueTest };
 
 	public String teleport(String roomName) {
 		Room roomTemp = masterRoomMap.get(roomName);
@@ -56,12 +56,12 @@ public class Player {
 		try {
 			inputItem = new Item(Item.getItem(itemName));
 
-			if (1 > currentRoom.getItem(itemName).amount)
+			if (1 > currentRoom.getItem(itemName).getAmount())
 				return "toomuch";
 			else if (inventory.containsItem(itemName))
-				inputItem.amount = 1 + inventory.getItem(itemName).amount;
+				inputItem.setAmount(1 + inventory.getItem(itemName).getAmount());
 			else
-				if (inputItem.isStackable) inputItem.amount = 1; // change so that user can specify how many to pick up*/
+				if (inputItem.isStackable) inputItem.setAmount(1); // change so that user can specify how many to pick up*/
 
 			if (!inputItem.roomID.contains(roomID)) {
 				inputItem.roomID.add(roomID);
@@ -83,14 +83,14 @@ public class Player {
 			int amount = 1;
 			if (inputItem.isStackable) amount = numbers[0];
 
-			if (inventory.containsItem(itemName) && inventory.getItem(itemName).amount < currentRoom.getItem(itemName).amount)
-				inputItem.amount = amount + inventory.getItem(itemName).amount;
-			else if (inventory.containsItem(itemName) && amount + inventory.getItem(itemName).amount >= currentRoom.getItem(itemName).amount)
+			if (inventory.containsItem(itemName) && inventory.getItem(itemName).getAmount() < currentRoom.getItem(itemName).getAmount())
+				inputItem.setAmount(amount + inventory.getItem(itemName).getAmount());
+			else if (inventory.containsItem(itemName) && amount + inventory.getItem(itemName).getAmount() >= currentRoom.getItem(itemName).getAmount())
 				return "toomuch";
-			else if (amount > currentRoom.getItem(itemName).amount) 
+			else if (amount > currentRoom.getItem(itemName).getAmount()) 
 				return "toomuch";
 			else
-				if (inputItem.isStackable) inputItem.amount = amount; // change so that user can specify how many to pick up
+				if (inputItem.isStackable) inputItem.setAmount(amount); // change so that user can specify how many to pick up
 
 			if (!inputItem.roomID.contains(roomID)) {
 				inputItem.roomID.add(roomID);
@@ -121,7 +121,7 @@ public class Player {
 	public String itemCanBeLookedAt(String itemName) {
 		//Item inputItem = Item.getItem(itemName);
 		if (currentRoom.hasRepeatedItems(itemName)) return "roomrepeated";
-		//else if (pickedUpItems.containsItem(itemName) || currentRoom.containsItem(Item.getItem(itemName))) return "contains";
+		else if (inventory.containsItem(itemName) || currentRoom.containsItem(Item.getItem(itemName))) return "contains";
 		return "";
 	}
 
