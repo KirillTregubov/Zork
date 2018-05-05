@@ -184,7 +184,7 @@ class Parser {
 	public String findItem (String inputArr[]) {
 		for (int i = 0; i < inputArr.length; i++) {
 			for (int j = 0; j < Player.items.length; j++) {
-				if (Utils.containsIgnoreCase(Player.items[j].name, inputArr[i])) {
+				if (Utils.containsIgnoreCase(Player.items[j].toString(), inputArr[i])) {
 					return inputArr[i]; // should we return item?
 				}
 			}
@@ -195,7 +195,7 @@ class Parser {
 	public String findItemRemovePlural(String inputArr[]) {
 		for (int i = 0; i < inputArr.length; i++) {
 			for (int j = 0; j < Player.items.length; j++) {
-				if (Utils.containsIgnoreCase(Player.items[j].name, inputArr[i].substring(0, inputArr[i].length()-1))) {
+				if (Utils.containsIgnoreCase(Player.items[j].toString(), inputArr[i].substring(0, inputArr[i].length()-1))) {
 					return inputArr[i].substring(0, inputArr[i].length()-1); // should we return item?
 				}
 			}

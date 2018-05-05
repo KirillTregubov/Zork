@@ -26,7 +26,7 @@ class Inventory {
 	public String saveInventory() { // save inventory
 		String inventoryString = "";
 		int i = 0;
-		for(i = 0; i < inventory.size(); i++) inventoryString = inventoryString + inventory.get(i).name + "-" + inventory.get(i).amount + "-" + inventory.get(i).stats.listStats() + "-" + inventory.get(i).roomID.toString().replaceAll(",", "") + "-" + inventory.get(i).pickedUpAmounts.toString().replaceAll(",", "") + ", ";
+		for(i = 0; i < inventory.size(); i++) inventoryString = inventoryString + inventory.get(i) + "-" + inventory.get(i).getAmount() + "-" + inventory.get(i).stats + "-" + inventory.get(i).roomID.toString().replaceAll(",", "") + "-" + inventory.get(i).pickedUpAmounts.toString().replaceAll(",", "") + ", ";
 		return inventoryString;
 	}
 
@@ -37,7 +37,7 @@ class Inventory {
 		inventory.clear();
 		for (int i = 0; i < savedInventory.length; i++) {
 			Item inputItem = Item.getItem(savedInventory[i].substring(0, Utils.ordinalIndexOf(savedInventory[i], "-", 1)));
-			inputItem.amount = Integer.parseInt(savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 1) + 1, Utils.ordinalIndexOf(savedInventory[i], "-", 2)));
+			inputItem.setAmount(Integer.parseInt(savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 1) + 1, Utils.ordinalIndexOf(savedInventory[i], "-", 2))));
 			inputItem.stats.loadStats(savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 2) + 1, Utils.ordinalIndexOf(savedInventory[i], "-", 3)));
 			String roomIDs[] = savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 3) + 2, Utils.ordinalIndexOf(savedInventory[i], "-", 4)-1).split(" ");
 			for (String j : roomIDs) {
@@ -59,12 +59,12 @@ class Inventory {
 		String returnString = "";
 		for (int i = 0; i < inventory.size(); i++) {
 			if (inventory.get(i).isStackable) {
-				returnString += " " + inventory.get(i).amount + " " + inventory.get(i).name;
-				if (inventory.get(i).amount > 1) {
+				returnString += " " + inventory.get(i).getAmount() + " " + inventory.get(i);
+				if (inventory.get(i).getAmount() > 1) {
 					returnString += "s";
 				}
 			}
-			else returnString += " " + inventory.get(i).name;
+			else returnString += " " + inventory.get(i);
 
 			if (i < inventory.size()-1) returnString += ",";
 			else returnString += ".";
@@ -79,27 +79,27 @@ class Inventory {
 	public void addToInventory(Item item, String itemName, String roomID) { // work on this
 		if (containsItem(itemName)) {
 			if (!getItem(itemName).roomID.contains(roomID)) getItem(itemName).roomID.add(roomID);
-			getItem(itemName).amount++;
+			getItem(itemName).setAmount(getItem(itemName).getAmount()+1);
 		} else inventory.add(item);
 	}
 
 	public void addToInventory(Item item, String itemName, String roomID, int amount) { // work on this
 		if (containsItem(itemName)) {
 			if (!getItem(itemName).roomID.contains(roomID)) getItem(itemName).roomID.add(roomID);
-			getItem(itemName).amount = amount;
+			getItem(itemName).setAmount(amount);
 		} else inventory.add(item);
 	}
 
 	public Item getItem(String itemName) {
 		for (int i = 0; i < inventory.size(); i++) {
-			if (Utils.containsCompareBoth(inventory.get(i).name, itemName)) return inventory.get(i);
+			if (Utils.containsCompareBoth(inventory.get(i).toString(), itemName)) return inventory.get(i);
 		}
 		return null;
 	}
 
 	public Integer getItemIndex(String itemName) {
 		for (int i = 0; i < inventory.size(); i++) {
-			if (Utils.containsCompareBoth(inventory.get(i).name, itemName)) return i;
+			if (Utils.containsCompareBoth(inventory.get(i).toString(), itemName)) return i;
 		}
 		return null;
 	}
@@ -109,7 +109,7 @@ class Inventory {
 	 */
 	public boolean containsItem(String itemName) {
 		for (int i = 0; i < inventory.size(); i++) {
-			if (Utils.containsCompareBoth(inventory.get(i).name, itemName)) return true;
+			if (Utils.containsCompareBoth(inventory.get(i).toString(), itemName)) return true;
 		}
 		return false;
 	}
@@ -119,14 +119,14 @@ class Inventory {
 	 */
 	public boolean containsItem(Item item) {
 		for (int i = 0; i < inventory.size(); i++) {
-			if (Utils.containsCompareBoth(inventory.get(i).name, item.name)) return true;
+			if (Utils.containsCompareBoth(inventory.get(i).toString(), item.toString())) return true;
 		}
 		return false;
 	}
 
 	public int getItemAmount(String itemName) {
 		Item inputItem = getItem(itemName);
-		return inputItem.amount;
+		return inputItem.getAmount();
 	}
 
 	/**
@@ -135,7 +135,7 @@ class Inventory {
 	public boolean hasRepeatedItems(String itemName) {
 		int check = 0;
 		for (int i = 0; i < inventory.size(); i++) {
-			if (Utils.containsCompareBoth(inventory.get(i).name, itemName)) check++;
+			if (Utils.containsCompareBoth(inventory.get(i).toString(), itemName)) check++;
 		}
 
 		if (check > 1) return true;

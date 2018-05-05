@@ -6,22 +6,22 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /** "Room" Class - a class manipulating rooms in the game.
-*
-* Original Author:  Michael Kolling
-* Original Version: 1.0
-* Original Date:    July 1999
-* 
-* Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
-* Current Version: 0.2-alpha
-* Current Date:    April 2018
-* 
-* This class is part of Zork. Zork is a simple, text based adventure game.
-*
-* "Room" represents one location in the scenery of the game.  It is 
-* connected to at most four other rooms via exits.  The exits are labelled
-* north, east, south, west.  For each direction, the room stores a reference
-* to the neighbouring room, or null if there is no exit in that direction.
-*/
+ *
+ * Original Author:  Michael Kolling
+ * Original Version: 1.0
+ * Original Date:    July 1999
+ * 
+ * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ * Current Version: 0.2-alpha
+ * Current Date:    April 2018
+ * 
+ * This class is part of Zork. Zork is a simple, text based adventure game.
+ *
+ * "Room" represents one location in the scenery of the game.  It is 
+ * connected to at most four other rooms via exits.  The exits are labelled
+ * north, east, south, west.  For each direction, the room stores a reference
+ * to the neighbouring room, or null if there is no exit in that direction.
+ */
 
 class Room {
 	private String roomID;
@@ -118,11 +118,11 @@ class Room {
 		String returnString = "Items in this room:";
 		for (int i = 0; i < items.size(); i++) {
 			if (items.get(i).isStackable) {
-				returnString += " " + items.get(i).amount + " " + items.get(i).name;
-				if (items.get(i).amount > 1)
+				returnString += " " + items.get(i).getAmount() + " " + items.get(i);
+				if (items.get(i).getAmount() > 1)
 					returnString += "s";
 			} else {
-				returnString += " " + items.get(i).name;
+				returnString += " " + items.get(i);
 			}
 			if (i < items.size()-1)
 				returnString += ",";
@@ -186,7 +186,7 @@ class Room {
 	 */
 	public boolean containsItem(Item item) {
 		for (int i = 0; i < items.size(); i++) {
-			if (Utils.containsCompareBoth(items.get(i).name, item.name)) return true;
+			if (Utils.containsCompareBoth(items.get(i).toString(), item.toString())) return true;
 		}
 		return false;
 	}
@@ -208,7 +208,7 @@ class Room {
 
 	public Item getItem(String itemName) {
 		for (int i = 0; i < items.size(); i++) {
-			if (Utils.containsCompareBoth(items.get(i).name, itemName)) return items.get(i);
+			if (Utils.containsCompareBoth(items.get(i).toString(), itemName)) return items.get(i);
 		}
 		throw new IllegalStateException("Wasn't able to find item called " + itemName);
 	}
@@ -219,13 +219,13 @@ class Room {
 
 	public int getItemAmount(String itemName) {
 		Item inputItem = getItem(itemName);
-		return inputItem.amount;
+		return inputItem.getAmount();
 	}
 
 	public boolean hasRepeatedItems(String itemName) {
 		int check = 0;
 		for (int i = 0; i < items.size(); i++) {
-			if (Utils.containsCompareBoth(itemName, items.get(i).name)) check++;
+			if (Utils.containsCompareBoth(itemName, items.get(i).toString())) check++;
 		}
 
 		if (check > 1) return true;
@@ -240,18 +240,18 @@ class Room {
 				if (Item.isItem(Item.getItem(Integer.parseInt(items2[i])))) {
 					items.add(Item.getItem(Integer.parseInt(items2[i])));
 				} else {
-					System.out.println("Failed to add " + Item.getItem(items2[i]).name + " to inventory!");
+					System.out.println("Failed to add " + Item.getItem(items2[i]) + " to inventory!");
 				}
 			} catch (Exception e) {
 				int endItemIndex = items2[i].indexOf("-");
 				int itemAmountIndex = endItemIndex + 1;
-				Item inputItem = new Item(Item.getItem(Integer.parseInt(items2[i].substring(0, endItemIndex))));
-				if (Item.isItem(inputItem)) {
-					inputItem.amount = Integer.parseInt(items2[i].substring(itemAmountIndex));
-					originalItemAmounts.add(inputItem.amount);
+				if (Item.isItem(Item.getItem(Integer.parseInt(items2[i].substring(0, endItemIndex))))) {
+					Item inputItem = new Item(Item.getItem(Integer.parseInt(items2[i].substring(0, endItemIndex))));
+					inputItem.setAmount(Integer.parseInt(items2[i].substring(itemAmountIndex)));
+					originalItemAmounts.add(inputItem.getAmount());
 					items.add(inputItem);
 				} else {
-					System.out.println("Failed to add " + Item.getItem(Integer.parseInt(items2[i].substring(0, endItemIndex))).name + " to inventory!");
+					System.out.println("Failed to add " + Item.getItem(Integer.parseInt(items2[i].substring(0, endItemIndex))) + " to inventory!");
 				}
 			}
 		}
@@ -259,14 +259,15 @@ class Room {
 
 	public void updateItems(Player player, String roomID) {
 		for (int i = 0; i < items.size(); i++) {
-			if (player.inventory.containsItem(items.get(i).name) && player.didPickUpItem(items.get(i).name, roomID)) {
+			if (player.inventory.containsItem(items.get(i).toString()) && player.didPickUpItem(items.get(i).toString(), roomID)) {
 				if (items.get(i).isStackable) {
 					Item oldItem = new Item(items.get(i));
-					oldItem.amount = originalItemAmounts.get(i) - player.inventory.getItem(items.get(i).name).pickedUpAmounts.get(player.inventory.getItem(items.get(i).name).roomID.indexOf(roomID));
+					oldItem.setAmount(originalItemAmounts.get(i)
+							- player.inventory.getItem(items.get(i).toString()).pickedUpAmounts.get(player.inventory.getItem(items.get(i).toString()).roomID.indexOf(roomID)));
 
 					items.remove(items.get(i));
 					items.add(i, oldItem);
-					if (items.get(i).amount < 1) {
+					if (items.get(i).getAmount() < 1) {
 						items.remove(i);
 						originalItemAmounts.remove(i);
 						i--;
