@@ -11,8 +11,10 @@ public class Zork {
 
 	public static void main(String[] args) {	
 		Game game = new Game();
+		AlimTest.music(1);
 		game.play();
-
+		
+		
 		// Andy's Test data
 		//Gooblin Goebbels = new Gooblin("Goebbels",4);
 		//Goebbels.printStats();

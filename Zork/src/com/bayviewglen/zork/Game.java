@@ -89,6 +89,8 @@ class Game {
 			finished = processCommand(command);
 		}
 		System.out.println("Thank you for playing. Goodbye!");
+		AlimTest.music(0);
+		
 	}
 
 	private void initRooms(String fileName) throws Exception {
