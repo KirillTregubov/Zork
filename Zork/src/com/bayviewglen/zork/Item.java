@@ -148,10 +148,9 @@ class Item {
 		}
 		return -1;
 	}
-
 	// Returns string of object name 
 	public String toString (){
-		return name;
-	}
-
+		return name+"s";
+		}
+		
 }
