@@ -329,25 +329,31 @@ public class Stats {
 	public String toString(){
 		if (stats == null) return "There are no stats to display!";
 
-		String returnString = "";
+		ArrayList<String> returnArr = new ArrayList<String>();
 		for (int i = 0; i < stats.size(); i++) {
-			if (usedIndexes.get(i) == LVL_INDEX) returnString += statNames.get(i) + ": " + getLevel();
-			if (usedIndexes.get(i) == EXP_INDEX) returnString += statNames.get(i) + ": " + getExp();
-			if (usedIndexes.get(i) == AP_INDEX) returnString += statNames.get(i) + ": " + getAttributePoints();
-			if (usedIndexes.get(i) == CURR_HP_INDEX) returnString += statNames.get(i) + ": " + getCurrentHP();
-			if (usedIndexes.get(i) == MAX_HP_INDEX) returnString += statNames.get(i) + ": " + getMaximumHP();
-			if (usedIndexes.get(i) == ATK_INDEX) returnString += statNames.get(i) + ": " + getAttack();
-			if (usedIndexes.get(i) == DEF_INDEX) returnString += statNames.get(i) + ": " + getDefense();
-			if (usedIndexes.get(i) == SPEED_INDEX) returnString += statNames.get(i) + ": " + getSpeed();
-			if (usedIndexes.get(i) == ACCURACY_INDEX) returnString += statNames.get(i) + ": " + getAccuracy();
-			if (usedIndexes.get(i) == CRIT_INDEX) returnString += statNames.get(i) + ": " + getCriticalChance();
-			if (usedIndexes.get(i) == HEAL_POINTS_INDEX) returnString += statNames.get(i) + ": " + getHealPoints();
-			if (usedIndexes.get(i) == LIFE_STEAL_INDEX) returnString += statNames.get(i) + ": " + getLifeSteal();
-			if (usedIndexes.get(i) == DMG_REFLECT_INDEX) returnString += statNames.get(i) + ": " + getDamageReflection();
+			if (usedIndexes.get(i) == LVL_INDEX && getLevel() != 0) returnArr.add(statNames.get(i) + ": " + getLevel());
+			if (usedIndexes.get(i) == EXP_INDEX && getExp() != 0) returnArr.add(statNames.get(i) + ": " + getExp());
+			if (usedIndexes.get(i) == AP_INDEX && getAttributePoints() != 0) returnArr.add(statNames.get(i) + ": " + getAttributePoints());
+			if (usedIndexes.get(i) == CURR_HP_INDEX && getCurrentHP() != 0) returnArr.add(statNames.get(i) + ": " + getCurrentHP());
+			if (usedIndexes.get(i) == MAX_HP_INDEX && getMaximumHP() != 0) returnArr.add(statNames.get(i) + ": " + getMaximumHP());
+			if (usedIndexes.get(i) == ATK_INDEX && getAttack() != 0) returnArr.add(statNames.get(i) + ": " + getAttack());
+			if (usedIndexes.get(i) == DEF_INDEX && getDefense() != 0) returnArr.add(statNames.get(i) + ": " + getDefense());
+			if (usedIndexes.get(i) == SPEED_INDEX && getSpeed() != 0) returnArr.add(statNames.get(i) + ": " + getSpeed());
+			if (usedIndexes.get(i) == ACCURACY_INDEX && getAccuracy() != 0.0) returnArr.add(statNames.get(i) + ": " + getAccuracy());
+			if (usedIndexes.get(i) == CRIT_INDEX && getCriticalChance() != 0.0) returnArr.add(statNames.get(i) + ": " + getCriticalChance());
+			if (usedIndexes.get(i) == HEAL_POINTS_INDEX && getHealPoints() != 0) returnArr.add(statNames.get(i) + ": " + getHealPoints());
+			if (usedIndexes.get(i) == LIFE_STEAL_INDEX && getLifeSteal() != 0) returnArr.add(statNames.get(i) + ": " + getLifeSteal());
+			if (usedIndexes.get(i) == DMG_REFLECT_INDEX && getDamageReflection() != 0.0) returnArr.add(statNames.get(i) + ": " + getDamageReflection());
+		}
+		
+		String returnString = "";
+		for (int i = 0; i < returnArr.size(); i++) {
+			returnString += returnArr.get(i);
 
-			if (i < stats.size()-1) returnString += ", ";
+			if (i < returnArr.size()-1) returnString += ", ";
 			else returnString += ".";
 		}
+
 		return returnString;
 	}
 }

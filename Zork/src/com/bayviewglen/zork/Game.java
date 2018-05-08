@@ -175,7 +175,7 @@ class Game {
 					+ "\nLast known location: " + player.getRoomName()
 					+ "\nLast known items in inventory:");
 			if (player.inventory.isEmpty()) System.out.println(" Nothing was found...");
-			else System.out.println(player.inventory.listInventory());
+			else System.out.println(player.inventory);
 			System.out.println();
 		} else {
 			System.out.println("Hello, traveller! What is your name?");
@@ -242,7 +242,7 @@ class Game {
 					else System.out.println("That item is not in your inventory or in the " + player.getRoomName() + ".");
 				} else if (commandType.equals("inventory")) {
 					if (player.inventory.isEmpty()) System.out.println("Your inventory is empty!");
-					else System.out.println("Your inventory contains:" + player.inventory.listInventory());
+					else System.out.println("Your inventory contains:" + player.inventory);
 
 				} else if (commandType.equals("place")) {
 					if (contextWord.equals("room")) System.out.println(player.getRoomDescription());
