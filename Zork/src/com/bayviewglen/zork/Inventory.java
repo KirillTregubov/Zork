@@ -53,26 +53,6 @@ class Inventory {
 	}
 
 	/**
-	 * Returns player's inventory as a string
-	 */
-	public String listInventory() {
-		String returnString = "";
-		for (int i = 0; i < inventory.size(); i++) {
-			if (inventory.get(i).isStackable) {
-				returnString += " " + inventory.get(i).getAmount() + " " + inventory.get(i);
-				if (inventory.get(i).getAmount() > 1) {
-					returnString += "s";
-				}
-			}
-			else returnString += " " + inventory.get(i);
-
-			if (i < inventory.size()-1) returnString += ",";
-			else returnString += ".";
-		}
-		return returnString;
-	}
-
-	/**
 	 * Adds item to inventory using specified index (if item exists)
 	 * @return 
 	 */
@@ -147,5 +127,23 @@ class Inventory {
 	 */
 	public boolean isEmpty() {
 		return inventory.isEmpty();
+	}
+
+	// toString method
+	public String toString() {
+		String returnString = "";
+		for (int i = 0; i < inventory.size(); i++) {
+			if (inventory.get(i).isStackable) {
+				returnString += " " + inventory.get(i).getAmount() + " " + inventory.get(i);
+				if (inventory.get(i).getAmount() > 1) {
+					returnString += "s";
+				}
+			}
+			else returnString += " " + inventory.get(i);
+
+			if (i < inventory.size()-1) returnString += ",";
+			else returnString += ".";
+		}
+		return returnString;
 	}
 }

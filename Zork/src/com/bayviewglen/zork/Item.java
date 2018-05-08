@@ -50,7 +50,7 @@ class Item {
 		pickedUpAmounts = new ArrayList<Integer>();
 	}
 
-	Item(String name, String description, int typeIndex, String stats, int[] uniqueIndexes) {
+	Item(String name, String description, int uniqueIndex, int typeIndex, String stats, int[] uniqueIndexes) {
 		this.name = name;
 		this.description = description;
 		try {
@@ -61,7 +61,7 @@ class Item {
 		}
 
 		amount = 1;
-		if (uniqueIndexes != null) {
+		if (uniqueIndex == UNIQUE_INDEX) {
 			this.stats = new Stats(Stats.ITEM_INDEX, typeIndex, stats, uniqueIndexes);
 		} else this.stats = new Stats(Stats.ITEM_INDEX, typeIndex, stats);
 		roomID = new ArrayList<String>();
@@ -131,7 +131,7 @@ class Item {
 		return isItem(Item.getItem(itemName));
 	}
 
-	// Returns if an item is stackable	
+	// Returns if an item is stackable
 	public static boolean isStackable(Item item) {
 		return item.isStackable;
 	}
@@ -149,7 +149,7 @@ class Item {
 		return -1;
 	}
 
-	// Returns string of object name 
+	// toString method
 	public String toString() {
 		return name;
 	}

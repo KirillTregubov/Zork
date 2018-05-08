@@ -279,4 +279,9 @@ class Room {
 			}
 		}
 	}
+
+	// toString method
+	public String toString() {
+		return roomName;
+	}
 }

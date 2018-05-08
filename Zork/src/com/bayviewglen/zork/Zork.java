@@ -13,7 +13,6 @@ public class Zork {
 		Game game = new Game();
 		game.play();
 		
-		
 		// Andy's Test data
 		//Gooblin Goebbels = new Gooblin("Goebbels",4);
 		//Goebbels.printStats();

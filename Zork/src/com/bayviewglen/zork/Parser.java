@@ -230,6 +230,6 @@ class Parser {
 	 * Print out a list of valid command words.
 	 */
 	public String listCommands() {
-		return commands.listCommands();
+		return commands.toString();
 	}
 }
