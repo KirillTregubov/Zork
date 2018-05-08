@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import sun.audio.AudioPlayer;
+
 /** "Game" Class - the main class of the "Zork" game.
  * 
  * Original Author:  Michael Kolling
@@ -39,7 +41,7 @@ class Game {
 	private Parser parser;
 	private BufferedWriter writer;
 	private BufferedReader reader;
-	private final String FileLocation = "data\\"; // Change to "data/save.dat" if using Mac
+	private final String fileLocation = "data\\"; // Change to "data/save.dat" if using Mac
 	private final String DEFAULT_ROOM = "0";
 	private Player player;
 	//private Inventory inventory = new Inventory();
@@ -59,7 +61,7 @@ class Game {
 			player = new Player();
 
 			// Initialize Rooms
-			initRooms(FileLocation + "rooms.dat");
+			initRooms(fileLocation + "rooms.dat");
 
 			// Load game if saved
 			if (gameIsSaved()) load();
@@ -73,7 +75,8 @@ class Game {
 	/**
 	 *  Main play routine (loops until quit)
 	 */
-	public void play() {            
+	public void play() {
+		Music.playMusic(fileLocation);
 		printWelcome();
 
 		// Enter the main command loop: repeatedly reads / executes commands until the game is over
@@ -89,7 +92,7 @@ class Game {
 			finished = processCommand(command);
 		}
 		System.out.println("Thank you for playing. Goodbye!");
-		AlimTest.music(0);
+		Music.stopMusic();
 		
 	}
 
@@ -376,7 +379,7 @@ class Game {
 	 */
 	public void save() {
 		try {
-			writer = new BufferedWriter(new FileWriter(FileLocation + "save.dat", true));
+			writer = new BufferedWriter(new FileWriter(fileLocation + "save.dat", true));
 			writer.write("Name: " + player.name + "; ");	// save room currently in
 			writer.write("Room: " + player.getRoomID() + "; ");	// save room currently in
 			if (!player.inventory.isEmpty()) { // check to make sure inventory isn't empty
@@ -396,7 +399,7 @@ class Game {
 	 */
 	public boolean gameIsSaved() {
 		try {
-			reader = new BufferedReader(new FileReader(FileLocation + "save.dat"));
+			reader = new BufferedReader(new FileReader(fileLocation + "save.dat"));
 			return reader.readLine() != null;
 		} catch(IOException e) {
 			return false;
@@ -410,7 +413,7 @@ class Game {
 		try {
 			if (gameIsSaved()) {
 				String saveFile = null, line;
-				reader = new BufferedReader(new FileReader(FileLocation + "save.dat"));
+				reader = new BufferedReader(new FileReader(fileLocation + "save.dat"));
 				while ((line = reader.readLine()) != null) {
 					saveFile = line;
 				}
@@ -436,7 +439,7 @@ class Game {
 		String saveFile = null, line;
 		try {
 			if (gameIsSaved()) {
-				reader = new BufferedReader(new FileReader(FileLocation + "save.dat"));
+				reader = new BufferedReader(new FileReader(fileLocation + "save.dat"));
 				while ((line = reader.readLine()) != null) {	// while loop to determine last line in save file
 					saveFile = line; // assigns the latest save to variable saveFile
 				}
