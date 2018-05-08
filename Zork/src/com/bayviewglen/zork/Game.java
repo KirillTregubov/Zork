@@ -7,11 +7,8 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
-
-import sun.audio.AudioPlayer;
 
 /** "Game" Class - the main class of the "Zork" game.
  * 
@@ -136,7 +133,6 @@ class Game {
 					String roomItems = reader.readLine();
 					roomItems = roomItems.split(":")[1].trim();
 					String[] itemsString = roomItems.split(", ");
-					int index = 0;
 					room.setItems(itemsString); // assign items to the room's variable
 					player.masterRoomMap.put(roomID, room);
 				}
@@ -272,7 +268,6 @@ class Game {
 			}
 		} // take
 		else if (commandName.equalsIgnoreCase("take") || (commandName.equalsIgnoreCase("pick up"))) { // add way to pick up amounts of stackable items
-			String givenItem = "";
 			if (contextWord != null) {
 				//System.out.println(player.itemCanBePickedUp(givenItem)); test command
 				if (player.itemCanBePickedUp(contextWord).equals("roomrepeated")) {
