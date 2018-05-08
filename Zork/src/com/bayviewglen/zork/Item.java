@@ -50,7 +50,7 @@ class Item {
 		pickedUpAmounts = new ArrayList<Integer>();
 	}
 
-	Item(String name, String description, int uniqueIndex, int typeIndex, String stats, int[] uniqueIndexes) {
+	Item(String name, String description, int typeIndex, String stats, int[] uniqueIndexes) {
 		this.name = name;
 		this.description = description;
 		try {
@@ -61,7 +61,7 @@ class Item {
 		}
 
 		amount = 1;
-		if (uniqueIndex == UNIQUE_INDEX) {
+		if (uniqueIndexes != null) {
 			this.stats = new Stats(Stats.ITEM_INDEX, typeIndex, stats, uniqueIndexes);
 		} else this.stats = new Stats(Stats.ITEM_INDEX, typeIndex, stats);
 		roomID = new ArrayList<String>();
