@@ -39,6 +39,11 @@ public class Entity {
 	public Entity (String _name,int[] _stats) {
 		name = _name;
 		stats = new int[NUM_STATS];
+<<<<<<< Upstream, based on origin/master
+=======
+		
+		
+>>>>>>> 60b34f1 0.2-alpha build 1.6
 
 		for (int i=0;i<NUM_STATS;i++) {
 			stats[i] = _stats[i];
@@ -176,7 +181,11 @@ public class Entity {
 	}
 
 	public String attackText() {
-		return "Unknown entity swings their sword";
+		return this.getName()+" attacks ";
 	}
 
+<<<<<<< Upstream, based on origin/master
 }
+=======
+}
+>>>>>>> 60b34f1 0.2-alpha build 1.6

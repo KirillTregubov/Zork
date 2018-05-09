@@ -9,6 +9,10 @@ Room Name: Trial 1 Start
 Room Description:  Welcome to Trial 1. (instructions)
 Exit Rooms: D-0
 Room Items: 5-4, 0, 1
+<<<<<<< Upstream, based on origin/master
+=======
+Room Enemies: OP Squire <Boss> <1-0-30-30-20-20-25-25>, Some Queer <Enemy> <1-0-30-30-20-20-25-25>, Green Gooblin <Enemy> <1-0-30-30-20-20-25-25>, Bob the Shopkeeper <NPC> <1-0-30-30-20-20-25-25>
+>>>>>>> 60b34f1 0.2-alpha build 1.6
 
 Room ID: 10
 Room Name: Trial 2 Start

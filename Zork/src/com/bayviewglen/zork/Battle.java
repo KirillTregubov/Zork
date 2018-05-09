@@ -4,17 +4,17 @@ import java.util.Scanner;
 
 public class Battle {
 	
-	public PlayerStats player;
+	public PlayerStats playe;
 	public Entity entity;
 	
 	public Battle(PlayerStats p, Entity ent) {
-		player = p;
+		playe = p;
 		entity = ent;
 	}
 	
 	
 	public PlayerStats getPlayer(){
-		return player;
+		return playe;
 		
 	}
 	
@@ -24,19 +24,17 @@ public class Battle {
 	
 	public void startBattle() { // Consumables count as a turn
 		
-		int storedPlayerSpeed = player.getSpeed();
+		int storedPlayerSpeed = playe.getSpeed();
 		int storedEntitySpeed = entity.getSpeed();
 		
-		entity.engagementText(); // This displays a message specific to each enemy class which states their type and name
+		System.out.println("You have been engaged by "+entity.getName()+"!");
 		
-		while(player.isAlive()&&entity.isAlive()) { // And while running away is not true
+		while(playe.isAlive()&&entity.isAlive()) { // TODO: And while running away is not true
 			
 			
 			
-			
-			
-			if (player.getSpeed()>entity.getSpeed()) { // Multiply by weapon speed
-				System.out.println(player.getName()+" will now move!");
+			if (playe.getSpeed()>=entity.getSpeed()) { // Multiply by weapon speed
+				System.out.println(playe.getName()+" will now move!");
 				
 				System.out.println("Take an action!");
 				battleParser();
@@ -47,35 +45,36 @@ public class Battle {
 					}
 					System.out.println(entity.getName()+" will now move!");
 					
-					damageDealer(entity,player);
+					damageDealer(entity,playe);
 					
 				}
 				
 			}
-			else if (entity.getSpeed()>player.getSpeed()) { // Multiply by weapon speed
+			else if (entity.getSpeed()>playe.getSpeed()) { // Multiply by weapon speed
 				System.out.println(entity.getName()+" will now move!");
 				
-				if (player.getSpeedHint()) {
+				if (playe.getSpeedHint()) {
 					System.out.println("Hint: The enemy has the first move on this turn, consider upgrading your speed stat!");
-					player.setSpeedHint(false);
+					playe.setSpeedHint(false);
 				}
+			
 				
-				damageDealer(entity,player);
+				damageDealer(entity,playe);
 				
-				if (player.isAlive()) {
+				if (playe.isAlive()) {
 					
 					System.out.println("Take an action!");
 					battleParser();
 					
-					if (player.getSpeed()<storedPlayerSpeed) {
-						player.setSpeed(player.getSpeed()+20);
+					if (playe.getSpeed()<storedPlayerSpeed) {
+						playe.setSpeed(playe.getSpeed()+20);
 				}
 				
 			}
 			}
 		}
 		
-		if (player.isAlive()==false) {
+		if (playe.isAlive()==false) {
 			System.out.println("A dark day for the Republic. You are defeated...");
 		}
 		else if (entity.isAlive()==false) {
@@ -91,11 +90,11 @@ public class Battle {
 		String parseMe = input.nextLine().toLowerCase();
 		
 		if (parseMe.equals("block")||parseMe.equals("block attack")||parseMe.equals("block hit")) {
-			player.setIsBlocking(true);
+			playe.setIsBlocking(true);
 		}
 		else if (parseMe.equals("attack")||parseMe.equals("hit")||parseMe.equals("swing")||parseMe.equals("stab")||
 				parseMe.equals("bludgeon")||parseMe.equals("slash")||parseMe.equals("strike")) {
-			damageDealer(player,entity);
+			damageDealer(playe,entity);
 		}
 		else if (parseMe.equals("power attack")) {
 			// Damage increase
@@ -120,20 +119,20 @@ public class Battle {
 				if (/*getItemDamage()*/10*(attacker.getStrength()/40)*((40-defender.getDefence())/40)<=0) {
 					defender.setCurrHP(defender.getCurrHP()-1);
 					System.out.println(defender.getName()+" took 1 damage!"); // Minimum of one damage
-					System.out.println("Defender "+defender.getName()+" Health:"+ defender.getCurrHP());
+					System.out.println(defender.getName()+"'s health: "+ defender.getCurrHP());
 				}
 				else {
 					System.out.println(defender.getName()+" took "+/*getItemDamage()*/10*(attacker.getStrength()/40)*((40-defender.getDefence())/40)+" damage!");
 					defender.setCurrHP(defender.getCurrHP()-/*getItemDamage()*/(10*(attacker.getStrength()/40)*((40-defender.getDefence())/40)));
 					defender.setCurrHP(defender.getCurrHP()-1);
-					System.out.println("Defender "+defender.getName()+" Health:"+ defender.getCurrHP());
+					System.out.println(defender.getName()+"'s health: "+ defender.getCurrHP());
 				}
 			}
 			else {
 				System.out.println(attacker.getName()+"'s attack was successfully blocked by "+defender.getName()+"!");
 				System.out.println("The successful block has caught "+attacker.getName()+" offguard. Strike Now!");
 				attacker.setSpeed(attacker.getSpeed()-20);
-				player.setIsBlocking(false); // Resets their blocking states for the next combat turn
+				playe.setIsBlocking(false); // Resets their blocking states for the next combat turn
 				entity.setIsBlocking(false);
 			}
 			

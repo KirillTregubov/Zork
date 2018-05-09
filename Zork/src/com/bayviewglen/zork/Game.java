@@ -134,6 +134,43 @@ class Game {
 					roomItems = roomItems.split(":")[1].trim();
 					String[] itemsString = roomItems.split(", ");
 					room.setItems(itemsString); // assign items to the room's variable
+<<<<<<< Upstream, based on origin/master
+=======
+					
+					String roomEntities = reader.readLine();
+					if (roomEntities != null && roomEntities.isEmpty()!=true) {
+						if (roomEntities.contains("Room Enemies")) {
+
+
+							roomEntities = roomEntities.split(":")[1].trim();
+
+							String[] entityString;
+							entityString = roomEntities.split(", ");
+							// Enemy, type
+							String[][] entities = new String[2][entityString.length];
+							String entityString2;
+							String[] entitiesStrings;
+							int[] numbersStrings;
+							int[][] statsArr = new int[entities[0].length][8];
+							String[] entityStats;
+
+							for (int i=0;i<entityString.length;i++) {
+								entityString2 = entityString[i];
+								entitiesStrings = entityString2.split(" <");
+								entities[0][i] = entitiesStrings[0];
+								entities[1][i] = entitiesStrings[1].substring(0, entitiesStrings[1].length()-1);
+								entityStats = entitiesStrings[2].substring(0, entitiesStrings[2].length()-1).split("-");
+								for (int j =0;j<entityStats.length;j++) {
+									statsArr[i][j] = Integer.parseInt(entityStats[j]);
+								}	
+							}
+							room.setEntities(entities,statsArr);
+						}
+					}
+					
+					
+					
+>>>>>>> 60b34f1 0.2-alpha build 1.6
 					player.masterRoomMap.put(roomID, room);
 				}
 			}
@@ -149,6 +186,9 @@ class Game {
 					roomTemp.setExit(s.charAt(0), exitRoom);
 				}
 			}
+			
+			
+			
 			reader.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -366,6 +406,19 @@ class Game {
 			player.setCurrentRoom(nextRoom, player);
 			player.updateItems(player, nextRoom.getRoomID());
 			System.out.println(player.getRoomTravelDescription());
+<<<<<<< Upstream, based on origin/master
+=======
+			
+			if (nextRoom != null) {
+				player.setCurrentRoom(nextRoom, player);
+				player.updateItems(player, nextRoom.getRoomID());
+				System.out.println(player.getRoomTravelDescription());
+				// Init battles
+
+				player.getRoom().startBattle(player.getPlayerStats());
+	}
+			
+>>>>>>> 60b34f1 0.2-alpha build 1.6
 		} else System.out.println("That's not an option... You might be trapped.");
 	}
 

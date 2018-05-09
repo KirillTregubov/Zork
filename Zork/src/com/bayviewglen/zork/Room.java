@@ -30,6 +30,10 @@ class Room {
 	private ArrayList<Item> items;
 	private ArrayList<Integer> originalItemAmounts;
 	private HashMap<String, Room> exits;        // stores exits of this room.
+	private ArrayList<Enemy> enemies;
+	private ArrayList<Boss> bosses;
+	private ArrayList<NPC> npcs;
+
 
 	/**
 	 * Create a room described "description". Initially, it has no exits.
@@ -42,6 +46,9 @@ class Room {
 
 	public Room() {
 		// default constructor.
+		enemies = null;
+		bosses = null;
+		npcs = null;
 		roomName = "DEFAULT ROOM";
 		description = "DEFAULT DESCRIPTION";
 		exits = new HashMap<String, Room>();
@@ -84,7 +91,11 @@ class Room {
 	 * Returns the name, description, and exits related to the current room.
 	 */
 	public String longDescription() {
+<<<<<<< Upstream, based on origin/master
 		return "Currently in: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems();
+=======
+		return "Currently in: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems() + listEnemies();
+>>>>>>> 60b34f1 0.2-alpha build 1.6
 	}
 
 
@@ -92,7 +103,11 @@ class Room {
 	 * Returns the name, description, and exits related to the room being travelled to.
 	 */
 	public String travelDescription() {
+<<<<<<< Upstream, based on origin/master
 		return "Going to: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems();
+=======
+		return "Going to: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems() + listEnemies();
+>>>>>>> 60b34f1 0.2-alpha build 1.6
 	}
 
 	/**
@@ -283,5 +298,138 @@ class Room {
 	// toString method
 	public String toString() {
 		return roomName;
+<<<<<<< Upstream, based on origin/master
+=======
+	}
+	
+	// Andy Entity Stuff
+	
+public String listEnemies() {
+		
+		liveCheck();
+		String returnString = "";
+		if (getRoomEnemies()!=null) {
+			if (getRoomEnemies().size() > 0) {
+				returnString = "\n" + "Enemies in this room: ";
+	
+				for (int i = 0; i < getRoomEnemies().size(); i++) {
+	
+					returnString += getRoomEnemies().get(i).getName(); // Display stats later (Inspect function)
+	
+					if (i == getRoomEnemies().size() - 1) {
+						returnString += ".";
+					} else {
+						returnString += ", ";
+					}
+				}
+			} else {
+				returnString = "";
+			}
+		}
+		return returnString;
+	}
+
+public ArrayList<Enemy> getRoomEnemies() {
+		return enemies;
+	}
+
+	public void setRoomEnemies(ArrayList<Enemy> enemies) {
+		this.enemies = enemies;
+	}
+	
+	public ArrayList<Boss> getRoomBosses() {
+		return bosses;
+	}
+
+	public void setRoomBosses(ArrayList<Boss> bosses) {
+		this.bosses = bosses;
+	}
+	
+	public ArrayList<NPC> getRoomNPC() {
+		return npcs;
+	}
+
+	public void setRoomNPC(ArrayList<NPC> npc) {
+		this.npcs = npc;
+	}
+
+//Checks and edits the list of entities based on if they are alive or not
+	public void liveCheck() {
+		// Enemy
+		if (getRoomEnemies()!=null) {
+			int eSize = getRoomEnemies().size();
+			for (int i=0;i<eSize;i++) {
+				if (getRoomEnemies().get(i).isAlive()==false) {
+					getRoomEnemies().remove(i);
+					eSize--;
+					i--;
+				}
+			}
+		}
+		// Boss
+		if (getRoomBosses()!=null) {
+			int bSize = getRoomBosses().size();
+				for (int i=0;i<bSize;i++) {
+					if (getRoomBosses().get(i).isAlive()==false) {
+						getRoomBosses().remove(i);
+						bSize--;
+						i--;
+						}
+				}
+		}
+		// NPC
+		/*int nSize = npcs.size();
+			for (int i=0;i<nSize;i++) {
+				if (npcs.get(i).isAlive()==false) {
+					npcs.remove(i);
+					nSize--;
+					i--;
+					}
+			}*/
+	}
+
+// Start Battle
+	public void startBattle(PlayerStats pStats) {
+		// Enemy battle
+		if (getRoomEnemies().size()>0) {
+			for (int i=0;i<getRoomEnemies().size();i++) {
+				Battle bat = new Battle(pStats,getRoomEnemies().get(i));
+				bat.startBattle();
+			}
+		}
+		// Boss battle
+		if (bosses.size()>0) {
+			for (int i=0;i<bosses.size();i++) {
+				Battle bat = new Battle(pStats,bosses.get(i));
+				bat.startBattle();
+			}
+		}
+	}
+
+public void setEntities(String[][] ent,int[][] arr) {
+		
+		setRoomEnemies(new ArrayList<Enemy>());
+		setRoomBosses(new ArrayList<Boss>());
+		npcs = new ArrayList<NPC>();
+		bosses = new ArrayList<Boss>();
+		
+		if (ent[0][0]!=null) {
+			for (int i=0;i<ent[0].length;i++) {
+				System.out.println("I am bugged "+ent[1][i]);
+				if (ent[1][i].compareTo("Enemy")==0) {
+					getRoomEnemies().add(new Enemy(ent[0][i],arr[i]));
+				}
+				else if (ent[1][i].compareTo("Boss")==0) {
+					getRoomBosses().add(new Boss(ent[0][i],arr[i]));
+				}
+				else if (ent[1][i].compareTo("NPC")==0) {
+					
+				}
+				else {
+					System.out.println("Mission failed, run it again. (Loading entities has failed)");
+				}
+			}
+		}
+>>>>>>> 60b34f1 0.2-alpha build 1.6
 	}
 }
