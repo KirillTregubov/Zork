@@ -3,7 +3,7 @@ package com.bayviewglen.zork;
 public class PlayerStats extends Entity {
 
 	int xp;
-	boolean battleSpeedHint;
+	boolean battleSpeedHint; //.
 	
 	
 	PlayerStats() {

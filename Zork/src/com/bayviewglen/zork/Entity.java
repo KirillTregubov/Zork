@@ -20,7 +20,7 @@ public class Entity {
 
 	public int[] stats;
 
-	//Level, atr points, currenthp, MaxHP, Strength, defence, speed, accuracy
+	//Level, atr points, currenthp, MaxHP, Strength, defence, speed, accuracy.
 
 
 

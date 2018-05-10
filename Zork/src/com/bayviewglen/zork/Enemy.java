@@ -1,6 +1,6 @@
 package com.bayviewglen.zork;
 
-public class Enemy extends Entity { //Possible change this to NPC then extending to new Enemy class
+public class Enemy extends Entity { //Possible change this to NPC then extending to new Enemy class.
 	
 	
 	public Enemy () {

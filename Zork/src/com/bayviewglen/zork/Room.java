@@ -295,7 +295,7 @@ class Room {
 		}
 	}
 
-	// toString method
+	// toString method.
 	public String toString() {
 		return roomName;
 <<<<<<< Upstream, based on origin/master

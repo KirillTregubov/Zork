@@ -1,6 +1,6 @@
 package com.bayviewglen.zork;
 
-public class Boss extends Entity {
+public class Boss extends Entity {//.
 
 	public Boss () {
 		super();

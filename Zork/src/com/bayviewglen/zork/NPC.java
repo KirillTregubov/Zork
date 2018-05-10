@@ -1,6 +1,6 @@
 package com.bayviewglen.zork;
 
-public class NPC extends Entity {
+public class NPC extends Entity {//.
 
 	public NPC () {
 		super();

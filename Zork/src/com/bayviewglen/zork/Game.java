@@ -32,7 +32,7 @@ import java.util.Scanner;
  *  commands that the parser returns.
  */
 
-//Search terms: Teleporter, Changeme.
+//Search terms: Teleporter, Changeme..
 
 class Game {
 	private Parser parser;

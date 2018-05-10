@@ -6,7 +6,7 @@ import java.util.HashMap;
  * 
  * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
  * Current Version: 0.2-alpha
- * Current Date:    April 2018
+ * Current Date:    April 2018.
  */
 
 public class Player {

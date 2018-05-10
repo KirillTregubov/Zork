@@ -22,7 +22,7 @@ public class Battle {
 		return entity;
 	}
 	
-	public void startBattle() { // Consumables count as a turn
+	public void startBattle() { // Consumables count as a turn.
 		
 		int storedPlayerSpeed = playe.getSpeed();
 		int storedEntitySpeed = entity.getSpeed();
