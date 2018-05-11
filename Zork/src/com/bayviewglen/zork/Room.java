@@ -415,7 +415,6 @@ public void setEntities(String[][] ent,int[][] arr) {
 		
 		if (ent[0][0]!=null) {
 			for (int i=0;i<ent[0].length;i++) {
-				System.out.println("I am bugged "+ent[1][i]);
 				if (ent[1][i].compareTo("Enemy")==0) {
 					getRoomEnemies().add(new Enemy(ent[0][i],arr[i]));
 				}
