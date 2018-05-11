@@ -131,45 +131,44 @@ class Game {
 
 					// Read items, assign to array, and store it
 					String roomItems = reader.readLine();
-					if (roomItems.split(":")[1].trim().length() > 0) {
+					if (roomItems.contains("Items: ") && roomItems.split(":")[1].trim().length() > 0) {
 						roomItems = roomItems.split(":")[1].trim();
 						String[] itemsString = roomItems.split(", ");
 						room.setItems(itemsString); // assign items to the room's variable
 					}
 					
-					// Assign room to be stored as roomID
-
+					// Read Commands and Assign them 
+					String commands = reader.readLine();
+					// WORK IN PROGRESS
 					
+					// Read Entities and Create them 
 					String roomEntities = reader.readLine();
-					if (roomEntities != null && roomEntities.isEmpty()!=true) {
-						if (roomEntities.contains("Enemies")) {
+					if (roomEntities.contains("Entities: ") && roomEntities.split(":")[1].trim().length() > 0) {
+						roomEntities = roomEntities.split(":")[1].trim();
 
+						String[] entityString;
+						entityString = roomEntities.split(", ");
+						// Enemy, type
+						String[][] entities = new String[2][entityString.length];
+						String entityString2;
+						String[] entitiesStrings;
+						int[][] statsArr = new int[entities[0].length][8];
+						String[] entityStats;
 
-							roomEntities = roomEntities.split(":")[1].trim();
-
-							String[] entityString;
-							entityString = roomEntities.split(", ");
-							// Enemy, type
-							String[][] entities = new String[2][entityString.length];
-							String entityString2;
-							String[] entitiesStrings;
-							int[] numbersStrings;
-							int[][] statsArr = new int[entities[0].length][8];
-							String[] entityStats;
-
-							for (int i=0;i<entityString.length;i++) {
-								entityString2 = entityString[i];
-								entitiesStrings = entityString2.split(" <");
-								entities[0][i] = entitiesStrings[0];
-								entities[1][i] = entitiesStrings[1].substring(0, entitiesStrings[1].length()-1);
-								entityStats = entitiesStrings[2].substring(0, entitiesStrings[2].length()-1).split("-");
-								for (int j =0;j<entityStats.length;j++) {
-									statsArr[i][j] = Integer.parseInt(entityStats[j]);
-								}	
-							}
-							room.setEntities(entities,statsArr);
+						for (int i = 0; i < entityString.length; i++) {
+							entityString2 = entityString[i];
+							entitiesStrings = entityString2.split(" <");
+							entities[0][i] = entitiesStrings[0];
+							entities[1][i] = entitiesStrings[1].substring(0, entitiesStrings[1].length()-1);
+							entityStats = entitiesStrings[2].substring(0, entitiesStrings[2].length()-1).split("-");
+							for (int j =0;j<entityStats.length;j++) {
+								statsArr[i][j] = Integer.parseInt(entityStats[j]);
+							}	
 						}
+						room.setEntities(entities,statsArr);
 					}
+					
+					// Assign room to be stored as roomID
 					player.masterRoomMap.put(roomID, room);
 				}
 			}

@@ -2,16 +2,17 @@ ID: 0
 Name: Contest Hall
 Description:  This is room<br>1
 Exits: U-1
-Items: 
+Items: 39-4, 40, 41
 Commands:
+Entities: 
 
 ID: 1
 Name: Trial 1 Start
 Description: Welcome to Trial 1. (instructions)
 Exits: D-0
-Items: 5-4, 7, 0, 1, 6
+Items: 
 Commands:
-Enemies: OP Squire <Boss> <1-0-30-30-20-20-25-20>, Some Queer <Enemy> <1-0-30-30-20-20-25-25>, Green Gooblin <Enemy> <1-0-30-30-20-20-25-25>, Bob the Shopkeeper <NPC> <1-0-30-30-20-20-25-25>
+Entities: OP Squire <Boss> <1-0-30-30-20-20-25-20>, Some Queer <Enemy> <1-0-30-30-20-20-25-25>, Green Gooblin <Enemy> <1-0-30-30-20-20-25-25>, Bob the Shopkeeper <NPC> <1-0-30-30-20-20-25-25>
 
 ID: 10
 Name: Trial 2 Start
@@ -19,6 +20,7 @@ Description: Welcome to Trial 2. (instructions)
 Exits: D-2, U-4
 Items: 
 Commands:
+Entities: 
 
 ID: 11
 Name: Trial 3 Start
@@ -26,6 +28,7 @@ Description: Welcome to Trial 3. (instructions)
 Exits: D-Room 3
 Items: 
 Commands:
+Entities: 
 
 ID: 100
 Name: Trial 4 Start
@@ -40,6 +43,7 @@ Description: Welcome to Trial 5. (instructions)
 Exits: D-3
 Items: 
 Commands:
+Entities: 
 
 ID: 110
 Name: Trial 6 Start
@@ -47,6 +51,7 @@ Description: Welcome to Trial 6. (instructions)
 Exits: D-3
 Items: 
 Commands:
+Entities: 
 
 ID: 111
 Name: Trial 7 Start
@@ -54,6 +59,7 @@ Description: Welcome to Trial 7. (instructions)
 Exits: D-Room 3
 Items: 
 Commands:
+Entities: 
 
 ID: 1000
 Name: Trial 8 Start
@@ -61,6 +67,7 @@ Description: Welcome to Trial 8. (instructions)
 Exits: D-Room 3
 Items: 
 Commands:
+Entities:
 
 ID: 1001
 Name: Trial 9 Start
@@ -68,6 +75,7 @@ Description: Welcome to Trial 9. (instructions)
 Exits: D-Room 3
 Items: 
 Commands:
+Entities:
 
 ID: 1010
 Name: Trial 10 Start
@@ -75,6 +83,7 @@ Description: Welcome to Trial 10. (instructions)
 Exits: D-Room 3
 Items: 
 Commands:
+Entities:
 
 ID: 1011
 Name: Shop
@@ -82,6 +91,7 @@ Description: Welcome to the Shop. (instructions)
 Exits: D-Room 3
 Items: 3
 Commands:
+Entities:
 
 ID: 1100
 Name: Trading Centre
@@ -89,6 +99,7 @@ Description: Welcome to the Trading Centre. (instructions)
 Exits: D-Room 3
 Items: 
 Commands:
+Entities:
 
 ID: 1101
 Name: Challenge Gate
@@ -96,3 +107,4 @@ Description: Welcome to the Challenge Gate. (instructions)
 Exits: D-Room 3
 Items: 
 Commands:
+Entities:
