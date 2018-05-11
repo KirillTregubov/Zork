@@ -134,8 +134,7 @@ class Game {
 					roomItems = roomItems.split(":")[1].trim();
 					String[] itemsString = roomItems.split(", ");
 					room.setItems(itemsString); // assign items to the room's variable
-<<<<<<< Upstream, based on origin/master
-=======
+
 					
 					String roomEntities = reader.readLine();
 					if (roomEntities != null && roomEntities.isEmpty()!=true) {
@@ -167,10 +166,8 @@ class Game {
 							room.setEntities(entities,statsArr);
 						}
 					}
-					
-					
-					
->>>>>>> 60b34f1 0.2-alpha build 1.6
+
+
 					player.masterRoomMap.put(roomID, room);
 				}
 			}
@@ -406,8 +403,7 @@ class Game {
 			player.setCurrentRoom(nextRoom, player);
 			player.updateItems(player, nextRoom.getRoomID());
 			System.out.println(player.getRoomTravelDescription());
-<<<<<<< Upstream, based on origin/master
-=======
+
 			
 			if (nextRoom != null) {
 				player.setCurrentRoom(nextRoom, player);
@@ -418,7 +414,7 @@ class Game {
 				player.getRoom().startBattle(player.getPlayerStats());
 	}
 			
->>>>>>> 60b34f1 0.2-alpha build 1.6
+
 		} else System.out.println("That's not an option... You might be trapped.");
 	}
 

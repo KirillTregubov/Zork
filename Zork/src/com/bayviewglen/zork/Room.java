@@ -91,11 +91,9 @@ class Room {
 	 * Returns the name, description, and exits related to the current room.
 	 */
 	public String longDescription() {
-<<<<<<< Upstream, based on origin/master
-		return "Currently in: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems();
-=======
+
 		return "Currently in: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems() + listEnemies();
->>>>>>> 60b34f1 0.2-alpha build 1.6
+
 	}
 
 
@@ -103,11 +101,9 @@ class Room {
 	 * Returns the name, description, and exits related to the room being travelled to.
 	 */
 	public String travelDescription() {
-<<<<<<< Upstream, based on origin/master
-		return "Going to: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems();
-=======
+
 		return "Going to: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems() + listEnemies();
->>>>>>> 60b34f1 0.2-alpha build 1.6
+
 	}
 
 	/**
@@ -298,8 +294,7 @@ class Room {
 	// toString method.
 	public String toString() {
 		return roomName;
-<<<<<<< Upstream, based on origin/master
-=======
+
 	}
 	
 	// Andy Entity Stuff
@@ -429,6 +424,6 @@ public void setEntities(String[][] ent,int[][] arr) {
 				}
 			}
 		}
->>>>>>> 60b34f1 0.2-alpha build 1.6
+
 	}
 }
