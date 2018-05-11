@@ -23,7 +23,6 @@ public class Entity {
 	//Level, atr points, currenthp, MaxHP, Strength, defence, speed, accuracy.
 
 
-
 	public Entity () {
 		name = "Generic";
 		stats = new int[NUM_STATS];
@@ -176,9 +175,7 @@ public class Entity {
 	}
 
 	public String attackText() {
-		return this.getName()+" attacks ";
+		return this.getName() + " attacks ";
 	}
 
 }
-
-

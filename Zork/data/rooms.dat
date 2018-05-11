@@ -1,84 +1,98 @@
-Room ID: 0
-Room Name: Contest Hall
-Room Description:  This is room<br>1
-Exit Rooms: U-1
-Room Items: 5-4, 7, 0, 1, 6
+ID: 0
+Name: Contest Hall
+Description:  This is room<br>1
+Exits: U-1
+Items: 
+Commands:
 
-Room ID: 1
-Room Name: Trial 1 Start
-Room Description:  Welcome to Trial 1. (instructions)
-Exit Rooms: D-0
-Room Items: 5-4, 0, 1
-Room Enemies: OP Squire <Boss> <1-0-30-30-20-20-25-20>, Some Queer <Enemy> <1-0-30-30-20-20-25-25>, Green Gooblin <Enemy> <1-0-30-30-20-20-25-25>, Bob the Shopkeeper <NPC> <1-0-30-30-20-20-25-25>
+ID: 1
+Name: Trial 1 Start
+Description: Welcome to Trial 1. (instructions)
+Exits: D-0
+Items: 5-4, 7, 0, 1, 6
+Commands:
+Enemies: OP Squire <Boss> <1-0-30-30-20-20-25-20>, Some Queer <Enemy> <1-0-30-30-20-20-25-25>, Green Gooblin <Enemy> <1-0-30-30-20-20-25-25>, Bob the Shopkeeper <NPC> <1-0-30-30-20-20-25-25>
 
-Room ID: 10
-Room Name: Trial 2 Start
-Room Description: Welcome to Trial 2. (instructions)
-Exit Rooms: D-Room 2, U-Room 4
-Room Items: 2
+ID: 10
+Name: Trial 2 Start
+Description: Welcome to Trial 2. (instructions)
+Exits: D-2, U-4
+Items: 
+Commands:
 
-Room ID: 11
-Room Name: Trial 3 Start
-Room Description: Welcome to Trial 3. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 11
+Name: Trial 3 Start
+Description: Welcome to Trial 3. (instructions)
+Exits: D-Room 3
+Items: 
+Commands:
 
-Room ID: 100
-Room Name: Trial 4 Start
-Room Description: Welcome to Trial 4. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 100
+Name: Trial 4 Start
+Description: Welcome to Trial 4. (instructions)
+Exits: D-3
+Items: 
+Commands:
 
-Room ID: 101
-Room Name: Trial 5 Start
-Room Description: Welcome to Trial 5. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 101
+Name: Trial 5 Start
+Description: Welcome to Trial 5. (instructions)
+Exits: D-3
+Items: 
+Commands:
 
-Room ID: 110
-Room Name: Trial 6 Start
-Room Description: Welcome to Trial 6. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 110
+Name: Trial 6 Start
+Description: Welcome to Trial 6. (instructions)
+Exits: D-3
+Items: 
+Commands:
 
-Room ID: 111
-Room Name: Trial 7 Start
-Room Description: Welcome to Trial 7. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 111
+Name: Trial 7 Start
+Description: Welcome to Trial 7. (instructions)
+Exits: D-Room 3
+Items: 
+Commands:
 
-Room ID: 1000
-Room Name: Trial 8 Start
-Room Description: Welcome to Trial 8. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 1000
+Name: Trial 8 Start
+Description: Welcome to Trial 8. (instructions)
+Exits: D-Room 3
+Items: 
+Commands:
 
-Room ID: 1001
-Room Name: Trial 9 Start
-Room Description: Welcome to Trial 9. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 1001
+Name: Trial 9 Start
+Description: Welcome to Trial 9. (instructions)
+Exits: D-Room 3
+Items: 
+Commands:
 
-Room ID: 1010
-Room Name: Trial 10 Start
-Room Description: Welcome to Trial 10. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 1010
+Name: Trial 10 Start
+Description: Welcome to Trial 10. (instructions)
+Exits: D-Room 3
+Items: 
+Commands:
 
-Room ID: 1011
-Room Name: Shop
-Room Description: Welcome to the Shop. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 1011
+Name: Shop
+Description: Welcome to the Shop. (instructions)
+Exits: D-Room 3
+Items: 3
+Commands:
 
-Room ID: 1100
-Room Name: Trading Centre
-Room Description: Welcome to the Trading Centre. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 1100
+Name: Trading Centre
+Description: Welcome to the Trading Centre. (instructions)
+Exits: D-Room 3
+Items: 
+Commands:
 
-Room ID: 1101
-Room Name: Challenge Gate
-Room Description: Welcome to the Challenge Gate. (instructions)
-Exit Rooms: D-Room 3
-Room Items: 3
+ID: 1101
+Name: Challenge Gate
+Description: Welcome to the Challenge Gate. (instructions)
+Exits: D-Room 3
+Items: 
+Commands:

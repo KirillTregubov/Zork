@@ -102,7 +102,7 @@ class Game {
 			String line;
 
 			while((line = reader.readLine()) != null) {
-				if (line.contains("Room ID: ")) {
+				if (line.contains("ID: ")) {
 					// Create room
 					Room room = new Room();
 					// Read the ID
@@ -131,14 +131,18 @@ class Game {
 
 					// Read items, assign to array, and store it
 					String roomItems = reader.readLine();
-					roomItems = roomItems.split(":")[1].trim();
-					String[] itemsString = roomItems.split(", ");
-					room.setItems(itemsString); // assign items to the room's variable
+					if (roomItems.split(":")[1].trim().length() > 0) {
+						roomItems = roomItems.split(":")[1].trim();
+						String[] itemsString = roomItems.split(", ");
+						room.setItems(itemsString); // assign items to the room's variable
+					}
+					
+					// Assign room to be stored as roomID
 
 					
 					String roomEntities = reader.readLine();
 					if (roomEntities != null && roomEntities.isEmpty()!=true) {
-						if (roomEntities.contains("Room Enemies")) {
+						if (roomEntities.contains("Enemies")) {
 
 
 							roomEntities = roomEntities.split(":")[1].trim();
@@ -166,8 +170,6 @@ class Game {
 							room.setEntities(entities,statsArr);
 						}
 					}
-
-
 					player.masterRoomMap.put(roomID, room);
 				}
 			}
