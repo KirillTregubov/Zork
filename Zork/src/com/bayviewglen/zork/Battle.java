@@ -4,17 +4,21 @@ import java.util.Scanner;
 
 public class Battle {
 	
-	public PlayerStats playe;
+	public Player player;
+	public boolean playerIsBlocking;
 	public Entity entity;
+	public boolean entityIsBlocking;
 	
-	public Battle(PlayerStats p, Entity ent) {
-		playe = p;
+	public Battle(Player p, Entity ent) {
+		player = p;
+		playerIsBlocking = false;
 		entity = ent;
+		entityIsBlocking = false;
 	}
 	
 	
-	public PlayerStats getPlayer(){
-		return playe;
+	public Player getPlayer(){
+		return player;
 		
 	}
 	
@@ -24,80 +28,90 @@ public class Battle {
 	
 	public void startBattle() { // Consumables count as a turn.
 		
-		int storedPlayerSpeed = playe.getSpeed();
-		int storedEntitySpeed = entity.getSpeed();
 		
-		System.out.println("You have been engaged by "+entity.getName()+"!");
+		double storedPlayerSpeed = player.getStats().getSpeed();
+		double storedEntitySpeed = entity.getStats().getSpeed();
 		
-		while(playe.isAlive()&&entity.isAlive()) { // TODO: And while running away is not true
+		System.out.println("\nYou have been engaged by "+entity.getName()+"!");
+		
+		while(player.isAlive()&&entity.isAlive()) { // TODO: And while running away is not true
 			
+			System.out.println("");
 			
-			
-			if (playe.getSpeed()>=entity.getSpeed()) { // Multiply by weapon speed
-				System.out.println(playe.getName()+" will now move!");
+			if (player.getStats().getSpeed()>=entity.getStats().getSpeed()) { // Multiply by weapon speed
+				System.out.println(player.getName()+" will now move!");
 				
 				System.out.println("Take an action!");
 				battleParser();
 				
 				if (entity.isAlive()) {
-					if (entity.getSpeed()<storedEntitySpeed) {
-						entity.setSpeed(entity.getSpeed()+20);
+					if (entity.getStats().getSpeed()<storedEntitySpeed) {
+						entity.getStats().setSpeed(entity.getStats().getSpeed()+20);
 					}
 					System.out.println(entity.getName()+" will now move!");
 					
-					damageDealer(entity,playe);
+					
+					damageDealer(entity.getStats(),entity.getName(),player.getStats(),player.getName(),playerIsBlocking);
 					
 				}
 				
 			}
-			else if (entity.getSpeed()>playe.getSpeed()) { // Multiply by weapon speed
+			else if (entity.getStats().getSpeed()>player.getStats().getSpeed()) { // Multiply by weapon speed
 				System.out.println(entity.getName()+" will now move!");
 				
-				if (playe.getSpeedHint()) {
+				/*if (player.getStats().getSpeedHint()) {
 					System.out.println("Hint: The enemy has the first move on this turn, consider upgrading your speed stat!");
-					playe.setSpeedHint(false);
-				}
+					player.getStats().setSpeedHint(false);
+				}*/
 			
+				System.out.println(entity.getName()+" attacks "+entity.getName()+"!");
+				damageDealer(entity.getStats(),entity.getName(),player.getStats(),player.getName(),playerIsBlocking);
 				
-				damageDealer(entity,playe);
-				
-				if (playe.isAlive()) {
+				if (player.isAlive()) {
 					
 					System.out.println("Take an action!");
 					battleParser();
 					
-					if (playe.getSpeed()<storedPlayerSpeed) {
-						playe.setSpeed(playe.getSpeed()+20);
+					if (player.getStats().getSpeed()<storedPlayerSpeed) {
+						player.getStats().setSpeed(player.getStats().getSpeed()+20);
 				}
 				
 			}
 			}
 		}
 		
-		if (playe.isAlive()==false) {
+		if (player.isAlive()==false) {
 			System.out.println("A dark day for the Republic. You are defeated...");
 		}
 		else if (entity.isAlive()==false) {
-			System.out.println("You have defeated level "+entity.getLvl()+" "+entity.getName()+"!");
+			System.out.println("You have defeated level "+entity.getStats().getLevel()+" "+entity.getName()+"!");
 		}
 		
 	}
 	
 	public void battleParser() { // TODO: Add loop and ability to observe the enemy, which will show it's stats, take care of fail cases
 		// Attack, hit, swing, stab, bludgeon, slash, strike, power, run, use (item), consume, eat, drink, help
-		final String[] WORDS = {"use","block"};
 		Scanner input = new Scanner(System.in);
-		String parseMe = input.nextLine().toLowerCase();
+		String parseMe;
 		
-		if (parseMe.equals("block")||parseMe.equals("block attack")||parseMe.equals("block hit")) {
-			playe.setIsBlocking(true);
-		}
-		else if (parseMe.equals("attack")||parseMe.equals("hit")||parseMe.equals("swing")||parseMe.equals("stab")||
-				parseMe.equals("bludgeon")||parseMe.equals("slash")||parseMe.equals("strike")) {
-			damageDealer(playe,entity);
-		}
-		else if (parseMe.equals("power attack")) {
-			// Damage increase
+		for(boolean endParse=false;endParse==false;) {
+			parseMe = input.nextLine().toLowerCase();
+			if (parseMe.equals("block")||parseMe.equals("block attack")||parseMe.equals("block hit")) {
+				playerIsBlocking=true;
+				endParse = true;
+			}
+			else if (parseMe.equals("attack")||parseMe.equals("hit")||parseMe.equals("swing")||parseMe.equals("stab")||
+					parseMe.equals("bludgeon")||parseMe.equals("slash")||parseMe.equals("strike")) {
+				playerIsBlocking=false;
+				damageDealer(player.getStats(),player.getName(),entity.getStats(),entity.getName(),entityIsBlocking);
+				endParse = true;
+			}
+			else if (parseMe.equals("help")||parseMe.equals("help me")) {
+				System.out.println("Commands are \"attack\" and \"block\" or words and phases that mean them. It's really not that difficult, dude.");
+			}
+			else {
+				System.out.println("No known command by that name, try again. It's not like there's a battle going on right?");
+			}
 		}
 		/*else if (parseMe=="Attack") {
 			damageDealer(player,entity);
@@ -107,62 +121,48 @@ public class Battle {
 		
 	}
 	
-	public void damageDealer (Entity attacker, Entity defender) { // increase by 2.5% each time
-										// damage = getItemDamage()*(attacker.getStrength()/40)*((40-defender.getDefense())/40)
+	public void damageDealer (Stats attacker,String attackerName,Stats defender,String defenderName,boolean defenderBlockingState) {
 		
-		System.out.println(attacker.attackText()+defender.getName());
+		System.out.println(attackerName+" attacks "+defenderName+"!");
 		
 		
 		
 		if (didHit(attacker)) { // Accuracy calculator
-			if (defender.getIsBlocking()==false) {
-				if (/*getItemDamage()*/10*(attacker.getStrength()/40)*((40-defender.getDefence())/40)<=0) {
-					defender.setCurrHP(defender.getCurrHP()-1);
-					System.out.println(defender.getName()+" took 1 damage!"); // Minimum of one damage
-					System.out.println(defender.getName()+"'s health: "+ defender.getCurrHP());
+			if (defenderBlockingState==false) {
+				if (attacker.getAttack()*((40-defender.getDefense())/40)<1) {
+					defender.setCurrentHP(defender.getCurrentHP()-1);
+					System.out.println(defenderName+" took 1 damage!"); // Minimum of one damage
+					System.out.println(defenderName+"'s health: "+ defender.getCurrentHP());
 				}
 				else {
-					System.out.println(defender.getName()+" took "+/*getItemDamage()*/10*(attacker.getStrength()/40)*((40-defender.getDefence())/40)+" damage!");
-					defender.setCurrHP(defender.getCurrHP()-/*getItemDamage()*/(10*(attacker.getStrength()/40)*((40-defender.getDefence())/40)));
-					defender.setCurrHP(defender.getCurrHP()-1);
-					System.out.println(defender.getName()+"'s health: "+ defender.getCurrHP());
+					System.out.println(defenderName+" took "+attacker.getAttack()*((40-defender.getDefense())/40)+" damage!");
+					defender.setCurrentHP(defender.getCurrentHP()-attacker.getAttack()*((40-defender.getDefense())/40));
+					System.out.println(defenderName+"'s health: "+ defender.getCurrentHP());
 				}
 			}
 			else {
-				System.out.println(attacker.getName()+"'s attack was successfully blocked by "+defender.getName()+"!");
-				System.out.println("The successful block has caught "+attacker.getName()+" offguard. Strike Now!");
+				System.out.println(attackerName+"'s attack was successfully blocked by "+defenderName+"!");
+				System.out.println("The successful block has caught "+attackerName+" offguard. Strike Now!");
 				attacker.setSpeed(attacker.getSpeed()-20);
-				playe.setIsBlocking(false); // Resets their blocking states for the next combat turn
-				entity.setIsBlocking(false);
+				playerIsBlocking=false; // Resets their blocking states for the next combat turn
+				entityIsBlocking=false;
 			}
 			
 			playSound("/Users/adouglas/git/Zork/Zork/Test1.mp3"); // Doesn't work
 			
-			/*
-			// open the sound file as a Java input stream
-		    String gongFile = "/Users/adouglas/git/Zork/Zork/Recording.m4a";
-		    InputStream in = new FileInputStream(gongFile);
-
-		    // create an audiostream from the inputstream
-		    AudioStream audioStream = new AudioStream(in);
-
-		    // play the audio clip with the audioplayer class
-		    AudioPlayer.player.start(audioStream);
-		    */
-			
-			
 		}
 		else {
-			System.out.println(attacker.getName()+" completely missed their target!");
+			System.out.println(attackerName+" completely missed their target!");
 		}
 		
 		
 	}
 	
-	public boolean didHit(Entity ent) {
-		int random = (int) (Math.random()*100+ent.getAccuracy()); // Accuracy raises the minimum value TODO: subtract by item accuracy
+	public boolean didHit(Stats _stats) { // Accuracy is a double value (Ex: 0.5)
+		int random = (int)((Math.random())*100); // Accuracy raises the minimum value
+		double hits = random/100.0;
 		
-		if (((random))>50) {
+		if (hits<_stats.getAccuracy()) {
 			return true;
 		}
 		else {

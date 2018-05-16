@@ -18,13 +18,13 @@ public class Player {
 	public HashMap<String, Room> masterRoomMap;
 
 
-	public PlayerStats playerStats;
+	
 
 	Player() {
 		inventory = new Inventory();
 		//pickedUpItems = new Inventory();
 		stats = new Stats(Stats.ENTITY_INDEX, Stats.PLAYER_INDEX, "1,0,0,20,20,2,2,2,0.5,0.1");	
-		playerStats = new PlayerStats("Player_Name",new int[]{1,0,40,40,80,40,40,40},0);
+		
 	}
 
 	// Item Variables
@@ -36,7 +36,7 @@ public class Player {
 	static Item redApple = new Item("Red Apple", "Apple", Item.CONSUMABLE_INDEX, "5");
 	static Item basicSword = new Item("Basic Sword", "This is a test item 1.", Item.WEAPON_INDEX, "10,0.5");
 	static Item uniqueTest = new Item("Unique Test", "This is unique!", Item.WEAPON_INDEX, "20,0.0,0.25", new int[]{ Stats.DMG_REFLECT_INDEX });
-	
+
 	// Weapons - Common
 	static Item splinteredBranch = new Item("Splintered Branch", "A branch that hurts...a litle.", Item.WEAPON_INDEX, "2,0.0");
 	static Item woodenRapier = new Item("Wooden Rapier", "A wooden sword with a cool name.", Item.WEAPON_INDEX, "3,0.0");
@@ -85,14 +85,50 @@ public class Player {
 	static Item skyfireRoot= new Item("Skyfire Root", "A root that grows inside volcanos. It restores you to full health.", Item.CONSUMABLE_INDEX, "10000");
 	static Item combatPotion= new Item("Combat Potion", "Military grade potion that heals you to full health and boost attack power for 1 battle.", Item.CONSUMABLE_INDEX, "10000");
 
-	public static Item items[] = { itemOne, itemTwo, itemThree, itemFour, itemFive, redApple, basicSword, uniqueTest,
-			splinteredBranch, woodenRapier, copperKatana, silverLongsword,
+	public static Item items[] = { splinteredBranch, woodenRapier, copperKatana, silverLongsword,
 			steelDagger, cobaltBroadsword, ironSpear, lifeDrainStaff, goldenBambooSword,
 			titaniumScythe, terrorGauntlet, kongHammer, vileBlade,
 			genjiDragonblade, gandalfStaff, enchantedSabre, infinityGauntlet, developerSword,
 			cardboardArmor,leatherSuit, knightArmor, titaniumArmor, vibraniumArmor, electromagneticShield,
 			enchantedSteelArmor, enchantedForceField, skynightArmor, darkAngelArmor, vibraniumKineticSuit,
-			smallHeal, mediumHeal, largeHeal, skyfireRoot, combatPotion };
+			smallHeal, mediumHeal, largeHeal, skyfireRoot, combatPotion,
+			itemOne, itemTwo, itemThree, itemFour, itemFive, redApple, basicSword, uniqueTest };
+
+	// Indexes of Items
+	public final static int SPLINTERED_BRANCH = 0;
+	public final static int WOODEN_RAPIER = 1;
+	public final static int COPPER_KATANA = 2;
+	public final static int SILVER_LONGSWORD = 3;
+	public final static int STEEL_DAGGER = 4;
+	public final static int COBALT_BROADSWORD = 5;
+	public final static int IRON_SPEAR = 6;
+	public final static int LIFE_DRAIN_STAFF = 7;
+	public final static int GOLDEN_BAMBOO_SWORD = 8;
+	public final static int TITANIUM_SCYTHE = 9;
+	public final static int TERROR_GAUNTLET = 10;
+	public final static int KONG_HAMMER = 11;
+	public final static int VILE_BLADE = 12;
+	public final static int GENJI_DRAGONBLADE = 13;
+	public final static int GANDALF_STAFF = 14;
+	public final static int ENCHANTED_SABRE = 15;
+	public final static int INFINITY_GAUNTLET = 16;
+	public final static int DEVELOPER_SWORD = 17;
+	public final static int CARDBOARD_ARMOR = 18;
+	public final static int LEATHER_SUIT = 19;
+	public final static int KNIGHT_ARMOR = 20;
+	public final static int TITANIUM_ARMOR = 21;
+	public final static int VIBRANIUM_ARMOR = 22;
+	public final static int ELECTROMAGNETIC_SHIELD = 23;
+	public final static int ENCHANTED_STEEL_ARMOR = 24;
+	public final static int ENCHANTED_FORCE_FIELD = 25;
+	public final static int SKYNIGHT_ARMOR = 26;
+	public final static int DARK_ANGEL_ARMOR = 27;
+	public final static int VIBRANIUM_KINETIC_SUIT = 28;
+	public final static int SMALL_HEAL = 29;
+	public final static int MEDIUM_HEAL = 30;
+	public final static int LARGE_HEAL = 31;
+	public final static int SKYFIRE_ROOT = 32;
+	public final static int COMBAT_POTION = 33;
 
 	public String teleport(String roomName) {
 		Room roomTemp = masterRoomMap.get(roomName);
@@ -244,17 +280,24 @@ public class Player {
 	/*
 	 * Misc Setters
 	 */
-	public PlayerStats getPlayerStats() {
-		return playerStats;
+	public String getName() {
+		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
-		playerStats.setName(name);
+		
 	}
 
 	// toString method
 	public String toString() {
 		return name;
+	}
+	
+	public Stats getStats() {
+		return stats;
+	}
+
+	public boolean isAlive() {
+		return (stats.getCurrentHP()>0);
 	}
 }

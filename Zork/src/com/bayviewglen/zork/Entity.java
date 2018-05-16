@@ -2,8 +2,43 @@ package com.bayviewglen.zork;
 
 public class Entity {
 
-	public final static String[] STAT_NAMES = {"Level","Attribute points","CurrentHP","MaxHP","Strength","Defence","Speed","Accuracy"};
-	public final static int DEFAULT_STAT_VAL = 10;
+	public String name;
+	
+	public Stats stats;
+	public Inventory inventory;
+	public int entityType;
+	public final static int TYPE_BOSS = 1;
+	public final static int TYPE_ENEMY = 2;
+	public final static int TYPE_NPC = 3;
+	
+	public Entity (String _name,int _type,String _stats) {
+		name = _name;
+		stats = new Stats(1,1,_stats);
+		//inventory
+	}
+
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String _name) {
+		name = _name;
+	}
+	
+	public boolean isAlive() {
+		return (stats.getCurrentHP()>0);
+	}
+	
+	public Stats getStats() {
+		return stats;
+	}
+	public void setStats() {
+		System.out.println("Not implemented");
+	}
+	
+	
+	/*public final static String[] STAT_NAMES = {"Level","Attribute points","CurrentHP","MaxHP","Strength","Defence","Speed","Accuracy"};
+	public final static int DEFAULT_STAT_VAL = 5;
 	public final static int NUM_STATS = 8;
 
 	public final static int LVL = 0;
@@ -18,7 +53,8 @@ public class Entity {
 	public String name;
 	public boolean isBlocking;
 
-	public int[] stats;
+	
+	public double[] stats;
 
 	//Level, atr points, currenthp, MaxHP, Strength, defence, speed, accuracy.
 
@@ -26,7 +62,7 @@ public class Entity {
 
 	public Entity () {
 		name = "Generic";
-		stats = new int[NUM_STATS];
+		stats = new double[NUM_STATS];
 
 		for (int i=0;i<NUM_STATS;i++) {
 			stats[i] = DEFAULT_STAT_VAL;
@@ -36,9 +72,9 @@ public class Entity {
 
 	}
 
-	public Entity (String _name,int[] _stats) {
+	public Entity (String _name,double[] _stats) {
 		name = _name;
-		stats = new int[NUM_STATS];
+		stats = new double[NUM_STATS];
 
 		for (int i=0;i<NUM_STATS;i++) {
 			stats[i] = _stats[i];
@@ -58,62 +94,62 @@ public class Entity {
 		name = _name;
 	}
 
-	public int getLvl() {
+	public double getLvl() {
 		return stats[LVL];
 	}
-	public void setLvl(int level) {
+	public void setLvl(double level) {
 		stats[LVL] = level;
 	}
 
-	public int getAtrPoints() {
+	public double getAtrPoints() {
 		return stats[ATR_POINTS];
 	}
-	public void setAtrPoints(int points) {
+	public void setAtrPoints(double points) {
 		stats[ATR_POINTS] = points;
 	}
 
-	public int getCurrHP() {
+	public double getCurrHP() {
 		return stats[CURR_HP];
 	}
-	public void setCurrHP(int _curr_hp) {
+	public void setCurrHP(double _curr_hp) {
 		stats[CURR_HP] = _curr_hp;
 		if (getCurrHP()<0) {
 			stats[CURR_HP] = 0;
 		}
 	}
 
-	public int getMaxHP() {
+	public double getMaxHP() {
 		return stats[MAX_HP];
 	}
-	public void setMaxHP(int _max_hp) {
+	public void setMaxHP(double _max_hp) {
 		stats[MAX_HP] = _max_hp;
 	}
 
-	public int getStrength() {
+	public double getStrength() {
 		return stats[STR];
 	}
-	public void setStrength(int _str) {
-		stats[STR] = _str;
+	public void setStrength(double d) {
+		stats[STR] = d;
 	}
 
-	public int getDefence() {
+	public double getDefence() {
 		return stats[DEF];
 	}
-	public void setDefence(int _def) {
+	public void setDefence(double _def) {
 		stats[DEF] = _def;
 	}
 
-	public int getSpeed() {
+	public double getSpeed() {
 		return stats[SPD];
 	}
-	public void setSpeed(int _spd) {
+	public void setSpeed(double _spd) {
 		stats[SPD] = _spd;
 	}
 
-	public int getAccuracy() {
+	public double getAccuracy() {
 		return stats[ACC];
 	}
-	public void setAccuracy(int _acc) {
+	public void setAccuracy(double _acc) {
 		stats[ACC] = _acc;
 	}
 
@@ -178,7 +214,7 @@ public class Entity {
 	public String attackText() {
 		return this.getName()+" attacks ";
 	}
-
+*/
 }
 
 

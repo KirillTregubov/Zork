@@ -30,9 +30,9 @@ class Room {
 	private ArrayList<Item> items;
 	private ArrayList<Integer> originalItemAmounts;
 	private HashMap<String, Room> exits;        // stores exits of this room.
-	private ArrayList<Enemy> enemies;
-	private ArrayList<Boss> bosses;
-	private ArrayList<NPC> npcs;
+	private ArrayList<Entity> enemies;
+	private ArrayList<Entity> bosses;
+	private ArrayList<Entity> npcs;
 
 
 	/**
@@ -46,9 +46,9 @@ class Room {
 
 	public Room() {
 		// default constructor.
-		enemies = null;
-		bosses = null;
-		npcs = null;
+		enemies = new ArrayList<Entity>();
+		bosses = new ArrayList<Entity>();
+		npcs = new ArrayList<Entity>();
 		roomName = "DEFAULT ROOM";
 		description = "DEFAULT DESCRIPTION";
 		exits = new HashMap<String, Room>();
@@ -91,9 +91,9 @@ class Room {
 	 * Returns the name, description, and exits related to the current room.
 	 */
 	public String longDescription() {
-
-		return "Currently in: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems() + listEnemies();
-
+		String returnString = "Currently in: " + roomName +"\n" + description + "\n" + listExits();
+		if (hasItems()) return returnString + "\n" + listItems();
+		else return returnString;
 	}
 
 
@@ -101,9 +101,9 @@ class Room {
 	 * Returns the name, description, and exits related to the room being travelled to.
 	 */
 	public String travelDescription() {
-
-		return "Going to: " + roomName +"\n" + description + "\n" + listExits() + "\n" + listItems() + listEnemies();
-
+		String returnString = "Going to: " + roomName +"\n" + description + "\n" + listExits();
+		if (hasItems()) return returnString + "\n" + listItems();
+		else return returnString;
 	}
 
 	/**
@@ -118,14 +118,18 @@ class Room {
 		return returnString;
 	}
 
+	private boolean hasItems() {
+		if (items.size() == 0) return false;
+		else return true;
+	}
+
 	/**
 	 * Return a string describing the room's exits, for example
 	 * "Exits: north west ".
 	 */
 	private String listItems() {
-		if (items.size() == 0) {
-			return "There are no items in this room.";
-		}
+		if (!hasItems()) return "There are no items in this room.";
+
 		String returnString = "Items in this room:";
 		for (int i = 0; i < items.size(); i++) {
 			if (items.get(i).isStackable) {
@@ -324,27 +328,27 @@ public String listEnemies() {
 		return returnString;
 	}
 
-public ArrayList<Enemy> getRoomEnemies() {
+public ArrayList<Entity> getRoomEnemies() {
 		return enemies;
 	}
 
-	public void setRoomEnemies(ArrayList<Enemy> enemies) {
+	public void setRoomEnemies(ArrayList<Entity> enemies) {
 		this.enemies = enemies;
 	}
 	
-	public ArrayList<Boss> getRoomBosses() {
+	public ArrayList<Entity> getRoomBosses() {
 		return bosses;
 	}
 
-	public void setRoomBosses(ArrayList<Boss> bosses) {
+	public void setRoomBosses(ArrayList<Entity> bosses) {
 		this.bosses = bosses;
 	}
 	
-	public ArrayList<NPC> getRoomNPC() {
+	public ArrayList<Entity> getRoomNPC() {
 		return npcs;
 	}
 
-	public void setRoomNPC(ArrayList<NPC> npc) {
+	public void setRoomNPC(ArrayList<Entity> npc) {
 		this.npcs = npc;
 	}
 
@@ -384,40 +388,37 @@ public ArrayList<Enemy> getRoomEnemies() {
 	}
 
 // Start Battle
-	public void startBattle(PlayerStats pStats) {
+	public void startBattle(Player player) {
 		// Enemy battle
-		if (getRoomEnemies().size()>0) {
-			for (int i=0;i<getRoomEnemies().size();i++) {
-				Battle bat = new Battle(pStats,getRoomEnemies().get(i));
-				bat.startBattle();
+		if (getRoomEnemies()!=null) {
+			if (getRoomEnemies().size()>0) {
+				for (int i=0;i<getRoomEnemies().size();i++) {
+					Battle bat = new Battle(player,getRoomEnemies().get(i));
+					bat.startBattle();
+				}
 			}
-		}
-		// Boss battle
-		if (bosses.size()>0) {
-			for (int i=0;i<bosses.size();i++) {
-				Battle bat = new Battle(pStats,bosses.get(i));
-				bat.startBattle();
+			// Boss battle
+			if (bosses.size()>0) {
+				for (int i=0;i<bosses.size();i++) {
+					Battle bat = new Battle(player,getRoomBosses().get(i));
+					bat.startBattle();
+				}
 			}
 		}
 	}
 
-public void setEntities(String[][] ent,int[][] arr) {
+public void setEntities(String[][] ent) {
 		
-		setRoomEnemies(new ArrayList<Enemy>());
-		setRoomBosses(new ArrayList<Boss>());
-		npcs = new ArrayList<NPC>();
-		bosses = new ArrayList<Boss>();
-		
-		if (ent[0][0]!=null) {
+		if (ent!=null) { //String _name,int _type,String _stats
 			for (int i=0;i<ent[0].length;i++) {
 				if (ent[1][i].compareTo("Enemy")==0) {
-					getRoomEnemies().add(new Enemy(ent[0][i],arr[i]));
+					getRoomEnemies().add(new Entity(ent[0][i],Entity.TYPE_ENEMY,ent[2][i]));
 				}
 				else if (ent[1][i].compareTo("Boss")==0) {
-					getRoomBosses().add(new Boss(ent[0][i],arr[i]));
+					getRoomBosses().add(new Entity(ent[0][i],Entity.TYPE_BOSS,ent[2][i]));
 				}
 				else if (ent[1][i].compareTo("NPC")==0) {
-					
+					getRoomNPC().add(new Entity(ent[0][i],Entity.TYPE_NPC,ent[2][i]));
 				}
 				else {
 					System.out.println("Mission failed, run it again. (Loading entities has failed)");
