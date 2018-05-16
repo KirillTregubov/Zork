@@ -345,7 +345,7 @@ public class Stats {
 			if (usedIndexes.get(i) == LIFE_STEAL_INDEX && getLifeSteal() != 0) returnArr.add(statNames.get(i) + ": " + getLifeSteal());
 			if (usedIndexes.get(i) == DMG_REFLECT_INDEX && getDamageReflection() != 0.0) returnArr.add(statNames.get(i) + ": " + getDamageReflection());
 		}
-		
+
 		String returnString = "";
 		for (int i = 0; i < returnArr.size(); i++) {
 			returnString += returnArr.get(i);

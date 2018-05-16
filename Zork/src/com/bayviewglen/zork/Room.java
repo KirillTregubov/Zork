@@ -26,7 +26,7 @@ import java.util.Iterator;
 class Room {
 	private String roomID;
 	private String roomName;
-	
+
 	private String description;
 	private ArrayList<Item> items;
 	private ArrayList<Integer> originalItemAmounts;
@@ -39,7 +39,7 @@ class Room {
 	/**
 	 * Create a room described "description". Initially, it has no exits.
 	 * "description" is something like "a kitchen" or "an open court yard".
-	 
+
 	public Room(String description) {
 		this.description = description;
 		exits = new HashMap<String, Room>();
@@ -339,7 +339,7 @@ class Room {
 	public void setRoomEnemies(ArrayList<Entity> enemies) {
 		this.enemies = enemies;
 	}
-	
+
 	public ArrayList<Entity> getRoomBosses() {
 		return bosses;
 	}
@@ -411,26 +411,26 @@ class Room {
 		}
 	}
 
-public void setEntities(String[][] ent) {
-		
+	public void setEntities(String[][] ent) {
+
 		if (ent!=null) { //String _name,int _type,String _stats
 
-		if (ent[0][0]!=null) {
-			for (int i=0;i<ent[0].length;i++) {
-				if (ent[1][i].compareTo("Enemy")==0) {
-					getRoomEnemies().add(new Entity(ent[0][i],Entity.TYPE_ENEMY,ent[2][i]));
-				}
-				else if (ent[1][i].compareTo("Boss")==0) {
-					getRoomBosses().add(new Entity(ent[0][i],Entity.TYPE_BOSS,ent[2][i]));
-				}
-				else if (ent[1][i].compareTo("NPC")==0) {
-				}
-				else {
-					System.out.println("Mission failed, run it again. (Loading entities has failed)");
+			if (ent[0][0]!=null) {
+				for (int i=0;i<ent[0].length;i++) {
+					if (ent[1][i].compareTo("Enemy")==0) {
+						getRoomEnemies().add(new NPC(ent[0][i],NPC.TYPE_ENEMY,ent[2][i]));
+					}
+					else if (ent[1][i].compareTo("Boss")==0) {
+						getRoomBosses().add(new NPC(ent[0][i],NPC.TYPE_BOSS,ent[2][i]));
+					}
+					else if (ent[1][i].compareTo("NPC")==0) {
+					}
+					else {
+						System.out.println("Mission failed, run it again. (Loading entities has failed)");
+					}
 				}
 			}
-		}
 
+		}
 	}
-}
 }

@@ -3,20 +3,19 @@ package com.bayviewglen.zork;
 public class Entity {
 
 	public String name;
-	
 	public Stats stats;
-	public Inventory inventory;
-	public int entityType;
-	public final static int TYPE_BOSS = 1;
-	public final static int TYPE_ENEMY = 2;
-	public final static int TYPE_NPC = 3;
+
+
+	public Entity(String name) {
+		this.name = name;
+	}
 	
-	public Entity (String _name,int _type,String _stats) {
-		name = _name;
-		stats = new Stats(1,1,_stats);
-		//inventory
+	public Entity(String name, int type, String stats) {
+		this.name = name;
+		this.stats = new Stats(Stats.ENTITY_INDEX, type, stats);
 	}
 
+	// Getters and Setters
 	
 	public String getName() {
 		return name;
@@ -24,195 +23,14 @@ public class Entity {
 	public void setName(String _name) {
 		name = _name;
 	}
-	
+
 	public boolean isAlive() {
-		return (stats.getCurrentHP()>0);
-	}
-	
-	public Stats getStats() {
-		return stats;
-	}
-	public void setStats() {
-		System.out.println("Not implemented");
-	}
-	
-	
-	/*public final static String[] STAT_NAMES = {"Level","Attribute points","CurrentHP","MaxHP","Strength","Defence","Speed","Accuracy"};
-	public final static int DEFAULT_STAT_VAL = 5;
-	public final static int NUM_STATS = 8;
-
-	public final static int LVL = 0;
-	public final static int ATR_POINTS = 1;
-	public final static int CURR_HP = 2;
-	public final static int MAX_HP = 3;
-	public final static int STR = 4;
-	public final static int DEF = 5;
-	public final static int SPD = 6;
-	public final static int ACC = 7;
-
-	public String name;
-	public boolean isBlocking;
-
-	
-	public double[] stats;
-
-	//Level, atr points, currenthp, MaxHP, Strength, defence, speed, accuracy.
-
-
-
-	public Entity () {
-		name = "Generic";
-		stats = new double[NUM_STATS];
-
-		for (int i=0;i<NUM_STATS;i++) {
-			stats[i] = DEFAULT_STAT_VAL;
-		}
-
-		isBlocking = false;
-
+		return (stats.getCurrentHP() > 0);
 	}
 
-	public Entity (String _name,double[] _stats) {
-		name = _name;
-		stats = new double[NUM_STATS];
-
-		for (int i=0;i<NUM_STATS;i++) {
-			stats[i] = _stats[i];
-		}
-
-		isBlocking = false;
-
-	}
-
-
-
-
-	public String getName() {
+	// toString method
+	public String toString() {
 		return name;
 	}
-	public void setName(String _name) {
-		name = _name;
-	}
 
-	public double getLvl() {
-		return stats[LVL];
-	}
-	public void setLvl(double level) {
-		stats[LVL] = level;
-	}
-
-	public double getAtrPoints() {
-		return stats[ATR_POINTS];
-	}
-	public void setAtrPoints(double points) {
-		stats[ATR_POINTS] = points;
-	}
-
-	public double getCurrHP() {
-		return stats[CURR_HP];
-	}
-	public void setCurrHP(double _curr_hp) {
-		stats[CURR_HP] = _curr_hp;
-		if (getCurrHP()<0) {
-			stats[CURR_HP] = 0;
-		}
-	}
-
-	public double getMaxHP() {
-		return stats[MAX_HP];
-	}
-	public void setMaxHP(double _max_hp) {
-		stats[MAX_HP] = _max_hp;
-	}
-
-	public double getStrength() {
-		return stats[STR];
-	}
-	public void setStrength(double d) {
-		stats[STR] = d;
-	}
-
-	public double getDefence() {
-		return stats[DEF];
-	}
-	public void setDefence(double _def) {
-		stats[DEF] = _def;
-	}
-
-	public double getSpeed() {
-		return stats[SPD];
-	}
-	public void setSpeed(double _spd) {
-		stats[SPD] = _spd;
-	}
-
-	public double getAccuracy() {
-		return stats[ACC];
-	}
-	public void setAccuracy(double _acc) {
-		stats[ACC] = _acc;
-	}
-
-	public boolean getIsBlocking() {
-		return isBlocking;
-	}
-	public void setIsBlocking(boolean state) {
-		isBlocking = state;
-	}
-
-
-	public void printStats () {
-		System.out.println("Name: "+name);
-		for (int i=0;i<NUM_STATS;i++) {
-			System.out.println(STAT_NAMES[i]+": "+stats[i]);
-		}
-	}
-
-	public boolean isAlive() {
-		return (getCurrHP()>0);
-	}
-
-	public void initLevelPoints() { // Used to give AI its attribute points and force it to use its points. Used upon AI initialization.
-		// DO NOT USE THIS ON PLAYER INITIALIZATION
-		this.setAtrPoints(this.getAtrPoints()+this.getLvl()*4); // 4 atr points per level, including starting level of 1
-		this.autoAtrSpend(); // Spends gained points
-	}
-
-	public void autoAtrSpend() { // Automatically spends attribute points on random stats, used for AI generation or for lazy players
-		int statChoice; // Choose between 5 different stats/numbers, index 3-7 inclusive
-		if (this.getAtrPoints()>0) {
-			while (0<getAtrPoints()) {
-				setAtrPoints(getAtrPoints()-1);
-				statChoice = (int) (Math.random()*5+1);
-
-				if (statChoice==1) {
-					this.setMaxHP(this.getMaxHP()+1);
-					this.setCurrHP(getCurrHP()+1);
-				}
-				else if (statChoice==2) {
-					this.setStrength(this.getStrength()+1);
-				}
-				else if (statChoice==3) {
-					this.setDefence(this.getDefence()+1);
-				}
-				else if (statChoice==4) {
-					this.setSpeed(this.getSpeed()+1);
-				}
-				else if (statChoice==5) {
-					this.setAccuracy(this.getAccuracy()+1);
-				}
-
-
-			}
-		}
-	}
-
-	public void engagementText() { // Displays what and who you are facing
-		System.out.println("Hello world");
-	}
-
-	public String attackText() {
-		return this.getName()+" attacks ";
-	}
-*/
 }

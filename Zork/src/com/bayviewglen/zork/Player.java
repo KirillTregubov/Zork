@@ -10,20 +10,19 @@ import java.util.HashMap;
  * Current Date:    April 2018.
  */
 
-public class Player {
+public class Player extends Entity {
 
-	public String name;
+	//public String name;
+	//public Stats stats;
 	private Room currentRoom;
 	public Inventory inventory;
-	public Stats stats;
 	public HashMap<String, Room> masterRoomMap;
 
 
 	Player() {
+		super("Player", Stats.PLAYER_INDEX, "1,0,0,20,20,2,2,2,0.5,0.1");
 		inventory = new Inventory();
-		//pickedUpItems = new Inventory();
-		stats = new Stats(Stats.ENTITY_INDEX, Stats.PLAYER_INDEX, "1,0,0,20,20,2,2,2,0.5,0.1");	
-		
+		//stats = new Stats(Stats.ENTITY_INDEX, Stats.PLAYER_INDEX, "1,0,0,20,20,2,2,2,0.5,0.1");	
 	}
 
 	// Item Variables
@@ -137,14 +136,14 @@ public class Player {
 		return null;
 	}
 
+	/*
+	 * Inventory Methods
+	 */
+
 	public boolean didPickUpItem(String itemName, String roomID) {
 		if (inventory.containsItem(itemName) && inventory.getItem(itemName).roomID.contains(roomID)) return true;
 		return false;
 	}
-
-	/*
-	 * Inventory Methods
-	 */
 
 	public String pickUpItem(String itemName, String roomID) { // add fix for consumables
 		Item inputItem;
@@ -274,28 +273,5 @@ public class Player {
 	public void setCurrentRoom(Room currentRoom, Player player) {
 		this.currentRoom = currentRoom;
 		//updateItems(player);
-	}
-
-	/*
-	 * Misc Setters
-	 */
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	// toString method
-	public String toString() {
-		return name;
-	}
-	
-	public Stats getStats() {
-		return stats;
-	}
-
-	public boolean isAlive() {
-		return (stats.getCurrentHP()>0);
 	}
 }

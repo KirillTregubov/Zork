@@ -70,10 +70,11 @@ class Game {
 	}
 
 	/**
+	 * 
 	 *  Main play routine (loops until quit)
 	 */
 	public void play() {
-		
+
 		//Sound mainmusic = new Sound(fileLocation + "music1.wav");
 		//mainmusic.loop();
 		Sound mainmusic = new Sound(fileLocation + "music1.wav");
@@ -96,7 +97,7 @@ class Game {
 		System.out.println("Thank you for playing. Goodbye!");
 		//Sound.stop();
 		Sound.stop();
-		
+
 	}
 
 	private void initRooms(String fileName) throws Exception {
@@ -142,44 +143,38 @@ class Game {
 						String[] itemsString = roomItems.split(", ");
 						room.setItems(itemsString); // assign items to the room's variable
 					}
-					
+
 					// Read Commands and Assign them 
 					String commands = reader.readLine();
 					// WORK IN PROGRESS
-					
+
 					// Read Entities and Create them 
 					String roomEntities = reader.readLine();
 					if (roomEntities.contains("Entities: ") && roomEntities.split(":")[1].trim().length() > 0) {
+						roomEntities = roomEntities.split(":")[1].trim();
 
+						String[] entityString;
+						entityString = roomEntities.split("/ ");
+						// Enemy, type
+						String[][] entities = new String[3][entityString.length];
+						String[] entitiesStrings;
 
-							roomEntities = roomEntities.split(":")[1].trim();
+						for (int i=0;i<entityString.length;i++) {
+							entitiesStrings = entityString[i].split(" <");
 
-							String[] entityString;
-							entityString = roomEntities.split("/ ");
-							// Enemy, type
-							String[][] entities = new String[3][entityString.length];
-							String[] entitiesStrings;
+							entities[0][i] = entitiesStrings[0];
+							entities[1][i] = entitiesStrings[1].substring(0, entitiesStrings[1].length()-1);
+							entities[2][i] = entitiesStrings[2].substring(0,entitiesStrings[2].length()-1);
+						}
+						room.setEntities(entities);
 
-
-							for (int i=0;i<entityString.length;i++) {
-								entitiesStrings = entityString[i].split(" <");
-								
-								
-								entities[0][i] = entitiesStrings[0];
-								entities[1][i] = entitiesStrings[1].substring(0, entitiesStrings[1].length()-1);
-								entities[2][i] = entitiesStrings[2].substring(0,entitiesStrings[2].length()-1);
-							}
-							room.setEntities(entities);
-						
 					}
-					
+
 					// Assign room to be stored as roomID
 					player.masterRoomMap.put(roomID, room);
-					}
-					
-				
-				}
-			
+				}	
+
+			}
 
 			for (String key : player.masterRoomMap.keySet()) {
 				Room roomTemp = player.masterRoomMap.get(key);
@@ -192,9 +187,7 @@ class Game {
 					roomTemp.setExit(s.charAt(0), exitRoom);
 				}
 			}
-			
-			
-			
+
 			reader.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -412,18 +405,9 @@ class Game {
 			player.setCurrentRoom(nextRoom, player);
 			player.updateItems(player, nextRoom.getRoomID());
 			System.out.println(player.getRoomTravelDescription());
-
 			
-			if (nextRoom != null) {
-				player.setCurrentRoom(nextRoom, player);
-				player.updateItems(player, nextRoom.getRoomID());
-				System.out.println(player.getRoomTravelDescription());
-				// Init battles
-				
-				player.getRoom().startBattle(player);
-				
-	}
-			
+			// Init battles
+			player.getRoom().startBattle(player);
 
 		} else System.out.println("That's not an option... You might be trapped.");
 	}
