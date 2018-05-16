@@ -26,8 +26,8 @@ public class Battle {
 		
 		int storedPlayerSpeed = playe.getSpeed();
 		int storedEntitySpeed = entity.getSpeed();
-		
 		System.out.println("You have been engaged by "+entity.getName()+"!");
+		
 		
 		while(playe.isAlive()&&entity.isAlive()) { // TODO: And while running away is not true
 			

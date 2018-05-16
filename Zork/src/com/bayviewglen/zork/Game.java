@@ -73,7 +73,8 @@ class Game {
 	 *  Main play routine (loops until quit)
 	 */
 	public void play() {
-		Music.playMusic(fileLocation);
+		Sound mainmusic = new Sound(fileLocation + "music1.wav");
+		mainmusic.loop();
 		printWelcome();
 
 		// Enter the main command loop: repeatedly reads / executes commands until the game is over
@@ -89,7 +90,7 @@ class Game {
 			finished = processCommand(command);
 		}
 		System.out.println("Thank you for playing. Goodbye!");
-		Music.stopMusic();
+		Sound.stop();
 		
 	}
 
