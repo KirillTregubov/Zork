@@ -1,5 +1,6 @@
 package com.bayviewglen.zork;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /** "Player" Class - a class that creates a player and stores their data.
@@ -17,8 +18,6 @@ public class Player {
 	public Stats stats;
 	public HashMap<String, Room> masterRoomMap;
 
-
-	
 
 	Player() {
 		inventory = new Inventory();
@@ -285,7 +284,6 @@ public class Player {
 	}
 	public void setName(String name) {
 		this.name = name;
-		
 	}
 
 	// toString method

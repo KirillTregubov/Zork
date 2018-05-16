@@ -76,6 +76,9 @@ class Game {
 		
 		//Sound mainmusic = new Sound(fileLocation + "music1.wav");
 		//mainmusic.loop();
+		Sound mainmusic = new Sound(fileLocation + "music1.wav");
+		mainmusic.loop();
+
 		printWelcome();
 
 		// Enter the main command loop: repeatedly reads / executes commands until the game is over
@@ -92,6 +95,7 @@ class Game {
 		}
 		System.out.println("Thank you for playing. Goodbye!");
 		//Sound.stop();
+		Sound.stop();
 		
 	}
 
@@ -168,11 +172,14 @@ class Game {
 							room.setEntities(entities);
 						
 					}
-
-
+					
+					// Assign room to be stored as roomID
 					player.masterRoomMap.put(roomID, room);
+					}
+					
+				
 				}
-			}
+			
 
 			for (String key : player.masterRoomMap.keySet()) {
 				Room roomTemp = player.masterRoomMap.get(key);

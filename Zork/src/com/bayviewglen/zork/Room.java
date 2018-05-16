@@ -26,6 +26,7 @@ import java.util.Iterator;
 class Room {
 	private String roomID;
 	private String roomName;
+	
 	private String description;
 	private ArrayList<Item> items;
 	private ArrayList<Integer> originalItemAmounts;
@@ -38,8 +39,8 @@ class Room {
 	/**
 	 * Create a room described "description". Initially, it has no exits.
 	 * "description" is something like "a kitchen" or "an open court yard".
-	 */
-	/*public Room(String description) {
+	 
+	public Room(String description) {
 		this.description = description;
 		exits = new HashMap<String, Room>();
 	}*/
@@ -52,6 +53,8 @@ class Room {
 		roomName = "DEFAULT ROOM";
 		description = "DEFAULT DESCRIPTION";
 		exits = new HashMap<String, Room>();
+		items = new ArrayList<Item>();
+		originalItemAmounts = new ArrayList<Integer>();
 	}
 
 	public void setExit(char direction, Room r) throws Exception{
@@ -300,21 +303,21 @@ class Room {
 		return roomName;
 
 	}
-	
+
 	// Andy Entity Stuff
-	
-public String listEnemies() {
-		
+
+	public String listEnemies() {
+
 		liveCheck();
 		String returnString = "";
 		if (getRoomEnemies()!=null) {
 			if (getRoomEnemies().size() > 0) {
 				returnString = "\n" + "Enemies in this room: ";
-	
+
 				for (int i = 0; i < getRoomEnemies().size(); i++) {
-	
+
 					returnString += getRoomEnemies().get(i).getName(); // Display stats later (Inspect function)
-	
+
 					if (i == getRoomEnemies().size() - 1) {
 						returnString += ".";
 					} else {
@@ -328,7 +331,8 @@ public String listEnemies() {
 		return returnString;
 	}
 
-public ArrayList<Entity> getRoomEnemies() {
+
+	public ArrayList<Entity> getRoomEnemies() {
 		return enemies;
 	}
 
@@ -343,7 +347,7 @@ public ArrayList<Entity> getRoomEnemies() {
 	public void setRoomBosses(ArrayList<Entity> bosses) {
 		this.bosses = bosses;
 	}
-	
+
 	public ArrayList<Entity> getRoomNPC() {
 		return npcs;
 	}
@@ -352,7 +356,7 @@ public ArrayList<Entity> getRoomEnemies() {
 		this.npcs = npc;
 	}
 
-//Checks and edits the list of entities based on if they are alive or not
+	//Checks and edits the list of entities based on if they are alive or not
 	public void liveCheck() {
 		// Enemy
 		if (getRoomEnemies()!=null) {
@@ -368,13 +372,13 @@ public ArrayList<Entity> getRoomEnemies() {
 		// Boss
 		if (getRoomBosses()!=null) {
 			int bSize = getRoomBosses().size();
-				for (int i=0;i<bSize;i++) {
-					if (getRoomBosses().get(i).isAlive()==false) {
-						getRoomBosses().remove(i);
-						bSize--;
-						i--;
-						}
+			for (int i=0;i<bSize;i++) {
+				if (getRoomBosses().get(i).isAlive()==false) {
+					getRoomBosses().remove(i);
+					bSize--;
+					i--;
 				}
+			}
 		}
 		// NPC
 		/*int nSize = npcs.size();
@@ -387,8 +391,8 @@ public ArrayList<Entity> getRoomEnemies() {
 			}*/
 	}
 
-// Start Battle
 	public void startBattle(Player player) {
+	// Start Battle
 		// Enemy battle
 		if (getRoomEnemies()!=null) {
 			if (getRoomEnemies().size()>0) {
@@ -410,6 +414,8 @@ public ArrayList<Entity> getRoomEnemies() {
 public void setEntities(String[][] ent) {
 		
 		if (ent!=null) { //String _name,int _type,String _stats
+
+		if (ent[0][0]!=null) {
 			for (int i=0;i<ent[0].length;i++) {
 				if (ent[1][i].compareTo("Enemy")==0) {
 					getRoomEnemies().add(new Entity(ent[0][i],Entity.TYPE_ENEMY,ent[2][i]));
@@ -418,7 +424,6 @@ public void setEntities(String[][] ent) {
 					getRoomBosses().add(new Entity(ent[0][i],Entity.TYPE_BOSS,ent[2][i]));
 				}
 				else if (ent[1][i].compareTo("NPC")==0) {
-					getRoomNPC().add(new Entity(ent[0][i],Entity.TYPE_NPC,ent[2][i]));
 				}
 				else {
 					System.out.println("Mission failed, run it again. (Loading entities has failed)");
@@ -427,4 +432,5 @@ public void setEntities(String[][] ent) {
 		}
 
 	}
+}
 }
