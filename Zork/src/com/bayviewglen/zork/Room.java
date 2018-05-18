@@ -435,6 +435,9 @@ class Room {
 				}
 			}
 		}
+		
+		liveCheck(); // Removes the dead enemies
+		
 		if (loss==true) {
 			// TODO: Execute order 66. Also known as resetting the player's health and teleporting them back to the start
 			
@@ -445,7 +448,7 @@ class Room {
 		}
 		else {
 			// TODO: The player is victorious, and now has full control of the room
-			longDescription();
+			System.out.println("\n"+player.getRoom().longDescription());
 		}
 	}
 
