@@ -20,7 +20,7 @@ public class Player extends Entity {
 
 
 	Player() {
-		super("Player", Stats.PLAYER_INDEX, "1,0,0,20,20,2,2,2,0.5,0.1");
+		super("Player", Stats.PLAYER_INDEX, "1,0,0,40,40,20,20,20,0.8,0.1");
 		inventory = new Inventory();
 		//stats = new Stats(Stats.ENTITY_INDEX, Stats.PLAYER_INDEX, "1,0,0,20,20,2,2,2,0.5,0.1");	
 	}
