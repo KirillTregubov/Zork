@@ -41,6 +41,7 @@ class Game {
 	private final String fileLocation = "data\\"; // Change to "data/save.dat" if using Mac
 	private final String DEFAULT_ROOM = "0";
 	private Player player;
+	private Sound musicMainTheme = new Sound(fileLocation + "music1.wav");
 	//private Inventory inventory = new Inventory();
 
 	// This is a MASTER object that contains all of the rooms and is easily accessible.
@@ -71,31 +72,24 @@ class Game {
 
 	/**
 	 * 
-	 *  Main play routine (loops until quit)
+	 *  Main play routine (loops until quit
 	 */
 	public void play() {
 
-		//Sound mainmusic = new Sound(fileLocation + "music1.wav");
-		//mainmusic.loop();
-		Sound mainmusic = new Sound(fileLocation + "music1.wav");
-		mainmusic.loop();
+		musicMainTheme.loop();
 
 		printWelcome();
 
 		// Enter the main command loop: repeatedly reads / executes commands until the game is over
+		
 		boolean finished = false;
+		// check if in trial mode
 		while (!finished) {
-			/*Command command = parser.legacyGetCommand(); // legacy implementation
-			System.out.println("");
-			finished = legacyProcessCommand(command); // change if making new command
-			 */
-			//WORK IN PROGRESS
 			System.out.println("");
 			Command command = parser.getCommand(player);
 			finished = processCommand(command);
 		}
 		System.out.println("Thank you for playing. Goodbye!");
-		//Sound.stop();
 		Sound.stop();
 
 	}
@@ -343,6 +337,14 @@ class Game {
 				if (commandName.equalsIgnoreCase("take")) System.out.println("take that.");
 				else System.out.println("pick up that.");
 			}
+		} // mute
+		else if (commandName.equalsIgnoreCase("mute")) {
+			musicMainTheme.pause();
+			System.out.println("Game sound has been muted.");
+		} // unmute
+		else if (commandName.equalsIgnoreCase("unmute")) {
+			musicMainTheme.loop();
+			System.out.println("Game sound has been enabled.");
 		} // save
 		else if (commandName.equalsIgnoreCase("save")) save();
 		// quit

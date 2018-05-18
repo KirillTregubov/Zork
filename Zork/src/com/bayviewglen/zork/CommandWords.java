@@ -28,7 +28,8 @@ class CommandWords {
 			{"look at", "inventory item place", "Allows you to look at things. Usage: \"look at inventory\", \"look at red apple\""}, {"inspect", "inventory item place", "Allows you to inspect things. Usage: \"inspect inventory\", \"inspect red apple\""},
 			{"take", "item", "Allows you to take things. Usage: \"take red apple\", \"take sword\""}, {"grab", "item", "Allows you to grab things. Usage: \"grab red apple\", \"grab sword\""},
 			{"pick up", "item", "Allows you to pick up things. Usage: \"pick up red apple\", \"pick up basic sword\""},
-			{"mute", "default", "Mutes the music. Usage: \"mute music\""},
+			{"mute", "default", "Mutes the game's sound. Usage: \"mute game\""},
+			{"unmute", "default", "Unmutes the game's sound. Usage: \"unmute game\""},
 			{"save", "default", "Saves the current state of your playthrough. Usage: \"save\""},
 			{"quit", "default", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}, {"stop", "default", "Stops playing the game. Usage: \"stop game\", \"stop playing\""}
 	};
