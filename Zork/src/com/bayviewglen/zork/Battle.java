@@ -53,7 +53,6 @@ public class Battle {
 			else if (entity.stats.getSpeed()>player.stats.getSpeed()) {
 				System.out.println(entity.getName()+" will now move!");
 
-				System.out.println(entity.getName()+" attacks "+entity.getName()+"!");
 				damageDealer(entity.stats,entity.getName(),player.stats,player.getName(),playerIsBlocking);
 
 				if (player.isAlive()) {

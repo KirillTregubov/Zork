@@ -270,8 +270,12 @@ public class Player extends Entity {
 	/*
 	 * Room Setter
 	 */
-	public void setCurrentRoom(Room currentRoom, Player player) {
+	public void setCurrentRoom(Room currentRoom) {
 		this.currentRoom = currentRoom;
 		//updateItems(player);
+	}
+	
+	public void setDefaultRoom() {
+		this.currentRoom = masterRoomMap.get("0");
 	}
 }

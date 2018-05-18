@@ -62,7 +62,7 @@ class Game {
 
 			// Load game if saved
 			if (gameIsSaved()) load();
-			else player.setCurrentRoom(player.masterRoomMap.get(DEFAULT_ROOM), player);
+			else player.setCurrentRoom(player.masterRoomMap.get(DEFAULT_ROOM));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -248,7 +248,7 @@ class Game {
 		else if (commandName.equalsIgnoreCase("teleport") || commandName.equalsIgnoreCase("tp")) {
 			Room nextRoom = player.masterRoomMap.get(contextWord);
 			if (nextRoom != null) {
-				player.setCurrentRoom(nextRoom, player);
+				player.setCurrentRoom(nextRoom);
 				System.out.println(player.getRoomTravelDescription());
 			}
 		}/* // give
@@ -402,7 +402,7 @@ class Game {
 		// Try to leave current room.
 		Room nextRoom = player.getNextRoom(direction);
 		if (nextRoom != null) {
-			player.setCurrentRoom(nextRoom, player);
+			player.setCurrentRoom(nextRoom);
 			player.updateItems(player, nextRoom.getRoomID());
 			System.out.println(player.getRoomTravelDescription());
 			
@@ -485,7 +485,7 @@ class Game {
 
 				// Find and assign currentRoom to the room in the save file
 				player.setName(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 1) + 2, Utils.ordinalIndexOf(saveFile, ";", 1)));
-				player.setCurrentRoom(player.masterRoomMap.get(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 2) + 2, Utils.ordinalIndexOf(saveFile, ";", 2))), player);
+				player.setCurrentRoom(player.masterRoomMap.get(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 2) + 2, Utils.ordinalIndexOf(saveFile, ";", 2))));
 
 				// Find and load inventory
 				if (Utils.ordinalIndexOf(saveFile, ":", 3) != -1) { // check if inventory was saved
