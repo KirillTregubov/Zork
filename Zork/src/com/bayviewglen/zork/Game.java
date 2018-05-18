@@ -41,6 +41,7 @@ class Game {
 	private final String fileLocation = "data\\"; // Change to "data/save.dat" if using Mac
 	private final String DEFAULT_ROOM = "0";
 	private Player player;
+	private Sound musicMainTheme = new Sound(fileLocation + "music1.wav");
 	//private Inventory inventory = new Inventory();
 
 	// This is a MASTER object that contains all of the rooms and is easily accessible.
@@ -75,8 +76,7 @@ class Game {
 	 */
 	public void play() {
 
-		Sound mainmusic = new Sound(fileLocation + "music1.wav");
-		mainmusic.loop();
+		musicMainTheme.loop();
 
 		printWelcome();
 
@@ -337,6 +337,14 @@ class Game {
 				if (commandName.equalsIgnoreCase("take")) System.out.println("take that.");
 				else System.out.println("pick up that.");
 			}
+		} // mute
+		else if (commandName.equalsIgnoreCase("mute")) {
+			musicMainTheme.pause();
+			System.out.println("Game sound has been muted.");
+		} // unmute
+		else if (commandName.equalsIgnoreCase("unmute")) {
+			musicMainTheme.loop();
+			System.out.println("Game sound has been enabled.");
 		} // save
 		else if (commandName.equalsIgnoreCase("save")) save();
 		// quit
