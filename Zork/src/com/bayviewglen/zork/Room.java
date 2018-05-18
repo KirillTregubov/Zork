@@ -393,21 +393,62 @@ class Room {
 
 	public void startBattle(Player player) {
 	// Start Battle
-		// Enemy battle
-		if (getRoomEnemies()!=null) {
+		
+		
+		int battleResult;
+		boolean run = false;
+		boolean loss = false;
+		if (getRoomEnemies()!=null) { // Enemy battle
 			if (getRoomEnemies().size()>0) {
-				for (int i=0;i<getRoomEnemies().size();i++) {
+				for (int i=0;i<getRoomEnemies().size()&&run==false&&loss==false;i++) {
 					Battle bat = new Battle(player,getRoomEnemies().get(i));
-					bat.startBattle();
+					battleResult = bat.startBattle();
+					if (battleResult==0) {
+						// TODO: Run away commands
+						run = true;
+					}
+					else if (battleResult==1) {
+						// TODO: Victory. Should probably give them loot here based on the enemy's level
+						//getRoomEnemies().get(i).stats.getLevel();
+					}
+					else if (battleResult==2) {
+						loss = true;
+					}
 				}
 			}
-			// Boss battle
-			if (bosses.size()>0) {
-				for (int i=0;i<bosses.size();i++) {
+		}
+		if (getRoomBosses()!=null) { // Boss battle
+			if (getRoomBosses().size()>0) {
+				for (int i=0;i<getRoomBosses().size()&&run==false&&loss==false;i++) {
 					Battle bat = new Battle(player,getRoomBosses().get(i));
-					bat.startBattle();
+					battleResult = bat.startBattle();
+					if (battleResult==0) {
+						run = true;
+					}
+					else if (battleResult==1) {
+						// TODO: Victory. Should probably give them loot here based on the enemy's level
+						//getRoomEnemies().get(i).stats.getLevel();
+					}
+					else if (battleResult==2) {
+						loss = true;
+					}
 				}
 			}
+		}
+		
+		liveCheck(); // Removes the dead enemies
+		
+		if (loss==true) {
+			// TODO: Execute order 66. Also known as resetting the player's health and teleporting them back to the start
+			
+		}
+		else if (run==true) {
+			// TODO: Move the player back to whence they came (Move the back to their previous room which should be stored somewhere)
+			
+		}
+		else {
+			// TODO: The player is victorious, and now has full control of the room
+			System.out.println("\n"+player.getRoom().longDescription());
 		}
 	}
 

@@ -8,12 +8,14 @@ public class Battle {
 	public boolean playerIsBlocking;
 	public Entity entity;
 	public boolean entityIsBlocking;
+	public boolean running;
 
 	public Battle(Player p, Entity ent) {
 		player = p;
 		playerIsBlocking = false;
 		entity = ent;
 		entityIsBlocking = false;
+		running = false;
 	}
 
 
@@ -25,14 +27,11 @@ public class Battle {
 		return entity;
 	}
 
-	public void startBattle() { // Consumables count as a turn.
-
-
-		double storedPlayerSpeed = player.stats.getSpeed();
-		double storedEntitySpeed = entity.stats.getSpeed();
+	public int startBattle() { // Consumables count as a turn. Returns either a 0,1,2. 0 means you ran away. 1 means won. 2 means loss.
+		
 		System.out.println("\nYou have been engaged by "+entity.getName()+"!");
 
-		while(player.isAlive()&&entity.isAlive()) { // TODO: And while running away is not true
+		while((player.isAlive()&&entity.isAlive())&&running==false) { // TODO: And while running away is not true
 
 			System.out.println("");
 
@@ -43,9 +42,6 @@ public class Battle {
 				battleParser();
 
 				if (entity.isAlive()) {
-					if (entity.stats.getSpeed()<storedEntitySpeed) {
-						entity.stats.setSpeed(entity.stats.getSpeed()+20);
-					}
 					System.out.println(entity.getName()+" will now move!");
 
 
@@ -54,13 +50,8 @@ public class Battle {
 				}
 
 			}
-			else if (entity.stats.getSpeed()>player.stats.getSpeed()) { // Multiply by weapon speed
+			else if (entity.stats.getSpeed()>player.stats.getSpeed()) {
 				System.out.println(entity.getName()+" will now move!");
-
-				/*if (player.stats.getSpeedHint()) {
-					System.out.println("Hint: The enemy has the first move on this turn, consider upgrading your speed stat!");
-					player.stats.setSpeedHint(false);
-				}*/
 
 				System.out.println(entity.getName()+" attacks "+entity.getName()+"!");
 				damageDealer(entity.stats,entity.getName(),player.stats,player.getName(),playerIsBlocking);
@@ -70,20 +61,25 @@ public class Battle {
 					System.out.println("Take an action!");
 					battleParser();
 
-					if (player.stats.getSpeed()<storedPlayerSpeed) {
-						player.stats.setSpeed(player.stats.getSpeed()+20);
-					}
 
 				}
 			}
 		}
-
-		if (player.isAlive()==false) {
-			System.out.println("A dark day for the Republic. You are defeated...");
+		
+		if (running==true) {
+			System.out.println("You flee in panic. Cause. Ya know. Yer bad m8.");
+			return 0; // Retreat integer
 		}
 		else if (entity.isAlive()==false) {
 			System.out.println("You have defeated level "+entity.stats.getLevel()+" "+entity.getName()+"!");
+			return 1; // Victory integer
 		}
+		else if (player.isAlive()==false) {
+			System.out.println("You are defeated...");
+			entity.stats.setCurrentHP(entity.stats.getMaximumHP());
+			return 2; // Loss integer
+		}
+		return 0; // Retreat integer (in case everything breaks and you somehow get here
 
 	}
 
@@ -94,8 +90,8 @@ public class Battle {
 
 		for(boolean endParse=false;endParse==false;) {
 			parseMe = input.nextLine().toLowerCase();
-			if (parseMe.equals("block")||parseMe.equals("block attack")||parseMe.equals("block hit")) {
-				playerIsBlocking=true;
+			if (parseMe.equals("run")||parseMe.equals("run away")||parseMe.equals("flee")) {
+				running=true;
 				endParse = true;
 			}
 			else if (parseMe.equals("attack")||parseMe.equals("hit")||parseMe.equals("swing")||parseMe.equals("stab")||
@@ -125,23 +121,31 @@ public class Battle {
 
 
 
-		if (didHit(attacker)) { // Accuracy calculator
+		if (didHit(attacker.getAccuracy())) { // Hit chance
 			if (defenderBlockingState==false) {
-				if (attacker.getAttack()*((40-defender.getDefense())/40)<1) {
+				if (didHit(attacker.getCriticalChance())&&(attacker.getAttack()*1.5-defender.getDefense())>1) { // Critical hit chance
+					// Apply critical bonus (Currently 50% damage bonus, ask Zach for specifics)
+					System.out.println("It was a critical hit!");
+					System.out.println(defenderName+" took "+(attacker.getAttack()*1.5-defender.getDefense())+" damage!");
+					defender.setCurrentHP((int) (defender.getCurrentHP()-(attacker.getAttack()*1.5-defender.getDefense())));
+					System.out.println(defenderName+"'s health: "+ defender.getCurrentHP());
+				}
+				
+				else if ((attacker.getAttack()-defender.getDefense())<1) { // One damage minimum
+					System.out.println("The attack is ineffective...");
 					defender.setCurrentHP(defender.getCurrentHP()-1);
 					System.out.println(defenderName+" took 1 damage!"); // Minimum of one damage
 					System.out.println(defenderName+"'s health: "+ defender.getCurrentHP());
 				}
-				else {
-					System.out.println(defenderName+" took "+attacker.getAttack()*((40-defender.getDefense())/40)+" damage!");
-					defender.setCurrentHP(defender.getCurrentHP()-attacker.getAttack()*((40-defender.getDefense())/40));
+				else { // Normal Damage Calculation
+					System.out.println(defenderName+" took "+(attacker.getAttack()-defender.getDefense())+" damage!");
+					defender.setCurrentHP(defender.getCurrentHP()-(attacker.getAttack()-defender.getDefense()));
 					System.out.println(defenderName+"'s health: "+ defender.getCurrentHP());
 				}
 			}
-			else {
+			else { // This is basically redundant because of spamming reasons
 				System.out.println(attackerName+"'s attack was successfully blocked by "+defenderName+"!");
 				System.out.println("The successful block has caught "+attackerName+" offguard. Strike Now!");
-				attacker.setSpeed(attacker.getSpeed()-20);
 				playerIsBlocking=false; // Resets their blocking states for the next combat turn
 				entityIsBlocking=false;
 			}
@@ -156,11 +160,11 @@ public class Battle {
 
 	}
 
-	public boolean didHit(Stats _stats) { // Accuracy is a double value (Ex: 0.5)
+	public boolean didHit(double accuracy) { // Accuracy is a double value (Ex: 0.5)
 		int random = (int)((Math.random())*100); // Accuracy raises the minimum value
 		double hits = random/100.0;
 
-		if (hits<_stats.getAccuracy()) {
+		if (hits<=accuracy) {
 			return true;
 		}
 		else {
