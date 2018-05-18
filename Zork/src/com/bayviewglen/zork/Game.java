@@ -71,31 +71,25 @@ class Game {
 
 	/**
 	 * 
-	 *  Main play routine (loops until quit)
+	 *  Main play routine (loops until quit
 	 */
 	public void play() {
 
-		//Sound mainmusic = new Sound(fileLocation + "music1.wav");
-		//mainmusic.loop();
 		Sound mainmusic = new Sound(fileLocation + "music1.wav");
 		mainmusic.loop();
 
 		printWelcome();
 
 		// Enter the main command loop: repeatedly reads / executes commands until the game is over
+		
 		boolean finished = false;
+		// check if in trial mode
 		while (!finished) {
-			/*Command command = parser.legacyGetCommand(); // legacy implementation
-			System.out.println("");
-			finished = legacyProcessCommand(command); // change if making new command
-			 */
-			//WORK IN PROGRESS
 			System.out.println("");
 			Command command = parser.getCommand(player);
 			finished = processCommand(command);
 		}
 		System.out.println("Thank you for playing. Goodbye!");
-		//Sound.stop();
 		Sound.stop();
 
 	}
