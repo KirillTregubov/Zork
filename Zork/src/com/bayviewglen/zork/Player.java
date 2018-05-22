@@ -20,7 +20,7 @@ public class Player extends Entity {
 
 
 	Player() {
-		super("Player", Stats.PLAYER_INDEX, "1,0,0,40,40,20,20,20,0.8,0.1");
+		super("Player", Stats.PLAYER_INDEX, "1,1,1,999,120,120,120,20,0.8,0.1");
 		inventory = new Inventory();
 		//stats = new Stats(Stats.ENTITY_INDEX, Stats.PLAYER_INDEX, "1,0,0,20,20,2,2,2,0.5,0.1");	
 	}
@@ -48,9 +48,9 @@ public class Player extends Entity {
 			//Weapons - Legendary MSG: IMPLEMENT DAMAGE REFLECT AND DOUBLE ATTACK
 			new Item("Genji's Dragonblade", "Ryujin no ken wo kurae!", Item.WEAPON_INDEX, "20,0.0,0.25", new int[]{ Stats.DMG_REFLECT_INDEX }),
 			new Item("Gandalf's Staff", "You shall not pass!", Item.WEAPON_INDEX, "20,0.0"),
-			new Item("Enchanted Sabre", "A sword crafted by God himself.", Item.WEAPON_INDEX, "30,5.0,0.33", new int[]{ Stats.DMG_REFLECT_INDEX }),
+			new Item("Enchanted Sabre", "A sword crafted by God himself. So sharp, the edge of it's blade is a single atom thick.", Item.WEAPON_INDEX, "30,5.0,0.33", new int[]{ Stats.DMG_REFLECT_INDEX }),
 			new Item("Infinity Gauntlet", "The Infinity stones are not included.", Item.WEAPON_INDEX, "45,10.0,0.5", new int[]{ Stats.DMG_REFLECT_INDEX }),
-			new Item("Developer Sword", "A sword retrieved from the very heart of the syntax.", Item.WEAPON_INDEX, "10000,0.0"),
+			new Item("Developer Sword", "A sword Retrieved from the very heart of the syntax. It seems to have markings on the side written in binary.", Item.WEAPON_INDEX, "10000,0.0"),
 
 			//Armor - Normal 
 			new Item("Cardboard Armor", "A suit made of cardboard that your mom gave you for you're birthday.", Item.ARMOR_INDEX, "0"),
@@ -271,4 +271,39 @@ public class Player extends Entity {
 	public void setDefaultRoom() {
 		this.currentRoom = masterRoomMap.get("0");
 	}
+	
+	public int nextLvlExp() {
+		return (int) ((0.5*(stats.getLevel()+1)*(stats.getLevel()+1))*100 - (0.5*stats.getLevel()*stats.getLevel())*100);
+	}
+	
+	public void expCalculator(int opLevel,int type) {
+		int expGained = 0;
+		
+		if (opLevel<=stats.getLevel()) {
+			expGained = (int) (nextLvlExp()*(1/(3.0+stats.getLevel()-opLevel)));
+		}
+		else {
+			int expGainEqual = (int) (nextLvlExp()*(1/(3.0)));
+			expGained = (int) (expGainEqual*Math.pow(1.25,opLevel-stats.getLevel()));
+		}
+		
+		if (type==NPC.TYPE_BOSS) {
+			expGained *= 2;
+		}
+		
+		stats.setExp(stats.getExp()+expGained);
+		levelUp();
+		
+	}
+	
+	public void levelUp() {
+		
+		while(stats.getExp()>nextLvlExp()) {
+			stats.setExp(stats.getExp()-nextLvlExp());
+			stats.setLevel(stats.getLevel()+1);
+			stats.setAttributePoints(stats.getAttributePoints()+8);
+		}
+		
+	}
+
 }

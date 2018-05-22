@@ -57,6 +57,11 @@ class Game {
 		try {
 			// Load Player
 			player = new Player();
+			int opLevel = 20;
+			player.stats.setLevel(15);
+			System.out.println(player.stats.getLevel()+" "+player.stats.getExp());
+			player.expCalculator(opLevel, NPC.TYPE_ENEMY);
+			System.out.println(player.stats.getLevel()+" "+player.stats.getExp());
 
 			// Initialize Rooms
 			initRooms(fileLocation + "rooms.dat");
@@ -221,23 +226,29 @@ class Game {
 	 * Work in Progress
 	 */
 	private boolean processCommand(Command command) {
+		System.out.println(command);
 		if(command.isUnknown()) {
 			System.out.println("You cannot do that...");
 			return false;
 		}
+		
 		String commandName = command.command;
 		String commandType = command.commandType;
 		String contextWord = command.contextWord;
 		Integer numbers[] = command.numbers;
-
+		System.out.println(commandName);
+		System.out.println(commandType);
+		System.out.println(contextWord);
 		//System.out.println(commandName + "\n" + commandType + "\n" + contextWord);
 
 		// help
+		System.out.println(commandName);
 		if (commandName.equalsIgnoreCase("help")) printHelp();
 		// list
 		else if (commandName.equalsIgnoreCase("list")) printCommands(); // might need to add contextWord
 		// go
-		else if (commandName.equalsIgnoreCase("go") || commandName.equalsIgnoreCase("walk")) goRoom(command, commandName);
+		else if (commandName.equalsIgnoreCase("go") || commandName.equalsIgnoreCase("walk")) { System.out.println("Hello world"); goRoom(command, commandName);
+		}
 		// teleport
 		else if (commandName.equalsIgnoreCase("teleport") || commandName.equalsIgnoreCase("tp")) {
 			Room nextRoom = player.masterRoomMap.get(contextWord);

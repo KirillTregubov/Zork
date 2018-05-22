@@ -89,6 +89,7 @@ public class Battle {
 
 		for(boolean endParse=false;endParse==false;) {
 			parseMe = input.nextLine().toLowerCase();
+			String[] words=parseMe.split(" ");
 			if (parseMe.equals("run")||parseMe.equals("run away")||parseMe.equals("flee")) {
 				running=true;
 				endParse = true;
@@ -99,6 +100,21 @@ public class Battle {
 				damageDealer(player.stats,player.getName(),entity.stats,entity.getName(),entityIsBlocking);
 				endParse = true;
 			}
+			else if (words[0].equals("consume")||words[0].equals("eat")||words[0].equals("use")) {
+				String itemName="";
+				for (int j=1;j<words.length;j++) {
+					itemName+=words[j]+" ";
+				}
+				itemName = itemName.trim();
+				// Call useItem()
+				if (false/*player.getInventory().useItem(itemName)*/) {
+				System.out.println(player.getName()+" used a "+itemName+"!");
+				endParse = true;
+				}
+				else {
+					System.out.println("Take an action!");
+				}
+			}
 			else if (parseMe.equals("help")||parseMe.equals("help me")) {
 				System.out.println("Commands are \"attack\" and \"block\" or words and phases that mean them. It's really not that difficult, dude.");
 			}
@@ -106,11 +122,6 @@ public class Battle {
 				System.out.println("No known command by that name, try again. It's not like there's a battle going on right?");
 			}
 		}
-		/*else if (parseMe=="Attack") {
-			damageDealer(player,entity);
-		}*/
-
-		// Create parser or use Curills
 
 	}
 
