@@ -56,7 +56,7 @@ class Game {
 	public Game() {
 		try {
 			// Load Player
-			Player player = new Player();
+			player = new Player();
 			// Initialize Rooms
 			initRooms(fileLocation + "rooms.dat");
 
