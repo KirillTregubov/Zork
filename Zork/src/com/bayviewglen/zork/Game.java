@@ -56,12 +56,6 @@ class Game {
 	public Game() {
 		try {
 			// Load Player
-			player = new Player();
-			int opLevel = 20;
-			player.stats.setLevel(15);
-			System.out.println(player.stats.getLevel()+" "+player.stats.getExp());
-			player.expCalculator(opLevel, NPC.TYPE_ENEMY);
-			System.out.println(player.stats.getLevel()+" "+player.stats.getExp());
 
 			// Initialize Rooms
 			initRooms(fileLocation + "rooms.dat");

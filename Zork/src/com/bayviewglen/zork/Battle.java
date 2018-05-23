@@ -1,5 +1,6 @@
 package com.bayviewglen.zork;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Battle {
@@ -107,12 +108,19 @@ public class Battle {
 				}
 				itemName = itemName.trim();
 				// Call useItem()
-				if (false/*player.getInventory().useItem(itemName)*/) {
+				
+				if (player.getInventory().containsItem(itemName)) {
 				System.out.println(player.getName()+" used a "+itemName+"!");
+				int itemIndex = player.getInventory().getItemIndex(itemName);
+				player.stats.setCurrentHP(player.stats.getCurrentHP()+player.getInventory().getItemList().get(itemIndex).stats.getHealPoints());
+				ArrayList<Item> temp = player.getInventory().getItemList();
+				temp.remove(itemIndex);
+				
+				player.getInventory().setItemList(temp);
 				endParse = true;
 				}
 				else {
-					System.out.println("Take an action!");
+					System.out.println("That item does not exist, you're wasting valuable time! \nTake an action!");
 				}
 			}
 			else if (parseMe.equals("help")||parseMe.equals("help me")) {

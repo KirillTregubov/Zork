@@ -305,5 +305,8 @@ public class Player extends Entity {
 		}
 		
 	}
-
+	
+	public Inventory getInventory() {
+		return inventory;
+	}
 }

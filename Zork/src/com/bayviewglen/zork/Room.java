@@ -429,7 +429,6 @@ class Room {
 					else if (battleResult==1) {
 						// TODO: Victory. Should probably give them loot here based on the enemy's level
 						//getRoomEnemies().get(i).stats.getLevel();
-						//Send enemy level and if it is a boss
 						player.expCalculator(getRoomBosses().get(i).stats.getLevel(), NPC.TYPE_BOSS);
 					}
 					else if (battleResult==2) {
