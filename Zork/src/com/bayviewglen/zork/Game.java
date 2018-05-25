@@ -41,6 +41,7 @@ class Game {
 	public static final String FILE_LOCATION = "data\\"; // Change to "data/save.dat" if using Mac
 	private final String DEFAULT_ROOM = "0";
 	private Player player;
+	private Sound musicMainTheme = new Sound(fileLocation + "music1.wav");
 	//private Inventory inventory = new Inventory();
 
 	// This is a MASTER object that contains all of the rooms and is easily accessible.
@@ -56,13 +57,12 @@ class Game {
 		try {
 			// Load Player
 			player = new Player();
-
 			// Initialize Rooms
 			initRooms(FILE_LOCATION + "rooms.dat");
 
 			// Load game if saved
 			if (gameIsSaved()) load();
-			else player.setCurrentRoom(player.masterRoomMap.get(DEFAULT_ROOM), player);
+			else player.setCurrentRoom(player.masterRoomMap.get(DEFAULT_ROOM));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -75,8 +75,12 @@ class Game {
 	 */
 	public void play() {
 
+<<<<<<< HEAD
 		Sound mainmusic = new Sound(FILE_LOCATION + "music1.wav");
 		mainmusic.loop();
+=======
+		musicMainTheme.loop();
+>>>>>>> branch 'master' of https://github.com/KTregubov/Zork
 
 		printWelcome();
 
@@ -224,28 +228,34 @@ class Game {
 	 * Work in Progress
 	 */
 	private boolean processCommand(Command command) {
+		System.out.println(command);
 		if(command.isUnknown()) {
 			System.out.println("You cannot do that...");
 			return false;
 		}
+		
 		String commandName = command.command;
 		String commandType = command.commandType;
 		String contextWord = command.contextWord;
 		Integer numbers[] = command.numbers;
-
+		System.out.println(commandName);
+		System.out.println(commandType);
+		System.out.println(contextWord);
 		//System.out.println(commandName + "\n" + commandType + "\n" + contextWord);
 
 		// help
+		System.out.println(commandName);
 		if (commandName.equalsIgnoreCase("help")) printHelp();
 		// list
 		else if (commandName.equalsIgnoreCase("list")) printCommands(); // might need to add contextWord
 		// go
-		else if (commandName.equalsIgnoreCase("go") || commandName.equalsIgnoreCase("walk")) goRoom(command, commandName);
+		else if (commandName.equalsIgnoreCase("go") || commandName.equalsIgnoreCase("walk")) { System.out.println("Hello world"); goRoom(command, commandName);
+		}
 		// teleport
 		else if (commandName.equalsIgnoreCase("teleport") || commandName.equalsIgnoreCase("tp")) {
 			Room nextRoom = player.masterRoomMap.get(contextWord);
 			if (nextRoom != null) {
-				player.setCurrentRoom(nextRoom, player);
+				player.setCurrentRoom(nextRoom);
 				System.out.println(player.getRoomTravelDescription());
 			}
 		}/* // give
@@ -340,6 +350,14 @@ class Game {
 				if (commandName.equalsIgnoreCase("take")) System.out.println("take that.");
 				else System.out.println("pick up that.");
 			}
+		} // mute
+		else if (commandName.equalsIgnoreCase("mute")) {
+			musicMainTheme.pause();
+			System.out.println("Game sound has been muted.");
+		} // unmute
+		else if (commandName.equalsIgnoreCase("unmute")) {
+			musicMainTheme.loop();
+			System.out.println("Game sound has been enabled.");
 		} // save
 		else if (commandName.equalsIgnoreCase("save")) save();
 		// quit
@@ -399,7 +417,7 @@ class Game {
 		// Try to leave current room.
 		Room nextRoom = player.getNextRoom(direction);
 		if (nextRoom != null) {
-			player.setCurrentRoom(nextRoom, player);
+			player.setCurrentRoom(nextRoom);
 			player.updateItems(player, nextRoom.getRoomID());
 			System.out.println(player.getRoomTravelDescription());
 			
@@ -482,7 +500,7 @@ class Game {
 
 				// Find and assign currentRoom to the room in the save file
 				player.setName(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 1) + 2, Utils.ordinalIndexOf(saveFile, ";", 1)));
-				player.setCurrentRoom(player.masterRoomMap.get(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 2) + 2, Utils.ordinalIndexOf(saveFile, ";", 2))), player);
+				player.setCurrentRoom(player.masterRoomMap.get(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 2) + 2, Utils.ordinalIndexOf(saveFile, ";", 2))));
 
 				// Find and load inventory
 				if (Utils.ordinalIndexOf(saveFile, ":", 3) != -1) { // check if inventory was saved
