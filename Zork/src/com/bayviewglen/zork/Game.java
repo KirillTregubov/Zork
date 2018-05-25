@@ -41,7 +41,7 @@ class Game {
 	public static final String FILE_LOCATION = "data\\"; // Change to "data/save.dat" if using Mac
 	private final String DEFAULT_ROOM = "0";
 	private Player player;
-	private Sound musicMainTheme = new Sound(fileLocation + "music1.wav");
+	private Sound musicMainTheme = new Sound(FILE_LOCATION + "music1.wav");
 	//private Inventory inventory = new Inventory();
 
 	// This is a MASTER object that contains all of the rooms and is easily accessible.
@@ -74,13 +74,10 @@ class Game {
 	 *  Main play routine (loops until quit
 	 */
 	public void play() {
-
-<<<<<<< HEAD
 		Sound mainmusic = new Sound(FILE_LOCATION + "music1.wav");
 		mainmusic.loop();
-=======
+
 		musicMainTheme.loop();
->>>>>>> branch 'master' of https://github.com/KTregubov/Zork
 
 		printWelcome();
 
@@ -89,8 +86,8 @@ class Game {
 		boolean finished = false;
 		// check if in trial mode
 		
-		TrialDriver driver = new TrialDriver();
-		Trial currentTrial = TrialDriver.TrialTwoStart();
+		/*TrialDriver driver = new TrialDriver();
+		Trial currentTrial = driver.TrialTwoStart();*/
 		while (!finished) {
 			System.out.println("");
 			Command command = parser.getCommand(player);
@@ -228,7 +225,6 @@ class Game {
 	 * Work in Progress
 	 */
 	private boolean processCommand(Command command) {
-		System.out.println(command);
 		if(command.isUnknown()) {
 			System.out.println("You cannot do that...");
 			return false;
@@ -238,13 +234,9 @@ class Game {
 		String commandType = command.commandType;
 		String contextWord = command.contextWord;
 		Integer numbers[] = command.numbers;
-		System.out.println(commandName);
-		System.out.println(commandType);
-		System.out.println(contextWord);
 		//System.out.println(commandName + "\n" + commandType + "\n" + contextWord);
 
 		// help
-		System.out.println(commandName);
 		if (commandName.equalsIgnoreCase("help")) printHelp();
 		// list
 		else if (commandName.equalsIgnoreCase("list")) printCommands(); // might need to add contextWord

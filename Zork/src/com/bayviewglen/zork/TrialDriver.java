@@ -1,6 +1,7 @@
 package com.bayviewglen.zork;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -51,11 +52,13 @@ public class TrialDriver {
 	//starts trial 2 and checks if necessary trials are completed
 	public Trial TrialTwoStart () {
 		String exitString = "";
-		BufferedReader reader = new BufferedReader(new FileReader(Game.FILE_LOCATION + "dialogue.dat"));
 		ArrayList<String> dialogue = new ArrayList<>();
-		String line;
 		
 		try {
+			BufferedReader reader;
+			reader = new BufferedReader(new FileReader(Game.FILE_LOCATION + "dialogue.dat"));
+			String line;
+			
 			while((line = reader.readLine()) != null) {
 				if (line.equals("TRIAL TWO START")) {
 					
