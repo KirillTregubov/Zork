@@ -86,8 +86,8 @@ class Game {
 		boolean finished = false;
 		// check if in trial mode
 		
-		/*TrialDriver driver = new TrialDriver();
-		Trial currentTrial = driver.TrialTwoStart();*/
+		TrialDriver driver = new TrialDriver();
+		Trial currentTrial = driver.TrialTwoStart();
 		while (!finished) {
 			System.out.println("");
 			Command command = parser.getCommand(player);
