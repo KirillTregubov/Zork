@@ -113,12 +113,25 @@ public class Battle {
 				int itemIndex = player.getInventory().getItemIndex(itemName);
 				System.out.println(player.getName()+" used a "+itemName+"!");
 				
-				player.stats.setCurrentHP(player.stats.getCurrentHP()+player.getInventory().getItemList().get(itemIndex).stats.getHealPoints());
-				ArrayList<Item> temp = player.getInventory().getItemList();
-				temp.remove(itemIndex);
+				try {
+					player.stats.setCurrentHP(player.stats.getCurrentHP()+player.getInventory().getItemList().get(itemIndex).stats.getHealPoints());
+					System.out.println(player.getName()+" used a "+itemName+"!");
+					ArrayList<Item> temp = player.getInventory().getItemList();
+					
+					if (temp.get(itemIndex).getAmount()>1) {
+						temp.get(itemIndex).setAmount((temp.get(itemIndex).getAmount()-1));
+					}
+					else {
+						temp.remove(itemIndex);
+					}
+					
+					player.getInventory().setItemList(temp);
+					endParse = true;
+				}
+				catch (Exception e) {
+					System.out.println("That item does not have any applications in this instance.\nTake an action!");
+				}
 				
-				player.getInventory().setItemList(temp);
-				endParse = true;
 				}
 				else {
 					System.out.println("That item does not exist, you're wasting valuable time! \nTake an action!");
