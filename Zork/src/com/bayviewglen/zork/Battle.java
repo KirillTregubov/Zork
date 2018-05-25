@@ -110,8 +110,9 @@ public class Battle {
 				// Call useItem()
 				
 				if (player.getInventory().containsItem(itemName)) {
-				System.out.println(player.getName()+" used a "+itemName+"!");
 				int itemIndex = player.getInventory().getItemIndex(itemName);
+				System.out.println(player.getName()+" used a "+itemName+"!");
+				
 				player.stats.setCurrentHP(player.stats.getCurrentHP()+player.getInventory().getItemList().get(itemIndex).stats.getHealPoints());
 				ArrayList<Item> temp = player.getInventory().getItemList();
 				temp.remove(itemIndex);

@@ -94,7 +94,7 @@ class Room {
 	 * Returns the name, description, and exits related to the current room.
 	 */
 	public String longDescription() {
-		String returnString = "Currently in: " + roomName +"\n" + description + "\n" + listExits();
+		String returnString = "Currently in: " + roomName +"\n" + description + "\n" + listExits()+"\n"+listEnemies();
 		if (hasItems()) return returnString + "\n" + listItems();
 		else return returnString;
 	}
@@ -104,7 +104,7 @@ class Room {
 	 * Returns the name, description, and exits related to the room being travelled to.
 	 */
 	public String travelDescription() {
-		String returnString = "Going to: " + roomName +"\n" + description + "\n" + listExits();
+		String returnString = "Going to: " + roomName +"\n" + description + "\n" + listExits()+"\n"+listEnemies();
 		if (hasItems()) return returnString + "\n" + listItems();
 		else return returnString;
 	}
@@ -390,6 +390,81 @@ class Room {
 					}
 			}*/
 	}
+	
+	public void startCustomBattle(Player player, String entityName) {
+		
+		System.out.println(entityName);
+		int battleResult = -1;
+		boolean run = false;
+		boolean loss = false;
+		
+		if (getRoomEnemies()!=null) { // Enemy battle
+			if (getRoomEnemies().size()>0) {
+				for (int i=0;i<getRoomEnemies().size();i++) {
+					if (entityName.toLowerCase().equals(getRoomEnemies().get(i).getName().toLowerCase())) {
+						// Start the enemy battle
+						Battle batEnemy = new Battle(player,getRoomEnemies().get(i));
+						battleResult = batEnemy.startBattle();
+						if (battleResult==0) {
+							// TODO: Run away commands
+							run = true;
+						}
+						else if (battleResult==1) {
+							// TODO: Victory. Should probably give them loot here based on the enemy's level
+							//getRoomEnemies().get(i).stats.getLevel();
+							player.expCalculator(getRoomEnemies().get(i).stats.getLevel(), NPC.TYPE_ENEMY);
+						}
+						else if (battleResult==2) {
+							loss = true;
+						}
+					}
+				}
+			}
+		}
+		if (getRoomBosses()!=null) { // Enemy battle
+			if (getRoomBosses().size()>0) {
+				for (int i=0;i<getRoomBosses().size();i++) {
+					if (entityName.toLowerCase().equals(getRoomBosses().get(i).getName().toLowerCase())) {
+						// Start the boss battle
+						Battle batBoss = new Battle(player,getRoomBosses().get(i));
+						battleResult = batBoss.startBattle();
+						if (battleResult==0) {
+							// TODO: Run away commands
+							run = true;
+						}
+						else if (battleResult==1) {
+							// TODO: Victory. Should probably give them loot here based on the enemy's level
+							//getRoomEnemies().get(i).stats.getLevel();
+							player.expCalculator(getRoomBosses().get(i).stats.getLevel(), NPC.TYPE_BOSS);
+						}
+						else if (battleResult==2) {
+							loss = true;
+						}
+					}
+				}
+			}
+		}
+		
+		liveCheck(); // Removes the dead enemies
+		
+		if (loss==true) {
+			player.setDefaultRoom();
+			System.out.println("Respawning...");
+			System.out.println("\n"+player.getRoom().longDescription());
+			player.stats.setCurrentHP(player.stats.getMaximumHP());
+		}
+		else if (run==true) {
+			// TODO: Move the player back to whence they came (Move the back to their previous room which should be stored somewhere)
+			
+		}
+		else if (loss==false&&run==false&&battleResult==-1) {
+			System.out.println("There is no enemy in this room by that name!");
+		}
+		else {
+			System.out.println("\n"+player.getRoom().longDescription());
+		}
+		
+	}
 
 	public void startBattle(Player player) {
 	// Start Battle
@@ -441,7 +516,6 @@ class Room {
 		liveCheck(); // Removes the dead enemies
 		
 		if (loss==true) {
-			// TODO: Execute order 66. Also known as resetting the player's health and teleporting them back to the start
 			player.setDefaultRoom();
 			System.out.println("Respawning...");
 			System.out.println("\n"+player.getRoom().longDescription());
@@ -452,7 +526,6 @@ class Room {
 			
 		}
 		else {
-			// TODO: The player is victorious, and now has full control of the room
 			System.out.println("\n"+player.getRoom().longDescription());
 		}
 	}

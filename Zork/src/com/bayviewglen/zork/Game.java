@@ -38,10 +38,10 @@ class Game {
 	private Parser parser;
 	private BufferedWriter writer;
 	private BufferedReader reader;
-	private final String fileLocation = "data\\"; // Change to "data/save.dat" if using Mac
+	public static final String FILE_LOCATION = "data\\"; // Change to "data/save.dat" if using Mac
 	private final String DEFAULT_ROOM = "0";
 	private Player player;
-	private Sound musicMainTheme = new Sound(fileLocation + "music1.wav");
+	private Sound musicMainTheme = new Sound(FILE_LOCATION + "music1.wav");
 	//private Inventory inventory = new Inventory();
 
 	// This is a MASTER object that contains all of the rooms and is easily accessible.
@@ -58,7 +58,7 @@ class Game {
 			// Load Player
 			player = new Player();
 			// Initialize Rooms
-			initRooms(fileLocation + "rooms.dat");
+			initRooms(FILE_LOCATION + "rooms.dat");
 
 			// Load game if saved
 			if (gameIsSaved()) load();
@@ -74,6 +74,8 @@ class Game {
 	 *  Main play routine (loops until quit
 	 */
 	public void play() {
+		Sound mainmusic = new Sound(FILE_LOCATION + "music1.wav");
+		mainmusic.loop();
 
 		musicMainTheme.loop();
 
@@ -83,6 +85,9 @@ class Game {
 		
 		boolean finished = false;
 		// check if in trial mode
+		
+		/*TrialDriver driver = new TrialDriver();
+		Trial currentTrial = driver.TrialTwoStart();*/
 		while (!finished) {
 			System.out.println("");
 			Command command = parser.getCommand(player);
@@ -220,7 +225,6 @@ class Game {
 	 * Work in Progress
 	 */
 	private boolean processCommand(Command command) {
-		System.out.println(command);
 		if(command.isUnknown()) {
 			System.out.println("You cannot do that...");
 			return false;
@@ -230,13 +234,9 @@ class Game {
 		String commandType = command.commandType;
 		String contextWord = command.contextWord;
 		Integer numbers[] = command.numbers;
-		System.out.println(commandName);
-		System.out.println(commandType);
-		System.out.println(contextWord);
 		//System.out.println(commandName + "\n" + commandType + "\n" + contextWord);
 
 		// help
-		System.out.println(commandName);
 		if (commandName.equalsIgnoreCase("help")) printHelp();
 		// list
 		else if (commandName.equalsIgnoreCase("list")) printCommands(); // might need to add contextWord
@@ -255,6 +255,9 @@ class Game {
 		System.out.println("What would you like to receive?");
 		continueCommand(commandName);
 		}*/ // eat
+		else if (commandName.equalsIgnoreCase("battle")) {
+			player.getRoom().startCustomBattle(player,contextWord);
+		}
 		else if (commandName.equalsIgnoreCase("eat") || commandName.equalsIgnoreCase("consume")) { // add check if it's consumable - add joke
 			if (contextWord != null) {
 				try { 
@@ -414,7 +417,7 @@ class Game {
 			System.out.println(player.getRoomTravelDescription());
 			
 			// Init battles
-			player.getRoom().startBattle(player);
+			//player.getRoom().startBattle(player);
 
 		} else System.out.println("That's not an option... You might be trapped.");
 	}
@@ -424,7 +427,7 @@ class Game {
 	 */
 	public void save() {
 		try {
-			writer = new BufferedWriter(new FileWriter(fileLocation + "save.dat", true));
+			writer = new BufferedWriter(new FileWriter(FILE_LOCATION + "save.dat", true));
 			writer.write("Name: " + player.name + "; ");	// save room currently in
 			writer.write("Room: " + player.getRoomID() + "; ");	// save room currently in
 			if (!player.inventory.isEmpty()) { // check to make sure inventory isn't empty
@@ -444,7 +447,7 @@ class Game {
 	 */
 	public boolean gameIsSaved() {
 		try {
-			reader = new BufferedReader(new FileReader(fileLocation + "save.dat"));
+			reader = new BufferedReader(new FileReader(FILE_LOCATION + "save.dat"));
 			return reader.readLine() != null;
 		} catch(IOException e) {
 			return false;
@@ -458,7 +461,7 @@ class Game {
 		try {
 			if (gameIsSaved()) {
 				String saveFile = null, line;
-				reader = new BufferedReader(new FileReader(fileLocation + "save.dat"));
+				reader = new BufferedReader(new FileReader(FILE_LOCATION + "save.dat"));
 				while ((line = reader.readLine()) != null) {
 					saveFile = line;
 				}
@@ -484,7 +487,7 @@ class Game {
 		String saveFile = null, line;
 		try {
 			if (gameIsSaved()) {
-				reader = new BufferedReader(new FileReader(fileLocation + "save.dat"));
+				reader = new BufferedReader(new FileReader(FILE_LOCATION + "save.dat"));
 				while ((line = reader.readLine()) != null) {	// while loop to determine last line in save file
 					saveFile = line; // assigns the latest save to variable saveFile
 				}

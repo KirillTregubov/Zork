@@ -31,7 +31,8 @@ class CommandWords {
 			{"mute", "default", "Mutes the game's sound. Usage: \"mute game\""},
 			{"unmute", "default", "Unmutes the game's sound. Usage: \"unmute game\""},
 			{"save", "default", "Saves the current state of your playthrough. Usage: \"save\""},
-			{"quit", "default", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}, {"stop", "default", "Stops playing the game. Usage: \"stop game\", \"stop playing\""}
+			{"quit", "default", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}, {"stop", "default", "Stops playing the game. Usage: \"stop game\", \"stop playing\""},
+			{"battle", "default", "battles an enemy. Usage: \"battle derpman\", \"battle Some dude\""}
 	};
 
 	/**
@@ -87,10 +88,11 @@ class CommandWords {
 	/*
 	 * Returns a string of all available commands and their description
 	 */
-	public String listCommands() { // assumes every command has two keywords -> alternative should be found
+	public String toString() {
 		String returnString = "";
 		for(int i = 0; i < validCommands.length; i++)
 			if (validCommands[i][2] != "IGNORE") returnString = returnString + validCommands[i][0] + " - " + validCommands[i][2] + "\n";
 		return returnString;
 	}
+
 }
