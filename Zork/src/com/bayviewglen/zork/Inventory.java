@@ -146,4 +146,12 @@ class Inventory {
 		}
 		return returnString;
 	}
+	
+	public ArrayList<Item> getItemList(){
+		return inventory;
+	}
+	public void setItemList(ArrayList<Item> arr) {
+		inventory = arr;
+	}
+	
 }

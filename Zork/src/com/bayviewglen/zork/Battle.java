@@ -1,5 +1,6 @@
 package com.bayviewglen.zork;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Battle {
@@ -53,7 +54,6 @@ public class Battle {
 			else if (entity.stats.getSpeed()>player.stats.getSpeed()) {
 				System.out.println(entity.getName()+" will now move!");
 
-				System.out.println(entity.getName()+" attacks "+entity.getName()+"!");
 				damageDealer(entity.stats,entity.getName(),player.stats,player.getName(),playerIsBlocking);
 
 				if (player.isAlive()) {
@@ -90,6 +90,7 @@ public class Battle {
 
 		for(boolean endParse=false;endParse==false;) {
 			parseMe = input.nextLine().toLowerCase();
+			String[] words=parseMe.split(" ");
 			if (parseMe.equals("run")||parseMe.equals("run away")||parseMe.equals("flee")) {
 				running=true;
 				endParse = true;
@@ -100,6 +101,28 @@ public class Battle {
 				damageDealer(player.stats,player.getName(),entity.stats,entity.getName(),entityIsBlocking);
 				endParse = true;
 			}
+			else if (words[0].equals("consume")||words[0].equals("eat")||words[0].equals("use")) {
+				String itemName="";
+				for (int j=1;j<words.length;j++) {
+					itemName+=words[j]+" ";
+				}
+				itemName = itemName.trim();
+				// Call useItem()
+				
+				if (player.getInventory().containsItem(itemName)) {
+				System.out.println(player.getName()+" used a "+itemName+"!");
+				int itemIndex = player.getInventory().getItemIndex(itemName);
+				player.stats.setCurrentHP(player.stats.getCurrentHP()+player.getInventory().getItemList().get(itemIndex).stats.getHealPoints());
+				ArrayList<Item> temp = player.getInventory().getItemList();
+				temp.remove(itemIndex);
+				
+				player.getInventory().setItemList(temp);
+				endParse = true;
+				}
+				else {
+					System.out.println("That item does not exist, you're wasting valuable time! \nTake an action!");
+				}
+			}
 			else if (parseMe.equals("help")||parseMe.equals("help me")) {
 				System.out.println("Commands are \"attack\" and \"block\" or words and phases that mean them. It's really not that difficult, dude.");
 			}
@@ -107,11 +130,6 @@ public class Battle {
 				System.out.println("No known command by that name, try again. It's not like there's a battle going on right?");
 			}
 		}
-		/*else if (parseMe=="Attack") {
-			damageDealer(player,entity);
-		}*/
-
-		// Create parser or use Curills
 
 	}
 

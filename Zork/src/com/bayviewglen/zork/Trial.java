@@ -1,24 +1,19 @@
 package com.bayviewglen.zork;
 
-public class Trial {
-	
-	/*
-	 * Trial Class will:
-	 * 
-	 * - Update "exits" that go further in the rooms
-	 * - Allows battles to occur
-	 * - Executes any special commands that a room might have
-	 * - Limit to which ones you can enter / start
-	 * - Is in charge of all the dialogue with characters
-	 * - Tracks what enemies are defeated and doesn't respawn them until the trial is complete
-	 * - Influences the parser in some way
-	 * 
-	 * Boss rooms:
-	 * - Can't leave them (updates exits)
-	 */
+import java.util.ArrayList;
 
-	Trial() {
-		
+public class Trial {
+
+	private String exitString;
+	private ArrayList<String> dialogue;
+
+	Trial(String exitString, ArrayList<String> dialogue) {
+		this.exitString = exitString;
+		this.dialogue = dialogue;
 	}
 
+	// toString method
+	public String toString() {
+		return exitString;
+	}
 }

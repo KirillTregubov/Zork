@@ -410,6 +410,7 @@ class Room {
 					else if (battleResult==1) {
 						// TODO: Victory. Should probably give them loot here based on the enemy's level
 						//getRoomEnemies().get(i).stats.getLevel();
+						player.expCalculator(getRoomEnemies().get(i).stats.getLevel(), NPC.TYPE_ENEMY);
 					}
 					else if (battleResult==2) {
 						loss = true;
@@ -428,6 +429,7 @@ class Room {
 					else if (battleResult==1) {
 						// TODO: Victory. Should probably give them loot here based on the enemy's level
 						//getRoomEnemies().get(i).stats.getLevel();
+						player.expCalculator(getRoomBosses().get(i).stats.getLevel(), NPC.TYPE_BOSS);
 					}
 					else if (battleResult==2) {
 						loss = true;
@@ -440,7 +442,10 @@ class Room {
 		
 		if (loss==true) {
 			// TODO: Execute order 66. Also known as resetting the player's health and teleporting them back to the start
-			
+			player.setDefaultRoom();
+			System.out.println("Respawning...");
+			System.out.println("\n"+player.getRoom().longDescription());
+			player.stats.setCurrentHP(player.stats.getMaximumHP());
 		}
 		else if (run==true) {
 			// TODO: Move the player back to whence they came (Move the back to their previous room which should be stored somewhere)

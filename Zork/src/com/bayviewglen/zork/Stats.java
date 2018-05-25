@@ -32,13 +32,15 @@ public class Stats {
 	private ArrayList<String> statNames;
 	public String type; // is this needed?
 	private ArrayList<Integer> usedIndexes;
-	private static final String TYPES[][] = {Item.TYPES, {"Player", "Enemy"}};
+	private static final String TYPES[][] = {Item.TYPES, {"Player", "Enemy","Boss"}};
 	// Indexes of Types
 	public final static int ITEM_INDEX = 0;
 	public final static int ENTITY_INDEX = 1;
 	// Indexes of Sub-Types
 	public final static int PLAYER_INDEX = 0;
 	public final static int ENEMY_INDEX = 1;
+	public final static int BOSS_INDEX = 2;
+	
 	// Booleans
 	public boolean isBlocking;
 
@@ -92,10 +94,14 @@ public class Stats {
 		} else if (type == TYPES[ENTITY_INDEX][ENEMY_INDEX]) {
 			usedIndexes = new ArrayList<Integer>(Arrays.asList(new Integer[]{LVL_INDEX, AP_INDEX, CURR_HP_INDEX, MAX_HP_INDEX,
 					ATK_INDEX, DEF_INDEX, SPEED_INDEX, ACCURACY_INDEX, CRIT_INDEX}));
+		} else if (type == TYPES[ENTITY_INDEX][BOSS_INDEX]) {
+			usedIndexes = new ArrayList<Integer>(Arrays.asList(new Integer[]{LVL_INDEX, AP_INDEX, CURR_HP_INDEX, MAX_HP_INDEX,
+					ATK_INDEX, DEF_INDEX, SPEED_INDEX, ACCURACY_INDEX, CRIT_INDEX}));
 		}
 
 		if (usedIndexes.size() > 0) {
 			if (usedIndexes.contains(LVL_INDEX)) lvlIndex = usedIndexes.indexOf(LVL_INDEX);
+			if (usedIndexes.contains(EXP_INDEX)) expIndex = usedIndexes.indexOf(EXP_INDEX);
 			if (usedIndexes.contains(AP_INDEX)) apIndex = usedIndexes.indexOf(AP_INDEX);
 			if (usedIndexes.contains(CURR_HP_INDEX)) currHPIndex = usedIndexes.indexOf(CURR_HP_INDEX);
 			if (usedIndexes.contains(MAX_HP_INDEX)) maxHPIndex = usedIndexes.indexOf(MAX_HP_INDEX);
@@ -119,6 +125,9 @@ public class Stats {
 			if (index == LVL_INDEX) {
 				usedIndexes.add(LVL_INDEX);
 				lvlIndex = usedIndexes.indexOf(LVL_INDEX);
+			} if (index == EXP_INDEX) {
+				usedIndexes.add(EXP_INDEX);
+				expIndex = usedIndexes.indexOf(EXP_INDEX);
 			} if (index == AP_INDEX) {
 				usedIndexes.add(AP_INDEX);
 				apIndex = usedIndexes.indexOf(AP_INDEX);
