@@ -7,24 +7,24 @@ import java.util.List;
 
 /** "Parser" Class - part of the "Zork" game.
  * 
- * Original Author:  Michael Kolling
- * Original Version: 1.0
- * Original Date:    July 1999
+ *  Original Code Author: 	Michael Kolling
+ *  Original Code Version:	1.0
+ *  Original Published Date: July 1999
  * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.2-alpha
- * Current Date:    April 2018
+ *  Current Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Current Code Version:	0.2-alpha
+ *  Current Published Date:	May 2018
  * 
- * This class is part of Zork. Zork is a simple, text based adventure game.
+ *  This class is part of Zork. Zork is a simple, text based adventure game.
  *
- * This parser reads user input and tries to interpret it as a "Zork"
- * command. Every time it is called it reads a line from the terminal and
- * tries to interpret the line as a two word command. It returns the command
- * as an object of class Command.
+ *  This parser reads user input and tries to interpret it as a "Zork"
+ *  command. Every time it is called it reads a line from the terminal and
+ *  tries to interpret the line as a two word command. It returns the command
+ *  as an object of class Command.
  *
- * The parser has a set of known command words. It checks user input against
- * the known commands, and if the input is not one of the known commands, it
- * returns a command object that is marked as an unknown command.
+ *  The parser has a set of known command words. It checks user input against
+ *  the known commands, and if the input is not one of the known commands, it
+ *  returns a command object that is marked as an unknown command.
  */
 
 class Parser {
@@ -112,10 +112,8 @@ class Parser {
 						else if (roomName != null) return new Command(command, typeArray[i], roomName.toLowerCase());
 						else if (Utils.containsIgnoreCase(inputLine, "room")) return new Command(command, typeArray[i], "room");
 						//else return new Command(command, typeArray[i], inputLine.toLowerCase());
-
 					}
 				}
-
 			} // Single type command
 			else {
 				// Item
@@ -143,7 +141,11 @@ class Parser {
 						else if (roomName != null) return new Command(command, commandType, roomName.toLowerCase());
 						else return new Command(command, commandType, inputLine.toLowerCase());
 					} 
-
+				} // Battle
+				else if (commandType.equals("battle")) {
+					String enemy = findEnemy(player, inputArr);
+					if (enemy != null) return new Command(command, commandType, enemy);
+					else return new Command(command, commandType, null);
 				}
 			}
 		}
@@ -224,6 +226,14 @@ class Parser {
 		for (int i = 0; i < inputArr.length; i++) 
 			if (player.teleport(inputArr[i]) != null) return player.teleport(inputArr[i]);
 		return null;
+	}
+
+	public String findEnemy(Player player, String inputArr[]) {
+		for (String inputWord : inputArr) {
+			for (Entity entity : player.getRoom().getRoomEnemies()) {
+				if (Utils.containsIgnoreCase(entity.toString(), inputWord)) return inputWord;
+			}
+		} return null;
 	}
 
 	/*

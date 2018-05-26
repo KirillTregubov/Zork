@@ -2,12 +2,11 @@ package com.bayviewglen.zork;
 
 import java.util.ArrayList;
 
-
 /** "Inventory" Class - a class that stores and manages the inventory of the player.
  * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.2-alpha
- * Current Date:    April 2018
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.2-alpha
+ *  Published Date:	May 2018
  */
 
 class Inventory {

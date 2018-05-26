@@ -1,19 +1,17 @@
 package com.bayviewglen.zork;
 
-/** "Command Words" Class - part of the "Zork" game.
+/** "CommandWords" Class - stores all commands of the game.
  * 
- * Original Author:  Michael Kolling
- * Original Version: 1.0
- * Original Date:    July 1999
+ *  Original Code Author: 	Michael Kolling
+ *  Original Code Version:	1.0
+ *  Original Published Date: July 1999
  * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.2-alpha
- * Current Date:    April 2018
+ *  Current Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Current Code Version:	0.2-alpha
+ *  Current Published Date:	May 2018
  * 
- * This class holds an enumeration of all command words known to the game.
- * It is used to recognise commands as they are typed in.
- *
- * This class is part of the "Zork" game.
+ *  This class holds an enumeration of all command words known to the game.
+ *  It is used to recognize commands as they are typed in.
  */
 
 class CommandWords {
@@ -32,7 +30,9 @@ class CommandWords {
 			{"unmute", "default", "Unmutes the game's sound. Usage: \"unmute game\""},
 			{"save", "default", "Saves the current state of your playthrough. Usage: \"save\""},
 			{"quit", "default", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}, {"stop", "default", "Stops playing the game. Usage: \"stop game\", \"stop playing\""},
-			{"battle", "default", "battles an enemy. Usage: \"battle derpman\", \"battle Some dude\""}
+			{"battle", "battle", "Starts a battle with an enemy. Usage: \"battle the man\", \"battle some dude\""},
+			{"fight", "battle", "Start to fight an enemy. Usage: \"fight the man\", \"fight some dude\""},
+			{"challenge", "battle", "Challenges an enemy to a battle. \"challenge the man\", \"challenge some dude\""}
 	};
 
 	/**

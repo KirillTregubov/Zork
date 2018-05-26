@@ -3,11 +3,11 @@ package com.bayviewglen.zork;
 import java.util.Arrays;
 import java.util.HashMap;
 
-/** "Player" Class - a class that creates a player and stores their data.
+/** "Player" Class - generates and controls all of the player's information.
  * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.2-alpha
- * Current Date:    April 2018.
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.2-alpha
+ *  Published Date:	May 2018
  */
 
 public class Player extends Entity {

@@ -10,15 +10,15 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Scanner;
 
-/** "Game" Class - the main class of the "Zork" game.
+/** "Game" Class - the main class of the game.
  * 
- * Original Author:  Michael Kolling
- * Original Version: 1.0
- * Original Date:    July 1999
+ *  Original Code Author: 	Michael Kolling
+ *  Original Code Version:	1.0
+ *  Original Published Date: July 1999
  * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.2-alpha
- * Current Date:    April 2018
+ *  Current Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Current Code Version:	0.2-alpha
+ *  Current Published Date:	May 2018
  * 
  *  This class is the main class of the "Zork" application. Zork is a very
  *  simple, text based adventure game.  Users can walk around some scenery.
@@ -27,14 +27,16 @@ import java.util.Scanner;
  *  To play this game, create an instance of this class and call the "play"
  *  routine.
  * 
- *  This main class creates and initialises all the others: it creates all
+ *  This main class creates and initializes all the others: it creates all
  *  rooms, creates the parser and starts the game.  It also evaluates the
  *  commands that the parser returns.
  */
 
-//Search terms: Teleporter, Changeme..
+// LEGACY Search terms: Teleporter, Changeme..
 
 class Game {
+	public static final String GAME_NAME = "Temp Name"; // NAME
+	public static final String GAME_VERSION = "0.2-alpha"; // VERSION
 	private Parser parser;
 	private BufferedWriter writer;
 	private BufferedReader reader;
@@ -63,10 +65,12 @@ class Game {
 			// Load game if saved
 			if (gameIsSaved()) load();
 			else player.setCurrentRoom(player.masterRoomMap.get(DEFAULT_ROOM));
+			
+			// Create Parser
+			parser = new Parser();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		parser = new Parser();
 	}
 
 	/**
@@ -74,25 +78,26 @@ class Game {
 	 *  Main play routine (loops until quit
 	 */
 	public void play() {
+		// Initiate Music
 		Sound mainmusic = new Sound(FILE_LOCATION + "music1.wav");
 		mainmusic.loop();
-
 		musicMainTheme.loop();
-
 		printWelcome();
 
 		// Enter the main command loop: repeatedly reads / executes commands until the game is over
-		
 		boolean finished = false;
-		// check if in trial mode
+		boolean completingTrial = false; // trial checker
 		
+		// Testing functions
 		TrialDriver driver = new TrialDriver();
 		Trial currentTrial = driver.TrialTwoStart();
-		while (!finished) {
+		// Player is playing game
+		while (!finished) { // check if in trial mode !!!
 			System.out.println("");
 			Command command = parser.getCommand(player);
 			finished = processCommand(command);
 		}
+		// End Game
 		System.out.println("Thank you for playing. Goodbye!");
 		Sound.stop();
 
@@ -196,10 +201,11 @@ class Game {
 	 * Prints welcome message
 	 */
 	private void printWelcome() {
-		System.out.println("\n" + "Welcome to Zork!"
-				+ "\n" + "Zork is a new, incredibly boring adventure game."
-				+ "\n" + "Currenty Playing Version: 0.1-alpha"
-				+ "\n" + "Type 'help' if you need help."
+		System.out.println("\n" + "Welcome to " + GAME_NAME + "!"
+				+ "\n" + "We hope you enjoy playing " + GAME_NAME + ", an incredibly enjoyable adventure game!"
+				+ "\n" + "You are currenty playing version " + GAME_VERSION
+				+ "\n" + "You can type 'help' at any time if you need any."
+				+ "\n" + "Good luck and have fun!"
 				+ "\n");
 
 		if (gameIsSaved()) {
@@ -211,11 +217,11 @@ class Game {
 			else System.out.println(player.inventory);
 			System.out.println();
 		} else {
-			System.out.println("Hello, traveller! What is your name?");
+			System.out.println("Greetings, traveller! What is your name?"); // add more text here, explanation? put in the helper guy here
 			System.out.print("> ");
 			Scanner nameInput = new Scanner(System.in);
 			player.setName(nameInput.nextLine());
-			System.out.println("\nEnjoy your journey, " + player.name + "!");
+			System.out.println("\n" + "Enjoy your journey, " + player.name + "!");
 		}
 
 		System.out.println(player.getRoomDescription());
@@ -241,7 +247,7 @@ class Game {
 		// list
 		else if (commandName.equalsIgnoreCase("list")) printCommands(); // might need to add contextWord
 		// go
-		else if (commandName.equalsIgnoreCase("go") || commandName.equalsIgnoreCase("walk")) { System.out.println("Hello world"); goRoom(command, commandName);
+		else if (commandName.equalsIgnoreCase("go") || commandName.equalsIgnoreCase("walk")) { goRoom(command, commandName);
 		}
 		// teleport
 		else if (commandName.equalsIgnoreCase("teleport") || commandName.equalsIgnoreCase("tp")) {
@@ -250,14 +256,22 @@ class Game {
 				player.setCurrentRoom(nextRoom);
 				System.out.println(player.getRoomTravelDescription());
 			}
-		}/* // give
+			/*} // give
 		else if (commandName.equalsIgnoreCase("give")) {
 		System.out.println("What would you like to receive?");
-		continueCommand(commandName);
-		}*/ // eat
-		else if (commandName.equalsIgnoreCase("battle")) {
-			player.getRoom().startCustomBattle(player,contextWord);
-		}
+		continueCommand(commandName);*/
+		} // battle
+		else if (commandName.equalsIgnoreCase("battle") || commandName.equalsIgnoreCase("fight") || commandName.equalsIgnoreCase("challenge")) {
+			if (contextWord == null) {
+				System.out.println("You cannot battle that!");
+			} else {
+				if (player.getRoom().hasRepeatedEnemies(contextWord)) {
+					System.out.println("There are multiple enemies in this room with that name! Please be more specific!");
+				}
+				else player.getRoom().startCustomBattle(player,contextWord);
+			}
+			
+		} // eat
 		else if (commandName.equalsIgnoreCase("eat") || commandName.equalsIgnoreCase("consume")) { // add check if it's consumable - add joke
 			if (contextWord != null) {
 				try { 
@@ -269,7 +283,7 @@ class Game {
 			} else System.out.println("Do you really think you should be eating at a time like this?");
 			//continueCommand("eat");
 		} // look
-		else if (commandName.equalsIgnoreCase("look at") || commandName.equalsIgnoreCase("inspect")) {
+		else if (commandName.equalsIgnoreCase("look at") || commandName.equalsIgnoreCase("inspect")) { // might want to add look around?
 			if (contextWord != null) {
 				if (commandType.contains(" ")) System.out.println("You are not able to inspect that! Please be more specific.");
 				if (commandType.equals("item")) {
@@ -359,7 +373,7 @@ class Game {
 		else if (commandName.equalsIgnoreCase("quit") || commandName.equalsIgnoreCase("stop")) { // player wants to quit
 			return true;
 		} // wrong command
-		else System.out.println("You cannot do that...");
+		else System.out.println("The command " + commandName + "has been unaccounted for. Valve, please fix!");
 		return false;
 	}
 
@@ -367,7 +381,7 @@ class Game {
 	 * Processes a given command, assuming a related command was previously entered
 	 */
 	@Deprecated
-	private void continueCommand(String originalCommand) { // work in progress
+	private void continueCommand(String originalCommand) { // work in progress??
 		Command command = parser.getSecondaryCommand(player);
 		String commandInput = command.command;
 		Integer numbers[] = command.numbers;
@@ -416,7 +430,7 @@ class Game {
 			player.updateItems(player, nextRoom.getRoomID());
 			System.out.println(player.getRoomTravelDescription());
 			
-			// Init battles
+			// LEGACY Init battles
 			//player.getRoom().startBattle(player);
 
 		} else System.out.println("That's not an option... You might be trapped.");
@@ -455,7 +469,7 @@ class Game {
 	}
 
 	/*
-	 * Returns time the last save occurred
+	 * Returns time the last time the game was saved
 	 */
 	public String timeGameWasSaved() {
 		try {

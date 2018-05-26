@@ -1,5 +1,12 @@
 package com.bayviewglen.zork;
 
+/** "Entity" Class - generates entities.
+ * 
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.2-alpha
+ *  Published Date:	May 2018
+ */
+
 public class Entity {
 
 	public String name;
@@ -16,16 +23,12 @@ public class Entity {
 	}
 
 	// Getters and Setters
-	
-	public String getName() {
-		return name;
-	}
-	public void setName(String _name) {
-		name = _name;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public boolean isAlive() {
-		return (stats.getCurrentHP() > 0);
+		return stats.getCurrentHP() > 0;
 	}
 
 	// toString method

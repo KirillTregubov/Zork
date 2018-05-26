@@ -1,5 +1,12 @@
 package com.bayviewglen.zork;
 
+/** "NPC" Class - generates NPCs.
+ * 
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.2-alpha
+ *  Published Date:	May 2018
+ */
+
 public class NPC extends Entity {
 	
 	private boolean doesAutoEngage; // implement

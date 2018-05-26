@@ -6,9 +6,9 @@ import java.util.Collections;
 
 /** "Stats" Class - a class that creates and stores stats of everything in the game.
  * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.2-alpha
- * Current Date:    April 2018
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.2-alpha
+ *  Published Date:	May 2018
  */
 
 public class Stats {

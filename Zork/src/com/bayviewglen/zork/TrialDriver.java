@@ -5,6 +5,13 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/** "Trial Driver" Class - is in charge of processing and leading the player through trials.
+ * 
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.2-alpha
+ *  Published Date:	May 2018
+ */
+
 public class TrialDriver {
 
 	/*
@@ -57,20 +64,20 @@ public class TrialDriver {
 			String line;
 
 			for (int i = 0; i < arraySize; i++) {
-				// dialogue.add(new ArrayList<String>()); for test purposes
+				dialogue.add(new ArrayList<String>());
 				while ((line = reader.readLine()).length() > 1) {
 					dialogue.get(i).add(line);
 				}
 			}
 			reader.close();
 			
-			/* Testing correct array initialization
+			/*Testing correct array initialization
 			for (List<String> strs : dialogue) {
 				System.out.println("NEW TRIAL");
 				for (String str : strs) {
 					System.out.println(str);
 				}
-			} */
+			}*/
 		} catch (Exception e) {
 			System.out.println("AN ERROR OCCURRED");
 		}
