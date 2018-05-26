@@ -1,6 +1,5 @@
 package com.bayviewglen.zork;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 /** "Player" Class - generates and controls all of the player's information.

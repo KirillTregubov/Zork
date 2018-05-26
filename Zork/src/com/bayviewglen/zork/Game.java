@@ -86,11 +86,12 @@ class Game {
 
 		// Enter the main command loop: repeatedly reads / executes commands until the game is over
 		boolean finished = false;
-		boolean completingTrial = false; // trial checker
+		//boolean completingTrial = false; // trial checker
 		
-		// Testing functions
-		TrialDriver driver = new TrialDriver();
-		Trial currentTrial = driver.TrialTwoStart();
+		// Testing functions - WORK IN PROGRESS
+		/*TrialDriver driver = new TrialDriver();
+		Trial currentTrial = driver.TrialTwoStart();*/
+		
 		// Player is playing game
 		while (!finished) { // check if in trial mode !!!
 			System.out.println("");
@@ -148,7 +149,7 @@ class Game {
 					}
 
 					// Read Commands and Assign them 
-					String commands = reader.readLine();
+					//String commands = reader.readLine();
 					// WORK IN PROGRESS
 
 					// Read Entities and Create them 
@@ -219,8 +220,7 @@ class Game {
 		} else {
 			System.out.println("Greetings, traveller! What is your name?"); // add more text here, explanation? put in the helper guy here
 			System.out.print("> ");
-			Scanner nameInput = new Scanner(System.in);
-			player.setName(nameInput.nextLine());
+			player.setName(new Scanner(System.in).nextLine());
 			System.out.println("\n" + "Enjoy your journey, " + player.name + "!");
 		}
 
@@ -379,7 +379,6 @@ class Game {
 
 	/**
 	 * Processes a given command, assuming a related command was previously entered
-	 */
 	@Deprecated
 	private void continueCommand(String originalCommand) { // work in progress??
 		Command command = parser.getSecondaryCommand(player);
@@ -391,11 +390,11 @@ class Game {
 			System.out.println("You cannot do that...");
 		}
 
-		/* if (originalCommand.equals("eat")) {
+		if (originalCommand.equals("eat")) {
 			System.out.println("Whatever you say... You still can't eat at a time like this.");
 		} // wrong command
-		else System.out.println("You cannot do that...");*/
-	}
+		else System.out.println("You cannot do that...");
+	}*/
 
 	// User Commands
 

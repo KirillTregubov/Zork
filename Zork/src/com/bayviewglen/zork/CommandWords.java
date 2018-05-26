@@ -46,11 +46,11 @@ class CommandWords {
 	 * Return all command names as an array
 	 **/
 	public String[] getValidCommands() {
-		String validCommands[] = new String[this.validCommands.length];
-		for (int i = 0; i < this.validCommands.length; i++) {
-			validCommands[i] = this.validCommands[i][0];
+		String returnCommands[] = new String[validCommands.length];
+		for (int i = 0; i < validCommands.length; i++) {
+			returnCommands[i] = validCommands[i][0];
 		}
-		return validCommands;
+		return returnCommands;
 	}
 
 	/**

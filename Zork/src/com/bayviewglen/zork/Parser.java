@@ -157,7 +157,7 @@ class Parser {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		String inputLine = null; // will hold the full input line
 		Integer numbers[] = null; // temporary workaround before parser is fixed
-		boolean check = false;
+		//boolean check = false; LEGACY
 
 		// Take input
 		System.out.print("> "); // print prompt
