@@ -5,26 +5,28 @@ import java.util.HashMap;
 /** "Player" Class - generates and controls all of the player's information.
  * 
  *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- *  Code Version:	0.2-alpha
+ *  Code Version:	0.3-alpha
  *  Published Date:	May 2018
  */
 
 public class Player extends Entity {
 
-	//public String name;
-	//public Stats stats;
 	private Room currentRoom;
 	public Inventory inventory;
 	public HashMap<String, Room> masterRoomMap;
-
+	private Item equippedWeapon;
+	private Item equippedArmor;
 
 	Player() {
-		super("Player", Stats.PLAYER_INDEX, "1,1,1,999,120,120,120,20,0.8,0.1");
+		super("Player", Stats.PLAYER_INDEX, "1,0,0,10,10,2,0,0,0.9,0.1");
 		inventory = new Inventory();
-		//stats = new Stats(Stats.ENTITY_INDEX, Stats.PLAYER_INDEX, "1,0,0,20,20,2,2,2,0.5,0.1");	
+		inventory.forceAdd(Item.getItem(SPLINTERED_BRANCH));
+		inventory.forceAdd(Item.getItem(CARDBOARD_ARMOR));
+		equippedWeapon = Item.getItem(SPLINTERED_BRANCH);
+		equippedArmor = Item.getItem(CARDBOARD_ARMOR);
 	}
 
-	public static Item items[] = {//};
+	public static Item items[] = {
 			// Weapons - Common
 			new Item("Splintered Branch", "A branch that hurts...a litle.", Item.WEAPON_INDEX, "2,0.0"),
 			new Item("Wooden Rapier", "A wooden sword with a cool name.", Item.WEAPON_INDEX, "3,0.0"),
@@ -33,22 +35,22 @@ public class Player extends Entity {
 
 			// Weapons - Rare
 			new Item("Steel Dagger", "A dagger crafted of the finest steel.", Item.WEAPON_INDEX, "7,0.0"),
-			new Item("Cobalt Broadsword", "A large attack sword crafted from cobalt.", Item.WEAPON_INDEX, "8,1.0"),
-			new Item("Iron Spear", "A powerful iron spear that can pack a punch.", Item.WEAPON_INDEX, "5,5.0"),
+			new Item("Cobalt Broadsword", "A large attack sword crafted from cobalt.", Item.WEAPON_INDEX, "8,0.01"),
+			new Item("Iron Spear", "A powerful iron spear that can pack a punch.", Item.WEAPON_INDEX, "5,0.05"),
 			new Item("Staff of Draining", "A magic staff crafted by the angels. It is said to steal the life force from any enemy it faces", Item.WEAPON_INDEX, "6,0.0,0.25", new int[]{ Stats.DMG_REFLECT_INDEX } ),
-			new Item("Golden Bamboo Sword", "A powerful sword crafted with the only golden bamboo wood on the planet.", Item.WEAPON_INDEX, "8,3.0"),
+			new Item("Golden Bamboo Sword", "A powerful sword crafted with the only golden bamboo wood on the planet.", Item.WEAPON_INDEX, "8,0.03"),
 
 			//Weapons - Epic
-			new Item("Titanium Scythe", "A scythe said to be wielded by the grim reaper himself.", Item.WEAPON_INDEX, "10,2.0"),
-			new Item("Gauntlet of Terror", "A gaunlet that strikes fear into the enemies it faces.", Item.WEAPON_INDEX, "12,2.0"),
-			new Item("Donkey Kong Hammer", "The hammer that Mario himself used to defeat Donkey Kong.", Item.WEAPON_INDEX, "15,3.0"), 
-			new Item("The Vile Blade", "It's a vile sword? It's cool don't worry.", Item.WEAPON_INDEX, "20,1.0"), 
+			new Item("Titanium Scythe", "A scythe said to be wielded by the grim reaper himself.", Item.WEAPON_INDEX, "10,0.02"),
+			new Item("Gauntlet of Terror", "A gaunlet that strikes fear into the enemies it faces.", Item.WEAPON_INDEX, "12,0.02"),
+			new Item("Donkey Kong Hammer", "The hammer that Mario himself used to defeat Donkey Kong.", Item.WEAPON_INDEX, "15,0.03"), 
+			new Item("The Vile Blade", "It's a vile sword? It's cool don't worry.", Item.WEAPON_INDEX, "20,0.01"), 
 
-			//Weapons - Legendary MSG: IMPLEMENT DAMAGE REFLECT AND DOUBLE ATTACK
+			//Weapons - Legendary
 			new Item("Genji's Dragonblade", "Ryujin no ken wo kurae!", Item.WEAPON_INDEX, "20,0.0,0.25", new int[]{ Stats.DMG_REFLECT_INDEX }),
 			new Item("Gandalf's Staff", "You shall not pass!", Item.WEAPON_INDEX, "20,0.0"),
-			new Item("Enchanted Sabre", "A sword crafted by God himself. So sharp, the edge of it's blade is a single atom thick.", Item.WEAPON_INDEX, "30,5.0,0.33", new int[]{ Stats.DMG_REFLECT_INDEX }),
-			new Item("Infinity Gauntlet", "The Infinity stones are not included.", Item.WEAPON_INDEX, "45,10.0,0.5", new int[]{ Stats.DMG_REFLECT_INDEX }),
+			new Item("Enchanted Sabre", "A sword crafted by God himself. So sharp, the edge of it's blade is a single atom thick.", Item.WEAPON_INDEX, "30,0.05,0.33", new int[]{ Stats.DMG_REFLECT_INDEX }),
+			new Item("Infinity Gauntlet", "The Infinity stones are not included.", Item.WEAPON_INDEX, "45,0.1,0.5", new int[]{ Stats.DMG_REFLECT_INDEX }),
 			new Item("Developer Sword", "A sword Retrieved from the very heart of the syntax. It seems to have markings on the side written in binary.", Item.WEAPON_INDEX, "10000,0.0"),
 
 			//Armor - Normal 
@@ -70,8 +72,8 @@ public class Player extends Entity {
 			new Item("Small Heal Potion", "A magical potion that restores 5 health.", Item.CONSUMABLE_INDEX, "5"),
 			new Item("Medium Heal Potion", "A magical potion that restores 20 health.", Item.CONSUMABLE_INDEX, "20"),
 			new Item("Large Heal Potion", "A magical potion that restores 50 health.", Item.CONSUMABLE_INDEX, "50"),
-			new Item("Skyfire Root", "A root that grows inside volcanos. It restores you to full health.", Item.CONSUMABLE_INDEX, "10000"),
-			new Item("Combat Potion", "Military grade potion that heals you to full health and boost attack power for 1 battle.", Item.CONSUMABLE_INDEX, "10000"),
+			new Item("Skyfire Root", "A root that grows inside volcanos. It restores you to full health.", Item.CONSUMABLE_INDEX, "999"),
+			new Item("Combat Potion", "Military grade potion that heals you to full health and boost attack power for 1 battle.", Item.CONSUMABLE_INDEX, "999"),
 
 			// Item Variables
 			new Item("First Item", "This is a test item 1."),
@@ -129,8 +131,19 @@ public class Player extends Entity {
 	}
 
 	/*
-	 * Inventory Methods
+	 * Item & Inventory Methods
 	 */
+	public String checkEquippedItems() {
+		return "Equipped Weapon: " + equippedWeapon + "\nEquipped Armor: " + equippedArmor;
+	}
+
+	public void setEquippedWeapon(Item equippedWeapon) {
+		this.equippedWeapon = equippedWeapon;
+	}
+
+	public void setEquippedArmor(Item equippedArmor) {
+		this.equippedArmor = equippedArmor;
+	}
 
 	public boolean didPickUpItem(String itemName, String roomID) {
 		if (inventory.containsItem(itemName) && inventory.getItem(itemName).roomID.contains(roomID)) return true;
@@ -211,11 +224,31 @@ public class Player extends Entity {
 		return "";
 	}
 
+	public boolean consumeItem(String itemName) {
+		if (inventory.containsItem(itemName)) {
+			//System.out.println(inventory.getItem(itemName) + " " + inventory.getItemAmount(itemName));
+			inventory.consumeItem(itemName);
+			int healingDone = Item.getItem(itemName).stats.getHealPoints();
+			if (healingDone == 999 || stats.getCurrentHP() + healingDone > stats.getMaximumHP()) stats.setCurrentHP(stats.getMaximumHP());
+			else stats.setCurrentHP(stats.getCurrentHP() + Item.getItem(itemName).stats.getHealPoints());
+			return true;
+		}
+		return false;
+	}
+
 	/*
 	 * Room Getters
 	 */
 	public Room getRoom() {
 		return currentRoom;
+	}
+
+	public String getRoomTrial() {
+		return currentRoom.getTrial();
+	}
+
+	public boolean doesRoomHaveTrial() {
+		return currentRoom.getTrial() != null;
 	}
 
 	public String getRoomID() {
@@ -266,45 +299,45 @@ public class Player extends Entity {
 		this.currentRoom = currentRoom;
 		//updateItems(player);
 	}
-	
+
 	public void setDefaultRoom() {
-		this.currentRoom = masterRoomMap.get("0");
+		this.currentRoom = masterRoomMap.get("0-0");
 	}
-	
+
 	public int nextLvlExp() {
-		return (int) ((0.5*(stats.getLevel()+1)*(stats.getLevel()+1))*100 - (0.5*stats.getLevel()*stats.getLevel())*100);
+		return (int) ((0.5 * (stats.getLevel() + 1) * (stats.getLevel() + 1)) * 100 - (0.5 * stats.getLevel() * stats.getLevel()) * 100);
 	}
-	
-	public void expCalculator(int opLevel,int type) {
+
+	public void expCalculator(int opLevel, int type) {
 		int expGained = 0;
-		
-		if (opLevel<=stats.getLevel()) {
+
+		if (opLevel <= stats.getLevel()) {
 			expGained = (int) (nextLvlExp()*(1/(3.0+stats.getLevel()-opLevel)));
 		}
 		else {
 			int expGainEqual = (int) (nextLvlExp()*(1/(3.0)));
 			expGained = (int) (expGainEqual*Math.pow(1.25,opLevel-stats.getLevel()));
 		}
-		
-		if (type==NPC.TYPE_BOSS) {
+
+		if (type == Entity.BOSS_INDEX) {
 			expGained *= 2;
 		}
-		
-		stats.setExp(stats.getExp()+expGained);
+
+		stats.setExp(stats.getExp() + expGained);
 		levelUp();
-		
+
 	}
-	
+
 	public void levelUp() {
-		
-		while(stats.getExp()>nextLvlExp()) {
+
+		while(stats.getExp() > nextLvlExp()) {
 			stats.setExp(stats.getExp()-nextLvlExp());
 			stats.setLevel(stats.getLevel()+1);
 			stats.setAttributePoints(stats.getAttributePoints()+8);
 		}
-		
+
 	}
-	
+
 	public Inventory getInventory() {
 		return inventory;
 	}

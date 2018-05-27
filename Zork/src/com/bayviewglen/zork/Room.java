@@ -12,7 +12,7 @@ import java.util.Iterator;
  *  Original Published Date: July 1999
  * 
  *  Current Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- *  Current Code Version:	0.2-alpha
+ *  Current Code Version:	0.3-alpha
  *  Current Published Date:	May 2018
  * 
  *  This class is part of Zork. Zork is a simple, text based adventure game.
@@ -34,7 +34,7 @@ class Room {
 	private ArrayList<Entity> enemies;
 	private ArrayList<Entity> bosses;
 	private ArrayList<Entity> npcs;
-
+	private String trialName;
 
 	/**
 	 * Create a room described "description". Initially, it has no exits.
@@ -99,6 +99,7 @@ class Room {
 		String returnString = "Currently in: " + roomName +"\n" + description + "\n" + listExits();
 		if (hasItems()) returnString += "\n" + listItems();
 		if (hasEnemies()) returnString += "\n" + listEnemies();
+		if (hasBosses()) returnString += "\n" + listBosses();
 		return returnString;
 	}
 
@@ -110,6 +111,7 @@ class Room {
 		String returnString = "Going to: " + roomName +"\n" + description + "\n" + listExits();
 		if (hasItems()) returnString += "\n" + listItems();
 		if (hasEnemies()) returnString += "\n" + listEnemies();
+		if (hasBosses()) returnString += "\n" + listBosses();
 		return returnString;
 	}
 
@@ -130,8 +132,13 @@ class Room {
 		else return false;
 	}
 
-	private boolean hasEnemies() { // doesn't account for Bosses or NPCs -> fix?
+	public boolean hasEnemies() { // doesn't account for NPCs -> fix?
 		if (getRoomEnemies()!=null && getRoomEnemies().size() > 0) return true;
+		else return false;
+	}
+
+	public boolean hasBosses() {
+		if (getRoomBosses()!=null && getRoomBosses().size() > 0) return true;
 		else return false;
 	}
 
@@ -305,6 +312,14 @@ class Room {
 		}
 	}
 
+	public String getTrial() {
+		return trialName;
+	}
+
+	public void setTrial(String trialName) {
+		this.trialName = trialName;
+	}
+
 	// toString method.
 	public String toString() {
 		return roomName;
@@ -324,6 +339,22 @@ class Room {
 				returnString += getRoomEnemies().get(i).toString();
 
 				if (i == getRoomEnemies().size() - 1) returnString += ".";
+				else returnString += ", ";
+			}
+		}
+		return returnString;
+	}
+
+	public String listBosses() {
+		liveCheck();
+		String returnString = "";
+		if (hasBosses()) {
+			returnString = "Bosses in this room: ";
+
+			for (int i = 0; i < getRoomBosses().size(); i++) {
+				returnString += getRoomBosses().get(i).toString();
+
+				if (i == getRoomBosses().size() - 1) returnString += ".";
 				else returnString += ", ";
 			}
 		}
@@ -354,7 +385,7 @@ class Room {
 	public void setRoomNPC(ArrayList<Entity> npcs) {
 		this.npcs = npcs;
 	}
-	
+
 	public boolean hasRepeatedEnemies(String enemyName) {
 		int check = 0;
 		for (int i = 0; i < enemies.size(); i++) {
@@ -400,20 +431,45 @@ class Room {
 			}*/
 	}
 
-	public void startCustomBattle(Player player, String entityName) {
-		// Correctly assign given entity
+	public Entity findEnemy(Player player, String entityName) {
 		for (Entity entity : player.getRoom().getRoomEnemies()) {
-			if (Utils.containsIgnoreCase(entity.toString(), entityName)) entityName = entity.toString();
+			if (Utils.containsIgnoreCase(entity.toString(), entityName)) return entity;
 		}
-		
+		for (Entity entity : player.getRoom().getRoomBosses()) {
+			if (Utils.containsIgnoreCase(entity.toString(), entityName)) return entity;
+		}
+		return null;
+	}
+
+	public int startCustomBattle(Player player, String entityName) {
+		// Correctly assign given entity
+		Entity enemy = findEnemy(player, entityName);
+
 		//System.out.println(entityName); // test
 		int battleResult = -1;
 		boolean run = false;
 		boolean loss = false;
 
+		Battle currentBattle = new Battle(player, enemy);
+		battleResult = currentBattle.startBattle();
+
+		if (battleResult == 1) player.expCalculator(enemy.stats.getLevel(), Entity.ENEMY_INDEX);
+
+		/*if (battleResult == 0) {
+			run = true;
+		}
+		else if (battleResult == 1) {
+			// TODO: Victory. Should probably give them loot here based on the enemy's level
+			//getRoomEnemies().get(i).stats.getLevel();
+			player.expCalculator(enemy.stats.getLevel(), NPC.TYPE_ENEMY);
+		}
+		else if (battleResult == 2) {
+			loss = true;
+		}*/
+
 		// Initiate normal battle
-		if (hasEnemies()) { // Enemy battle
-			for (int i=0;i<getRoomEnemies().size();i++) {
+		/*if (hasEnemies()) { // Enemy battle
+			for (int i = 0; i < getRoomEnemies().size(); i++) {
 				if (entityName.toLowerCase().equals(getRoomEnemies().get(i).toString().toLowerCase())) {
 					// Start the enemy battle
 					Battle batEnemy = new Battle(player,getRoomEnemies().get(i));
@@ -456,32 +512,28 @@ class Room {
 					}
 				}
 			}
-		}
+		}*/
 
-		liveCheck(); // Removes the dead enemies
+		liveCheck(); // Removes dead enemies
 
-		if (loss==true) {
+		return battleResult;
+		/*if (loss == true) {
 			player.setDefaultRoom();
 			System.out.println("Respawning...");
 			System.out.println("\n"+player.getRoom().longDescription());
 			player.stats.setCurrentHP(player.stats.getMaximumHP());
-		}
-		else if (run==true) {
-			// TODO: Move the player back to whence they came (Move the back to their previous room which should be stored somewhere)
 
 		}
-		/*else if (loss==false&&run==false&&battleResult==-1) { //shouldn't be reachable
-			System.out.println("There is no enemy in this room by that name!");
+		else if (run == true) {
+			// TODO: Move the player back to whence they came (Move the back to their previous room which should be stored somewhere)
+
 		}*/
-		else {
-			System.out.println("\n"+player.getRoom().longDescription());
-		}
 
 	}
 
+	/*
 	public void startBattle(Player player) {
 		// Start Battle
-
 
 		int battleResult;
 		boolean run = false;
@@ -490,7 +542,7 @@ class Room {
 			if (getRoomEnemies().size()>0) {
 				for (int i=0;i<getRoomEnemies().size()&&run==false&&loss==false;i++) {
 					Battle bat = new Battle(player,getRoomEnemies().get(i));
-					battleResult = bat.startBattle();
+					battleResult = bat.newStartBattle(); 
 					if (battleResult==0) {
 						// TODO: Run away commands
 						run = true;
@@ -542,27 +594,21 @@ class Room {
 			System.out.println("\n"+player.getRoom().longDescription());
 		}
 	}
+	 */
 
 	public void setEntities(String[][] ent) {
+		if (ent != null && ent[0][0]!=null) { //String _name,int _type,String _stats
+			for (int i=0;i<ent[0].length;i++) {
+				if (ent[1][i].compareTo("Enemy") == 0)
+					getRoomEnemies().add(new Entity(ent[0][i],Entity.ENEMY_INDEX,ent[2][i]));
+				else if (ent[1][i].compareTo("Boss") == 0)
+					getRoomBosses().add(new Entity(ent[0][i],Entity.BOSS_INDEX,ent[2][i]));
+				else if (ent[1][i].compareTo("NPC") == 0) {
 
-		if (ent!=null) { //String _name,int _type,String _stats
-
-			if (ent[0][0]!=null) {
-				for (int i=0;i<ent[0].length;i++) {
-					if (ent[1][i].compareTo("Enemy")==0) {
-						getRoomEnemies().add(new NPC(ent[0][i],NPC.TYPE_ENEMY,ent[2][i]));
-					}
-					else if (ent[1][i].compareTo("Boss")==0) {
-						getRoomBosses().add(new NPC(ent[0][i],NPC.TYPE_BOSS,ent[2][i]));
-					}
-					else if (ent[1][i].compareTo("NPC")==0) {
-					}
-					else {
-						System.out.println("Mission failed, run it again. (Loading entities has failed)");
-					}
 				}
+				else
+					System.out.println("Mission failed, run it again. (Loading entities has failed)");
 			}
-
 		}
 	}
 }

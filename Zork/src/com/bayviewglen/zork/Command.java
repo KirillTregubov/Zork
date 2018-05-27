@@ -7,7 +7,7 @@ package com.bayviewglen.zork;
  *  Original Published Date: July 1999
  * 
  *  Current Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- *  Current Code Version:	0.2-alpha
+ *  Current Code Version:	0.3-alpha
  *  Current Published Date:	May 2018
  *
  *  This class holds information about a command that was issued by the user.
@@ -27,10 +27,10 @@ package com.bayviewglen.zork;
  */
 
 class Command {
-	public String command;
-	public String commandType;
-	public String contextWord;
-	public Integer numbers[];
+	private String command;
+	private String commandType;
+	private String contextWord;
+	private Integer numbers[];
 
 	/**
 	 * Create a command object. First and second word must be supplied, but
@@ -60,6 +60,22 @@ class Command {
 		this.commandType = commandType;
 		this.contextWord = contextWord;
 		this.numbers = numbers;
+	}
+
+	public String getCommand() {
+		return command;
+	}
+
+	public String getCommandType() {
+		return commandType;
+	}
+
+	public String getContextWord() {
+		return contextWord;
+	}
+
+	public Integer[] getNumbers() {
+		return numbers;
 	}
 
 	public Integer getFirstNumber() { // is this needed?

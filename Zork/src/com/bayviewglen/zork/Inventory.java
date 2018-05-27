@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /** "Inventory" Class - a class that stores and manages the inventory of the player.
  * 
  *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- *  Code Version:	0.2-alpha
+ *  Code Version:	0.3-alpha
  *  Published Date:	May 2018
  */
 
@@ -55,6 +55,10 @@ class Inventory {
 	 * Adds item to inventory using specified index (if item exists)
 	 * @return 
 	 */
+	public void forceAdd(Item item) {
+		inventory.add(item);
+	}
+
 	public void addToInventory(Item item, String itemName, String roomID) { // work on this
 		if (containsItem(itemName)) {
 			if (!getItem(itemName).roomID.contains(roomID)) getItem(itemName).roomID.add(roomID);
@@ -67,6 +71,14 @@ class Inventory {
 			if (!getItem(itemName).roomID.contains(roomID)) getItem(itemName).roomID.add(roomID);
 			getItem(itemName).setAmount(amount);
 		} else inventory.add(item);
+	}
+
+	public void consumeItem(String itemName) {
+		if (getItem(itemName).getAmount() == 1) inventory.remove(getItem(itemName));
+		else {
+			Item item = inventory.get(getItemIndex(itemName));
+			item.setAmount(item.getAmount()-1);
+		}
 	}
 
 	public Item getItem(String itemName) {
@@ -145,12 +157,13 @@ class Inventory {
 		}
 		return returnString;
 	}
-	
+
+	/* WHY
 	public ArrayList<Item> getItemList(){
 		return inventory;
 	}
 	public void setItemList(ArrayList<Item> arr) {
 		inventory = arr;
-	}
-	
+	}*/
+
 }

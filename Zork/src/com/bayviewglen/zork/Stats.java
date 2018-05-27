@@ -7,7 +7,7 @@ import java.util.Collections;
 /** "Stats" Class - a class that creates and stores stats of everything in the game.
  * 
  *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- *  Code Version:	0.2-alpha
+ *  Code Version:	0.3-alpha
  *  Published Date:	May 2018
  */
 
@@ -32,7 +32,7 @@ public class Stats {
 	private ArrayList<String> statNames;
 	public String type; // is this needed?
 	private ArrayList<Integer> usedIndexes;
-	private static final String TYPES[][] = {Item.TYPES, {"Player", "Enemy","Boss"}};
+	private static final String TYPES[][] = {Item.TYPES, Entity.TYPES};
 	// Indexes of Types
 	public final static int ITEM_INDEX = 0;
 	public final static int ENTITY_INDEX = 1;
@@ -40,9 +40,6 @@ public class Stats {
 	public final static int PLAYER_INDEX = 0;
 	public final static int ENEMY_INDEX = 1;
 	public final static int BOSS_INDEX = 2;
-	
-	// Booleans
-	public boolean isBlocking;
 
 	// Default Variables
 	public final static String[] STAT_NAMES = {"Level", "Experience Points", "Attribute Points", "Current HP", "Maximum HP", "Attack", "Defense",
@@ -325,15 +322,6 @@ public class Stats {
 		}
 	}
 
-	// Other Getters & Setters
-
-	public boolean getIsBlocking() {
-		return isBlocking;
-	}
-	public void setIsBlocking(boolean state) {
-		isBlocking = state;
-	}
-
 	// Returns string of object name 
 	public String toString(){
 		if (stats == null) return "There are no stats to display!";
@@ -343,26 +331,24 @@ public class Stats {
 			if (usedIndexes.get(i) == LVL_INDEX && getLevel() != 0) returnArr.add(statNames.get(i) + ": " + getLevel());
 			if (usedIndexes.get(i) == EXP_INDEX && getExp() != 0) returnArr.add(statNames.get(i) + ": " + getExp());
 			if (usedIndexes.get(i) == AP_INDEX && getAttributePoints() != 0) returnArr.add(statNames.get(i) + ": " + getAttributePoints());
-			if (usedIndexes.get(i) == CURR_HP_INDEX && getCurrentHP() != 0) returnArr.add(statNames.get(i) + ": " + getCurrentHP());
+			if (usedIndexes.get(i) == CURR_HP_INDEX && getCurrentHP() != 0) returnArr.add(statNames.get(i) + ": " + getCurrentHP()); //should probably have a check health command
 			if (usedIndexes.get(i) == MAX_HP_INDEX && getMaximumHP() != 0) returnArr.add(statNames.get(i) + ": " + getMaximumHP());
 			if (usedIndexes.get(i) == ATK_INDEX && getAttack() != 0) returnArr.add(statNames.get(i) + ": " + getAttack());
 			if (usedIndexes.get(i) == DEF_INDEX && getDefense() != 0) returnArr.add(statNames.get(i) + ": " + getDefense());
 			if (usedIndexes.get(i) == SPEED_INDEX && getSpeed() != 0) returnArr.add(statNames.get(i) + ": " + getSpeed());
-			if (usedIndexes.get(i) == ACCURACY_INDEX && getAccuracy() != 0.0) returnArr.add(statNames.get(i) + ": " + getAccuracy());
-			if (usedIndexes.get(i) == CRIT_INDEX && getCriticalChance() != 0.0) returnArr.add(statNames.get(i) + ": " + getCriticalChance());
+			if (usedIndexes.get(i) == ACCURACY_INDEX && getAccuracy() != 0.0) returnArr.add(statNames.get(i) + ": " + (int)(getAccuracy() * 100) + "%");
+			if (usedIndexes.get(i) == CRIT_INDEX && getCriticalChance() != 0.0) returnArr.add(statNames.get(i) + ": " + (int)(getCriticalChance() * 100) + "%");
 			if (usedIndexes.get(i) == HEAL_POINTS_INDEX && getHealPoints() != 0) returnArr.add(statNames.get(i) + ": " + getHealPoints());
 			if (usedIndexes.get(i) == LIFE_STEAL_INDEX && getLifeSteal() != 0) returnArr.add(statNames.get(i) + ": " + getLifeSteal());
-			if (usedIndexes.get(i) == DMG_REFLECT_INDEX && getDamageReflection() != 0.0) returnArr.add(statNames.get(i) + ": " + getDamageReflection());
+			if (usedIndexes.get(i) == DMG_REFLECT_INDEX && getDamageReflection() != 0.0) returnArr.add(statNames.get(i) + ": " + (int)(getDamageReflection() * 100) + "%");
 		}
 
 		String returnString = "";
 		for (int i = 0; i < returnArr.size(); i++) {
 			returnString += returnArr.get(i);
 
-			if (i < returnArr.size()-1) returnString += ", ";
-			else returnString += ".";
+			if (i < returnArr.size()-1) returnString += "\n";
 		}
-
 		return returnString;
 	}
 }

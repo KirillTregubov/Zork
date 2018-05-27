@@ -7,7 +7,7 @@ package com.bayviewglen.zork;
  *  Original Published Date: July 1999
  * 
  *  Current Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- *  Current Code Version:	0.2-alpha
+ *  Current Code Version:	0.3-alpha
  *  Current Published Date:	May 2018
  */
 

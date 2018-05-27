@@ -1,111 +1,127 @@
-ID: 0
-Name: Contest Hall
-Description:  This is room<br>1
-Exits: U-1
-Items: 39-4, 40, 41
-Commands:
+ID: 0 1
+Name: Tutorial Room
+Description: Day 7,205 – Contest: 209<br><br>Surrounded by millions of other contestants just like you, you stand awaiting what you know is your destiny.<br>Here, in the contest you are given one chance to prove yourself worthy of a better life. Like you, everyone<br>gets this chance, 1% of people pass and are granted access to the utopia of the new world while the 99% who<br>fail, remain here in the desolation of the rest of the earth surrounded by poverty, disease, hunger and death.<br>As you stand, waiting in the enormous circular room known as the theatre you can’t help but wonder if you are<br>going to pass or not. However, there is no room for that type of thinking. You will pass. You must pass if you<br>want to live a better life.<br><br>A man steps up to the podium to speak. Everyone quiets down to listen to him.<br><br>“Good morning everyone! Welcome to Contest 209. I know how long you have all been waiting<br>for this day to come and how long you have all been preparing so I will only give you some<br>brief instructions before I send you on your way. Here, in the contest, you cannot die thanks<br>to our brilliant science team. You may stay in the contest for as long as you would like,<br>die as many times as you would like however there is a 100-coin deduction for every death. Coins<br>are the currency we use here in the contest which you can use to purchase items in the shop.<br>The contest is structured in trials which are tasks that you must complete while taking part in the<br>contest. There are 7 of these trials, each challenging you in a different way. Once you complete<br>all 7 you will face the gate keeper who will determine whether or not you may pass into the new<br>world. Certain trials may only be accessed once you complete other previous trials. As an example,<br>you must complete the first trial before progressing onto any others. You will quickly discover<br>which trials you have access to as if you approach a door of a trial that you do not have access<br>to, it will not open. Furthermore, you may also choose to go the trade center where you may trade<br>any items you have collected within the trials with other contestants. Lastly, if you would like to<br>face enemies without having to enter trials, you may choose to go to the challenge gate where you<br>can face a random enemy in exchange for items. You may leave a trial at any time as long as you are<br>not engaged in any combat with an enemy. The only exception is if you are fighting a boss which<br>you encounter in trials 1, 5 and 7. Remember, there is only one way to fail the contest and that<br>is by doing something that is unforgivable in the society of the new world. You fail by giving up.<br>If you give up you will be sent back to the old world to stay there forever, no exceptions. You<br>will each now be teleported to your own private rooms where you will face a training robot that<br>will teach you the basics of battle.”
+Exits: U=0-2
+Items:
+Trial: tutorial
 Entities: 
+
+ID: 0 10
+Name: Small White Room
+Description: There is a sharp high pitch ring in your ears as you vanish and appear in another room,<br>much smaller than the one you were in before, with a sparring robot standing in front of<br>you. It begins to speak.
+Exits: U=0-0
+Items:
+Trial:
+Entities: Sparring Robot <Enemy> <1,0,10,10,1,0,1,0.5,0.0>
+
+ID: 0 0
+Name: Contest Hall
+Description: This is room<br>1
+Exits: U=1
+Items: 39-4, 40, 41
+Trial:
+Entities: OP Squire <Boss> <1,0,15,15,2,0,2,0.5,0.1>/ Sparring Robot <Enemy> <1,0,10,10,1,0,1,0.5,0.0>
 
 ID: 1
 Name: Trial 1 Start
 Description: Welcome to Trial 1. (instructions)
-Exits: D-0
+Exits: D=0-1
 Items: 39-4
-Commands:
+Trial:
 Entities: OP Squire <Boss> <1,0,20,20,2,2,2,0.5,0.1>/ Goofy Goober <Enemy> <1,0,120,120,40,40,40,0.9,0.2>/ Green Gooblin <Enemy> <1,0,20,20,2,2,2,0.5,0.1>/ Bob the Shopkeeper <NPC> <1,0,20,20,2,2,2,0.5,0.1>
 
 ID: 10
 Name: Trial 2 Start
 Description: Welcome to Trial 2. (instructions)
-Exits: D-2, U-4
+Exits: D=2, U=4
 Items: 
-Commands:
+Trial:
 Entities: 
 
 ID: 11
 Name: Trial 3 Start
 Description: Welcome to Trial 3. (instructions)
-Exits: D-Room 3
+Exits: D=2
 Items: 
-Commands:
+Trial:
 Entities: 
 
 ID: 100
 Name: Trial 4 Start
 Description: Welcome to Trial 4. (instructions)
-Exits: D-3
+Exits: D=2
 Items: 
-Commands:
+Trial:
 Entities: 
 
 ID: 101
 Name: Trial 5 Start
 Description: Welcome to Trial 5. (instructions)
-Exits: D-3
+Exits: D=2
 Items: 
-Commands:
+Trial:
 Entities: 
 
 ID: 110
 Name: Trial 6 Start
 Description: Welcome to Trial 6. (instructions)
-Exits: D-3
+Exits: D=2
 Items: 
-Commands:
+Trial:
 Entities: 
 
 ID: 111
 Name: Trial 7 Start
 Description: Welcome to Trial 7. (instructions)
-Exits: D-Room 3
+Exits: D=2
 Items: 
-Commands:
+Trial:
 Entities: 
 
 ID: 1000
 Name: Trial 8 Start
 Description: Welcome to Trial 8. (instructions)
-Exits: D-Room 3
+Exits: D=2
 Items: 
-Commands:
+Trial:
 Entities:
 
 ID: 1001
 Name: Trial 9 Start
 Description: Welcome to Trial 9. (instructions)
-Exits: D-Room 3
+Exits: D=2
 Items: 
-Commands:
+Trial:
 Entities:
 
 ID: 1010
 Name: Trial 10 Start
 Description: Welcome to Trial 10. (instructions)
-Exits: D-Room 3
+Exits: D=2
 Items: 
-Commands:
+Trial:
 Entities:
 
 ID: 1011
 Name: Shop
 Description: Welcome to the Shop. (instructions)
-Exits: D-Room 3
+Exits: D=2
 Items: 3
-Commands:
+Trial:
 Entities:
 
 ID: 1100
 Name: Trading Centre
 Description: Welcome to the Trading Centre. (instructions)
-Exits: D-Room 3
+Exits: D=2
 Items: 
-Commands:
+Trial:
 Entities:
 
 ID: 1101
 Name: Challenge Gate
 Description: Welcome to the Challenge Gate. (instructions)
-Exits: D-Room 3
+Exits: D=2
 Items: 
-Commands:
+Trial:
 Entities:

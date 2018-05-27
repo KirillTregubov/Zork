@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /** "Item" Class - a class that creates item objects.
  * 
  *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- *  Code Version:	0.2-alpha
+ *  Code Version:	0.3-alpha
  *  Published Date:	May 2018
  */
 

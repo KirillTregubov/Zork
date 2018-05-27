@@ -4,11 +4,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /** "Trial Driver" Class - is in charge of processing and leading the player through trials.
  * 
  *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- *  Code Version:	0.2-alpha
+ *  Code Version:	0.3-alpha
  *  Published Date:	May 2018
  */
 
@@ -42,7 +43,7 @@ public class TrialDriver {
 	// Dialogue
 	private int arraySize = 4;
 	private List<List<String>> dialogue = new ArrayList<List<String>>(arraySize); // change as you go
-	
+
 	// Indexes of what dialogue is what room
 	public final int TRIAL_ONE_DIALOGUE = 0;
 	public final int TRIAL_TWO_DIALOGUE = 1;
@@ -70,7 +71,7 @@ public class TrialDriver {
 				}
 			}
 			reader.close();
-			
+
 			/*Testing correct array initialization
 			for (List<String> strs : dialogue) {
 				System.out.println("NEW TRIAL");
@@ -83,13 +84,58 @@ public class TrialDriver {
 		}
 	}
 
+	//starts tutorial
+	public Trial tutorialStart (Player player) {		
+		System.out.println(player.getRoomShortDescription()); // fix exits?
+		System.out.println("");
+		player.setCurrentRoom(player.masterRoomMap.get("0-2"));
+		System.out.println(player.getRoomDescription());
+
+		System.out.println("\nRobot: Hello contest number 29886-E, please enter your name below.");
+		System.out.print("> ");
+		player.setName(new Scanner(System.in).nextLine());
+		System.out.println("\n" + "Robot: Excellent, " + player.name + ". Allow me to explain how combat functions within the contest. Your strength"
+				+ "\nis determined by your stats and items. Each stat begins at a base stat and can be upgraded"
+				+ "\nindividually with attribute points. These points are awarded to you each time you level up."
+				+ "\nYou level up by defeating enemies. Here are the stats:\n"
+				+ "\nMax Health: Base: 10 Max: 150"
+				+ "\nAttack: Base: 2, Max: 40"
+				+ "\nDefense: Base: 0, Max: 20"
+				+ "\nPlayer Speed: Base: 2, Max: 40"
+				+ "\nPlayer Accuracy: Base: 90%, Max: 100%"
+				+ "\nCritical Hit Chance: Base: 10%, Max: 60%\n"
+				+ "\nItems such as weapons increase your attack and critical hit stat while other items such as armor"
+				+ "\nincrease your defense stat.\n"
+				+ "\nWhen you engage in battle, you may choose 1 of 4 commands. You may choose to attack. use an item"
+				+ "\nsuch as a healing potion which restores health, or run away. The entity who attacks first is"
+				+ "\ndetermined by the speed stat. However, has a higher speed stat, attacks first. When an attack is"
+				+ "\ninitiated, the entities defense stat along with any armor they have will negate some or all damage"
+				+ "\ndealt. The battle will continue in a turn-based fashion until one entity loses all their HP. It is"
+				+ "\npossible however quite unlikely that an enemy will not only block but also counter attack. This"
+				+ "\ncounter attack does not count as their turn so bear that in mind. You have been given a"
+				+ "\nfree Splintered Branch as a gift.\n"
+				+ "\nTo engage in battle, type in 'battle', followed by my name. You should end up typing:"
+				+ "\nbattle Sparring Robot");
+
+		return new Trial("tutorialstart", false, "You must battle the Sparring Robot first!");
+	}
+
+	public Trial tutorialEnd (Player player) {
+		System.out.println("\nThe dummy breaks and collapses on the floor. It continues to speak."
+				+ "\nRobot: Congratulations, you will now be sent to the contest hall. Good luck!\n");
+		player.setCurrentRoom(player.masterRoomMap.get("0-0"));
+		System.out.println(player.getRoomTravelDescription());
+
+		return null; // reset currentTrial
+	}
+
 	//starts trial 1
-	public static void TrialOneStart (Player player) {
+	public static void trialOne (Player player) {
 		//run trial
 	}
 
 	//starts trial 2 and checks if necessary trials are completed
-	public Trial TrialTwoStart () {
+	public Trial trialTwo () {
 		String exitString = "";
 
 		// Check if needed trials are completed
@@ -97,12 +143,12 @@ public class TrialDriver {
 			exitString += "needT1";//"You cannot access this trial until you complete Trial 1.";
 
 		// Return Trial
-		return new Trial(exitString, new ArrayList<String>());
+		return new Trial("trialtwo", exitString);//, new ArrayList<String>());
 		//return new Trial(exitString, dialogue);
 	}
 
 	//starts trial 3 and checks if necessary trials are completed
-	public void TrialThreeStart () {
+	public void trialThree () {
 		if (isComplete(trialTwoComplete)==false)
 			System.out.println("You cannot access this trial until you complete Trial 2.");
 	}

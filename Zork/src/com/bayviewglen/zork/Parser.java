@@ -12,7 +12,7 @@ import java.util.List;
  *  Original Published Date: July 1999
  * 
  *  Current Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- *  Current Code Version:	0.2-alpha
+ *  Current Code Version:	0.3-alpha
  *  Current Published Date:	May 2018
  * 
  *  This class is part of Zork. Zork is a simple, text based adventure game.
@@ -52,12 +52,23 @@ class Parser {
 			System.out.println ("There was an error reading input: " + e.getMessage());
 		}
 
-		for (int i = 0; i < commands.getValidCommands().length; i++) {
+		String inputArr[] = inputLine.split(" ");
+
+		for (String inputString : inputArr) {
+			for (String validCommand : commands.getValidCommands()) {
+				if (inputString.equalsIgnoreCase(validCommand)) {
+					command = validCommand;
+					commandType = commands.getCommandType(command);
+				}
+			}
+		}
+
+		/*for (int i = 0; i < commands.getValidCommands().length; i++) {
 			if (Utils.containsIgnoreCase(inputLine, commands.getValidCommands()[i])) {
 				command = commands.getValidCommands()[i];
 				commandType = commands.getCommandType(command);
 			}
-		}
+		}*/
 
 		try {
 			if (command.equalsIgnoreCase("teleport") || command.equalsIgnoreCase("tp")) {
@@ -79,10 +90,9 @@ class Parser {
 			// Update inputLine
 			inputLine = inputLine.replaceAll("\\d","").replaceAll(" +", " ");
 			inputLine = Utils.removeBeforeSubstring(inputLine, command);
-
 		}
 
-		String inputArr[] = inputLine.split(" ");
+		inputArr = inputLine.split(" ");
 		if (command != null) {
 			commandType = commands.getCommandType(command);
 
@@ -153,6 +163,49 @@ class Parser {
 		else return new Command(null, null);
 	}
 
+	public Command getBattleCommand(Player player) {
+		// Initialize variables
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		String inputLine = null; // will hold the full input line
+		String command = null; // holds the command
+		String commandType = null; // holds command type
+		boolean check = false;
+
+		// Take input
+		System.out.print("> "); // print prompt
+		try {
+			inputLine = reader.readLine();
+		} catch(java.io.IOException e) {
+			System.out.println ("There was an error reading input: " + e.getMessage());
+		}
+
+		for (int i = 0; i < commands.getValidBattleCommands().length; i++) {
+			if (Utils.containsIgnoreCase(inputLine, commands.getValidBattleCommands()[i])) {
+				command = commands.getValidBattleCommands()[i];
+				commandType = commands.getBattleCommandType(command);
+			}
+		}
+
+		// Update inputLine
+		inputLine = inputLine.replaceAll("\\d","").replaceAll(" +", " ");
+		inputLine = Utils.removeBeforeSubstring(inputLine, command);
+		String inputArr[] = inputLine.split(" ");
+
+		//System.out.println(command + " and " + commandType + " and " + inputArr[0]);
+
+		if (commandType != null) {
+			if (commandType.equals("attack") || commandType.equals("run") || commandType.equals("help")) return new Command(command, commandType);
+			else if (commandType.equals("item")) {
+				String item = findItem(inputArr);
+				System.out.println(item);
+				if (item != null) return new Command(command, commandType, item.toLowerCase());
+			} else return new Command(null,null);	
+		}
+
+		if (command != null) return new Command(command, commandType, inputLine.toLowerCase());
+		else return new Command(null, null);
+	}
+
 	public Command getSecondaryCommand(Player player) {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		String inputLine = null; // will hold the full input line
@@ -186,7 +239,7 @@ class Parser {
 	public String findItem (String inputArr[]) {
 		for (int i = 0; i < inputArr.length; i++) {
 			for (int j = 0; j < Player.items.length; j++) {
-				if (Utils.containsIgnoreCase(Player.items[j].toString(), inputArr[i])) {
+				if (inputArr[i].length() > 3 && Utils.containsIgnoreCase(Player.items[j].toString(), inputArr[i])) {
 					return inputArr[i]; // should we return item?
 				}
 			}
@@ -229,11 +282,17 @@ class Parser {
 	}
 
 	public String findEnemy(Player player, String inputArr[]) {
-		for (String inputWord : inputArr) {
-			for (Entity entity : player.getRoom().getRoomEnemies()) {
-				if (Utils.containsIgnoreCase(entity.toString(), inputWord)) return inputWord;
+		if (player.getRoom().hasEnemies() || player.getRoom().hasBosses()) {
+			for (String inputWord : inputArr) {
+				for (Entity enemy : player.getRoom().getRoomEnemies()) {
+					if (Utils.containsIgnoreCase(enemy.toString(), inputWord)) return inputWord;
+				}
+				for (Entity boss: player.getRoom().getRoomBosses()) {
+					if (Utils.containsIgnoreCase(boss.toString(), inputWord)) return inputWord;
+				}
 			}
-		} return null;
+		}
+		return null;
 	}
 
 	/*
@@ -241,5 +300,12 @@ class Parser {
 	 */
 	public String listCommands() {
 		return commands.toString();
+	}
+
+	/*
+	 * Print out a list of valid command words.
+	 */
+	public String listBattleCommands() {
+		return commands.listBattleCommands();
 	}
 }
