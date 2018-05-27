@@ -3,6 +3,13 @@ package com.bayviewglen.zork;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/** "Battle" Class - instantiates and facilitates battles.
+ * 
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.2-alpha
+ *  Published Date:	May 2018
+ */
+
 public class Battle {
 
 	public Player player;
@@ -30,31 +37,31 @@ public class Battle {
 
 	public int startBattle() { // Consumables count as a turn. Returns either a 0,1,2. 0 means you ran away. 1 means won. 2 means loss.
 		
-		System.out.println("\nYou have been engaged by "+entity.getName()+"!");
+		System.out.println("\nYou have been engaged by "+ entity.toString() + "!");
 
 		while((player.isAlive()&&entity.isAlive())&&running==false) { // TODO: And while running away is not true
 
 			System.out.println("");
 
 			if (player.stats.getSpeed()>=entity.stats.getSpeed()) { // Multiply by weapon speed
-				System.out.println(player.getName()+" will now move!");
+				System.out.println(player.toString()+" will now move!");
 
 				System.out.println("Take an action!");
 				battleParser();
 
 				if (entity.isAlive()) {
-					System.out.println(entity.getName()+" will now move!");
+					System.out.println(entity.toString()+" will now move!");
 
 
-					damageDealer(entity.stats,entity.getName(),player.stats,player.getName(),playerIsBlocking);
+					damageDealer(entity.stats,entity.toString(),player.stats,player.toString(),playerIsBlocking);
 
 				}
 
 			}
 			else if (entity.stats.getSpeed()>player.stats.getSpeed()) {
-				System.out.println(entity.getName()+" will now move!");
+				System.out.println(entity.toString()+" will now move!");
 
-				damageDealer(entity.stats,entity.getName(),player.stats,player.getName(),playerIsBlocking);
+				damageDealer(entity.stats,entity.toString(),player.stats,player.toString(),playerIsBlocking);
 
 				if (player.isAlive()) {
 
@@ -71,7 +78,7 @@ public class Battle {
 			return 0; // Retreat integer
 		}
 		else if (entity.isAlive()==false) {
-			System.out.println("You have defeated level "+entity.stats.getLevel()+" "+entity.getName()+"!");
+			System.out.println("You have defeated level "+entity.stats.getLevel()+" "+entity.toString()+"!");
 			return 1; // Victory integer
 		}
 		else if (player.isAlive()==false) {
@@ -98,7 +105,7 @@ public class Battle {
 			else if (parseMe.equals("attack")||parseMe.equals("hit")||parseMe.equals("swing")||parseMe.equals("stab")||
 					parseMe.equals("bludgeon")||parseMe.equals("slash")||parseMe.equals("strike")) {
 				playerIsBlocking=false;
-				damageDealer(player.stats,player.getName(),entity.stats,entity.getName(),entityIsBlocking);
+				damageDealer(player.stats,player.toString(),entity.stats,entity.toString(),entityIsBlocking);
 				endParse = true;
 			}
 			else if (words[0].equals("consume")||words[0].equals("eat")||words[0].equals("use")) {
@@ -111,11 +118,10 @@ public class Battle {
 				
 				if (player.getInventory().containsItem(itemName)) {
 				int itemIndex = player.getInventory().getItemIndex(itemName);
-				System.out.println(player.getName()+" used a "+itemName+"!");
 				
 				try {
 					player.stats.setCurrentHP(player.stats.getCurrentHP()+player.getInventory().getItemList().get(itemIndex).stats.getHealPoints());
-					System.out.println(player.getName()+" used a "+itemName+"!");
+					System.out.println(player.toString()+" used a "+itemName+"!");
 					ArrayList<Item> temp = player.getInventory().getItemList();
 					
 					if (temp.get(itemIndex).getAmount()>1) {
