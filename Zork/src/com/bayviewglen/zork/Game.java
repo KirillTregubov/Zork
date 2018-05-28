@@ -85,7 +85,8 @@ class Game {
 		// Initiate Music
 		Sound mainmusic = new Sound(FILE_LOCATION + "music1.wav");
 		mainmusic.loop();
-		musicMainTheme.loop();
+		FlashingImages welcomeImage = new FlashingImages(FILE_LOCATION+"max.jpg",3000); 
+		
 
 		printWelcome();
 
