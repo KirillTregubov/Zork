@@ -89,6 +89,11 @@ class Game {
 		mainmusic.loop();
 		FlashingImages welcomeImage = new FlashingImages(FILE_LOCATION+"max.jpg",3000); 
 		
+<<<<<<< HEAD
+=======
+
+		printWelcome();
+>>>>>>> branch 'master' of https://github.com/KTregubov/Zork
 
 		printWelcome();
 		
