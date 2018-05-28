@@ -15,19 +15,33 @@ public class Battle {
 	public Player player;
 	public Entity enemy;
 	public boolean didRunAway;
+	public int attackCounter;
+	public int consumableUsageCounter;
+	public int critHitCounter;
 
 	public Battle(Player player, Entity enemy) {
 		this.player = player;
 		this.enemy = enemy;
 		didRunAway = false;
+		attackCounter = 0;
+		consumableUsageCounter = 0;
+		critHitCounter = 0;
+	}
+	
+	public ArrayList<Integer> getCounters() {
+		ArrayList<Integer> counters = new ArrayList<Integer>();
+		counters.add(attackCounter);
+		counters.add(consumableUsageCounter);
+		counters.add(critHitCounter);
+		return counters;
 	}
 
 	public int startBattle() {
 		if (enemy.getType().equals(Entity.TYPES[Entity.BOSS_INDEX])) {
 			enemy.stats.setSpeed(999);
 		}
-		System.out.println("\nYou have engaged in battle with " + enemy.toString() + "!");
-		System.out.println(enemy.toString() + "'s stats are: " + enemy.stats);
+		System.out.println("You have engaged in battle with " + enemy.toString() + "!");
+		System.out.println(enemy.toString() + "'s stats are: " + "\n" + enemy.stats);
 
 		while((player.isAlive() && enemy.isAlive()) && didRunAway == false) {
 			System.out.println("");
@@ -37,12 +51,12 @@ public class Battle {
 				processUserInput();
 
 				if (enemy.isAlive()) {
-					System.out.print("\n" + enemy.toString() + " will now move. ");
+					System.out.print("\n" + enemy.toString() + " will now move. It has " + enemy.stats.getCurrentHP() + " HP left. ");
 					damageDealingProcessor(true);
 				}
 
 			} else if (enemy.stats.getSpeed() > player.stats.getSpeed()) {
-				System.out.print(enemy.toString() + " moves first. ");
+				System.out.print(enemy.toString() + " moves first. It has " + enemy.stats.getCurrentHP() + " HP left. ");
 				damageDealingProcessor(true);
 
 				if (player.isAlive()) {
@@ -59,12 +73,12 @@ public class Battle {
 			return 0; // Retreat integer
 		}
 		else if (!enemy.isAlive()) {
-			System.out.println("You have defeated the Lvl "+ enemy.stats.getLevel() + " "+ enemy.toString()+"!"
+			System.out.println("You have defeated " + enemy.toString() + "!"
 					+ "\nYou have " + player.stats.getCurrentHP() + " health remaining.");
 			return 1; // Victory integer
 		}
 		else if (!player.isAlive()) {
-			System.out.println("You have been defeated by the Lvl " + enemy.stats.getLevel() + " " + enemy.toString() + "!");
+			System.out.println("You have been defeated by " + enemy.toString() + "!");
 			enemy.stats.setCurrentHP(enemy.stats.getMaximumHP()); // reset enemy HP
 			System.out.println("You have been returned to the Contest Hall.");
 			player.setDefaultRoom(); // teleport to Contest Hall
@@ -76,7 +90,7 @@ public class Battle {
 	}
 
 	private void processUserInput() {
-		System.out.println("Choose an action. Enter 'help' if you need any.");
+		System.out.println("You have " + player.stats.getCurrentHP() + " HP left. Choose an action. Enter 'help' if you need any.");
 		Parser parser = new Parser();
 		Command command = parser.getBattleCommand(player);
 		String commandName = command.getCommand();
@@ -96,9 +110,9 @@ public class Battle {
 			didRunAway = true;
 		} else if(commandType.equals("item")) {
 			if (player.inventory.containsItem(contextWord)) {
-				System.out.println("CONSUME");
-				// implement player method to consume and remove from inv
-
+				player.consumeItem(contextWord);
+				consumableUsageCounter++;
+				System.out.println("You have successfully consumed " + Item.getItem(contextWord) + "!");
 			} else System.out.println("There is no " + Item.getItem(contextWord) + " in your inventory...");
 		} else { // should be unreachable
 			System.out.println("You cannot do that...\n");
@@ -106,6 +120,10 @@ public class Battle {
 		}
 	}
 
+	/*attackCounter = 0;
+	consumableUsageCounter = 0;
+	critHitCounter = 0;
+	*/
 	private void damageDealingProcessor(boolean enemyIsAttacking) {
 		if (enemyIsAttacking) System.out.print("It attacks you, "); // add
 		else System.out.print("You attack "+ enemy.name + ", "); //add
@@ -132,14 +150,18 @@ public class Battle {
 				if (didHit(player.stats.getCriticalChance())) {
 					System.out.println("and land a critical hit, dealing " + (int) (player.stats.getAttack() * 1.5) + " damage.");
 					enemy.stats.setCurrentHP((int) (enemy.stats.getCurrentHP() - player.stats.getAttack() * 1.5));
+					attackCounter++;
+					critHitCounter++;
 				} // Normal Attack
 				else if (player.stats.getAttack() - enemy.stats.getDefense() > 1) {
 					System.out.println("and deal " + player.stats.getAttack() + " damage.");
 					enemy.stats.setCurrentHP((int) (enemy.stats.getCurrentHP() - player.stats.getAttack()));
+					attackCounter++;
 				} // Base Attack because too much armor / damage
 				else {
 					System.out.println("and deal 1 damage.");
 					enemy.stats.setCurrentHP(enemy.stats.getCurrentHP()-1);
+					attackCounter++;
 				}
 			} else System.out.println("but miss your attack!");
 		}

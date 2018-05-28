@@ -19,6 +19,8 @@ class CommandWords {
 	private static final String validCommands[][] = {
 			{"help", "default", "Prints the help message. Usage: \"help\""},
 			{"list", "default", "Lists things. Usage: \"list commands\""}, // add an example if list gains more uses
+			{"start", "trial", "Starts a trial. Usage: \"start trial one\", \"start trial 2\""},
+			{"abandon", "default", "Abandon a trial. Usage: \"abandon trial one\", \"abandon trial 2\""},
 			{"go", "place", "Allows you to go places. Usage: \"go west\", \"go down\""},
 			{"walk", "place", "Allows you to walk places. Usage: \"walk west\", \"walkT down\""},
 			//{"teleport", "place", "\"Cheater\" command. Remove before final release!"},
@@ -29,7 +31,7 @@ class CommandWords {
 			{"inspect", "inventory item place", "Allows you to inspect things. Usage: \"inspect inventory\", \"inspect red apple\""},
 			{"take", "item", "Allows you to take things. Usage: \"take red apple\", \"take sword\""},
 			{"grab", "item", "Allows you to grab things. Usage: \"grab red apple\", \"grab sword\""},
-			{"pick up", "item", "Allows you to pick up things. Usage: \"pick up red apple\", \"pick up basic sword\""},
+			{"pickup", "item", "Allows you to pick up things. Usage: \"pick up red apple\", \"pick up basic sword\""},
 			{"check", "default", "Allows you to check things. Usage: \"check equipped\""},
 			{"equip", "item", "Allows you to equip a weapon or armor. Usage: \"equip longsword\",\"equip titanium armor\""},
 			{"mute", "default", "Mutes the game's sound. Usage: \"mute game\""},

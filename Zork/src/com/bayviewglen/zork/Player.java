@@ -1,5 +1,6 @@
 package com.bayviewglen.zork;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /** "Player" Class - generates and controls all of the player's information.
@@ -308,35 +309,41 @@ public class Player extends Entity {
 		return (int) ((0.5 * (stats.getLevel() + 1) * (stats.getLevel() + 1)) * 100 - (0.5 * stats.getLevel() * stats.getLevel()) * 100);
 	}
 
-	public void expCalculator(int opLevel, int type) {
+	public void expCalculator(int battleResult, ArrayList<Integer> counters, int enemyType) {
 		int expGained = 0;
+		int attackCounter = counters.get(0);
+		int consumableUsageCounter = counters.get(1);
+		int critHitCounter = counters.get(2);
+		
+		/*for (Integer counter : counters) { //test
+			System.out.println(counter);
+		}*/
+		
+		// Base Exp Calculator
+		expGained += attackCounter * 5 + consumableUsageCounter * 10 + critHitCounter * 15;
 
-		if (opLevel <= stats.getLevel()) {
-			expGained = (int) (nextLvlExp()*(1/(3.0+stats.getLevel()-opLevel)));
+		// Battle Result Checker
+		if (battleResult == 2) {
+			expGained /= 2;
 		}
-		else {
-			int expGainEqual = (int) (nextLvlExp()*(1/(3.0)));
-			expGained = (int) (expGainEqual*Math.pow(1.25,opLevel-stats.getLevel()));
-		}
-
-		if (type == Entity.BOSS_INDEX) {
+		
+		// Type Checker
+		if (enemyType == Entity.BOSS_INDEX) {
 			expGained *= 2;
 		}
 
 		stats.setExp(stats.getExp() + expGained);
 		levelUp();
-
 	}
 
 	public void levelUp() {
-
+		if (stats.getLevel() >= 99) return;
 		while(stats.getExp() > nextLvlExp()) {
 			stats.setExp(stats.getExp()-nextLvlExp());
 			stats.setLevel(stats.getLevel()+1);
 			stats.setAttributePoints(stats.getAttributePoints()+8);
 		}
-
-	}
+	}	
 
 	public Inventory getInventory() {
 		return inventory;

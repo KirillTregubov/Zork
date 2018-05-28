@@ -96,7 +96,9 @@ class Room {
 	 * Returns the name, description, and exits related to the current room.
 	 */
 	public String longDescription() {
-		String returnString = "Currently in: " + roomName +"\n" + description + "\n" + listExits();
+		String returnString = "Currently in: " + roomName;
+		if (description.length() > 1) returnString += "\n" + description;
+		returnString += "\n" + listExits();
 		if (hasItems()) returnString += "\n" + listItems();
 		if (hasEnemies()) returnString += "\n" + listEnemies();
 		if (hasBosses()) returnString += "\n" + listBosses();
@@ -108,7 +110,9 @@ class Room {
 	 * Returns the name, description, and exits related to the room being travelled to.
 	 */
 	public String travelDescription() {
-		String returnString = "Going to: " + roomName +"\n" + description + "\n" + listExits();
+		String returnString = "Going to: " + roomName;
+		if (description.length() > 1) returnString += "\n" + description;
+		returnString += "\n" + listExits();
 		if (hasItems()) returnString += "\n" + listItems();
 		if (hasEnemies()) returnString += "\n" + listEnemies();
 		if (hasBosses()) returnString += "\n" + listBosses();
@@ -452,9 +456,10 @@ class Room {
 
 		Battle currentBattle = new Battle(player, enemy);
 		battleResult = currentBattle.startBattle();
-
-		if (battleResult == 1) player.expCalculator(enemy.stats.getLevel(), Entity.ENEMY_INDEX);
-
+		ArrayList<Integer> battleCounters = currentBattle.getCounters();
+		
+		if (battleResult != 0) player.expCalculator(battleResult, battleCounters, Entity.ENEMY_INDEX);
+		
 		/*if (battleResult == 0) {
 			run = true;
 		}

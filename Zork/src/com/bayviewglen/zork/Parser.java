@@ -51,7 +51,8 @@ class Parser {
 		} catch(java.io.IOException e) {
 			System.out.println ("There was an error reading input: " + e.getMessage());
 		}
-
+		
+		if (Utils.containsCompareBoth("pick up", inputLine)) inputLine = inputLine.substring(0, inputLine.indexOf("pick")) + "pickup" + inputLine.substring(inputLine.indexOf("pick up")+7);
 		String inputArr[] = inputLine.split(" ");
 
 		for (String inputString : inputArr) {
@@ -126,8 +127,14 @@ class Parser {
 				}
 			} // Single type command
 			else {
+				if (commandType.equals("trial")) {
+					try {
+						if (numbers[0] != null) return new Command(command, commandType, inputLine.toLowerCase(), numbers);
+					} catch (Exception e) {
+					}
+				}
 				// Item
-				if (commandType.equals("item")) { // multiple item fix
+				else if (commandType.equals("item")) { // multiple item fix
 					if (numbers != null) {
 						String item = findItemRemovePlural(inputArr);
 						if (item != null) return new Command(command, commandType, item.toLowerCase(), numbers);
@@ -197,7 +204,7 @@ class Parser {
 			if (commandType.equals("attack") || commandType.equals("run") || commandType.equals("help")) return new Command(command, commandType);
 			else if (commandType.equals("item")) {
 				String item = findItem(inputArr);
-				System.out.println(item);
+				//System.out.println(item);
 				if (item != null) return new Command(command, commandType, item.toLowerCase());
 			} else return new Command(null,null);	
 		}

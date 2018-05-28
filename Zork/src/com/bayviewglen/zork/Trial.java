@@ -10,39 +10,47 @@ import java.util.ArrayList;
  */
 
 public class Trial {
-
+	
+	private int sections;
 	private String trialName;
-	private String exitString;
-	private boolean canLeave;
-	private String leaveReason;
+	private boolean canContinue = true;
+	private boolean canFlee = true;
+	private String leaveReason = "";
+	private String fleeDirection = "";
 	//private ArrayList<String> dialogue;
 
-	Trial(String trialName) {
+	Trial(int sections, String trialName) {
+		this.sections = sections;
 		this.trialName = trialName;
 	}
 
-	Trial(String trialName, boolean canLeave, String leaveReason) {
+	Trial(int sections, String trialName, boolean canContinue, boolean canFlee, String fleeDirection, String leaveReason) {
+		this.sections = sections;
 		this.trialName = trialName;
-		this.canLeave = canLeave;
+		this.canContinue = canContinue;
+		this.canFlee = canFlee;
+		this.fleeDirection = fleeDirection;
 		this.leaveReason = leaveReason;
 	}
-
-	Trial(String trialName, String exitString) {
-		this.trialName = trialName;
-		this.exitString = exitString;
-		//this.dialogue = dialogue;
+	
+	public int getSections() {
+		return sections;
 	}
-
-	public String getExitString() {
-		return exitString;
-	}
-
+	
 	public String getLeaveReason() {
 		return leaveReason;
 	}
 
-	public boolean canLeave() {
-		return canLeave;
+	public boolean canContinue() {
+		return canContinue;
+	}
+	
+	public boolean canFlee() {
+		return canFlee;
+	}
+	
+	public String getFleeDirection() {
+		return fleeDirection;
 	}
 
 	// toString method

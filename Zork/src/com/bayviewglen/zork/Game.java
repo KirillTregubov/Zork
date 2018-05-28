@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 
 /** "Game" Class - the main class of the game.
@@ -35,7 +37,7 @@ import java.util.Scanner;
 // LEGACY Search terms: Teleporter, Changeme..
 
 class Game {
-	public static final String GAME_NAME = "Temp Name"; // NAME
+	public static final String GAME_NAME = "A Life Beyond"; // NAME
 	public static final String GAME_VERSION = "0.3-alpha"; // VERSION
 	private Parser parser;
 	private BufferedWriter writer;
@@ -85,10 +87,11 @@ class Game {
 		// Initiate Music
 		Sound mainmusic = new Sound(FILE_LOCATION + "music1.wav");
 		mainmusic.loop();
-		musicMainTheme.loop();
+		FlashingImages welcomeImage = new FlashingImages(FILE_LOCATION+"max.jpg",3000); 
+		
 
 		printWelcome();
-
+		
 		// Enter the main command loop: repeatedly reads / executes commands until the game is over
 		boolean finished = false;
 
@@ -133,7 +136,7 @@ class Game {
 					room.setRoomName(roomName.split(":")[1].trim()); // ATTENTION: Why is roomName not stored the way it's read?
 					// Read the Description
 					String roomDescription = reader.readLine();
-					room.setDescription(roomDescription.substring(roomDescription.indexOf(":")+2).replaceAll("<br>", "\n").trim());
+					room.setDescription(Utils.formatStringForPrinting(roomDescription.substring(roomDescription.indexOf(":")+2).replaceAll("<br>", "\n").trim()));
 					// Read the Exits
 					String roomExits = reader.readLine();
 
@@ -234,9 +237,13 @@ class Game {
 		while(!finished && completingTrial) {
 			// Tutorial
 			if (currentTrial == null) {
-				if (player.doesRoomHaveTrial() && player.getRoomTrial().equals("tutorial")) 
-					currentTrial = trialDriver.tutorialStart(player);
+				int i = 0;
+				if (player.doesRoomHaveTrial() && player.getRoomTrial().equals("tutorial")) {
+					currentTrial = trialDriver.tutorial(i, player);
+					i++;
+				}
 
+				//while (i < currentTrial.getSections()) {
 				while (!finished && player.getRoom().hasEnemies()) {
 					System.out.println("");
 					Command command = parser.getCommand(player);
@@ -244,18 +251,36 @@ class Game {
 				}
 				if (finished) return true;
 				else { 
-					currentTrial = trialDriver.tutorialEnd(player);
+					currentTrial = trialDriver.tutorial(i, player);
 					completingTrial = false;
 					return false;
 				}
+				//}
 
-			} // Trial Two
-			else if (currentTrial.toString().equals("trialtwo")) {
-				//trialTwo
+			} // Trial One
+			else if (currentTrial.toString().equals("trialone")) {
+				int i = 1;
+				//while (i < currentTrial.getSections()) {
+				while (!finished && player.getRoomID().equals("1")) { // add check ?
+					System.out.println("");
+					Command command = parser.getCommand(player);
+					finished = processCommand(command);
+				}
+				if (finished) return true;
+				else { 
+					currentTrial = trialDriver.trialOne(i, player);
+					while (!finished && player.getRoomID().equals("1-1")) { // add check ?
+						System.out.println("");
+						Command command = parser.getCommand(player);
+						finished = processCommand(command);
+					}
+					//completingTrial = false;
+					return false;
+				}
+				//}
 			}
 		}
-		if (finished) return true;
-		else return false;
+		return false; // insurance in case everything breaks
 	}
 
 	/*
@@ -279,11 +304,58 @@ class Game {
 		else if (commandName.equalsIgnoreCase("list")) printCommands(); // might need to add contextWord
 		// go
 		else if (commandName.equalsIgnoreCase("go") || commandName.equalsIgnoreCase("walk")) { 
-			if (completingTrial && !currentTrial.canLeave()) 
-				System.out.println(currentTrial.getLeaveReason());
-			else goRoom(command, commandName);
-		}
-		// teleport
+			goRoom(command, commandName);
+		} // start
+		else if (commandType.equalsIgnoreCase("trial")) {
+			if (completingTrial) {
+				System.out.println("You cannot start a trial while completing one.");
+				return false;
+			}
+			try {
+				if (command.getFirstNumber() == 1) {
+					currentTrial = trialDriver.trialOne(0, player);
+					/*} else if (command.getFirstNumber() == 2) {
+
+				} else if (command.getFirstNumber() == 3) {
+
+				} else if (command.getFirstNumber() == 4) {
+
+				} else if (command.getFirstNumber() == 5) {
+
+				} else if (command.getFirstNumber() == 6) {
+
+				} else if (command.getFirstNumber() == 7) {
+
+					 */
+				} else {
+					System.out.println("Unable to start that trial! Please try again.");
+					return false;
+				}
+				completingTrial = true;
+			} catch (Exception e) {
+				System.out.println("Unable to start that trial! Please try again.");
+				return false;
+			}
+		} // abandon
+		else if (commandName.equalsIgnoreCase("abandon")) {
+			if (!completingTrial) {
+				System.out.println("There is nothing to abandon!");
+				return false;
+			}
+			if (currentTrial.toString().equals("tutorial")) {
+				System.out.println("You cannot abandon the tutorial!");
+				return false;
+			}
+			System.out.println("Are you sure you want to abandon your current trial?");
+			System.out.print("\n> ");
+			Scanner nameInput = new Scanner(System.in);
+			String answer = nameInput.nextLine().toLowerCase();
+			if (answer.contains("y") || answer.contains("e")) {
+				System.out.println("You have abandoned " + currentTrial.toString() + ".");
+				currentTrial = null;
+				completingTrial = false;
+			} else return false;
+		} // teleport
 		else if (commandName.equalsIgnoreCase("teleport") || commandName.equalsIgnoreCase("tp")) {
 			Room nextRoom = player.masterRoomMap.get(contextWord);
 			if (nextRoom != null) {
@@ -318,8 +390,7 @@ class Game {
 		} // eat
 		else if (commandName.equalsIgnoreCase("consume")) { // add check if it's consumable - add joke
 			if (contextWord != null) {
-				try { 
-					Item item = Item.getItem(contextWord);
+				try {
 					if (player.consumeItem(contextWord)) {
 						System.out.println("You consumed " + Item.getItem(contextWord));
 					} else if (!player.inventory.containsItem(contextWord)) System.out.println("That item is not in your inventory!");
@@ -381,14 +452,16 @@ class Game {
 				if (player.inventory.containsItem(contextWord)) {
 					if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.WEAPON_INDEX])) {
 						player.setEquippedWeapon(player.inventory.getItem(contextWord));
+						// print
 					} else if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.WEAPON_INDEX])) {
 						player.setEquippedArmor(player.inventory.getItem(contextWord));
+						// print
 					} else System.out.println("The given item is not armor or a weapon.");
 				} else System.out.println("An item must be in your inventory for it to be equipped!");
 			} else System.out.println("You are not able to equip that! Check your spelling, otherwise it probably doesn't exist.");
 
 		} // take
-		else if (commandName.equalsIgnoreCase("take") || (commandName.equalsIgnoreCase("pick up"))) { // add way to pick up amounts of stackable items
+		else if (commandName.equalsIgnoreCase("take") || (commandName.equalsIgnoreCase("pickup") || (commandName.equalsIgnoreCase("grab")))) { // add way to pick up amounts of stackable items
 			if (contextWord != null) {
 				//System.out.println(player.itemCanBePickedUp(givenItem)); test command
 				if (player.itemCanBePickedUp(contextWord).equals("roomrepeated")) {
@@ -468,8 +541,9 @@ class Game {
 	 * Print list of commands used
 	 */
 	private void printHelp() {
-		System.out.println("You are lost. You are alone. You wander...");
-		System.out.println("To find out what commands are available, type in \"list commands\"");
+		System.out.println("You are lost. You are alone. You wander..."
+				+ "\nTo find out what commands are available, type in \"list commands\""
+				+ "\nIf you are stuck in a trial, you can always abandon it using the abandon command.");
 	}
 
 	private void printCommands() {
@@ -481,6 +555,16 @@ class Game {
 	 * Go to specified room (in the specified direction)
 	 */
 	private void goRoom(Command command, String givenCommand) {
+		/*for (Entry<String, Room> entry : player.masterRoomMap.entrySet()) {
+			String key = entry.getKey();
+			System.out.println(key);
+			Room value = entry.getValue();
+			System.out.println(value.getRoomName());
+			if (room.getRoomName().equals(command.getContextWord())) {
+				System.out.println("SUCC");
+			}
+		}*/
+
 		if (command.getContextWord() == null) {
 			System.out.print("Please indicate a direction you would like to ");
 			if (givenCommand.equalsIgnoreCase("walk")) System.out.println("walk in.");
@@ -488,17 +572,23 @@ class Game {
 			return;
 		}
 		String direction = command.getContextWord();
-		// Try to leave current room.
-		Room nextRoom = player.getNextRoom(direction);
-		if (nextRoom != null) {
-			player.setCurrentRoom(nextRoom);
-			player.updateItems(player, nextRoom.getRoomID());
-			System.out.println(player.getRoomTravelDescription());
+		System.out.println(currentTrial.canFlee() + " " + direction.equals(currentTrial.getFleeDirection()));
+		if (completingTrial && !currentTrial.canFlee() && direction.equals(currentTrial.getFleeDirection())) 
+			System.out.println(currentTrial.getLeaveReason());
+		else if (completingTrial && !currentTrial.canContinue() && !currentTrial.canFlee()) 
+			System.out.println(currentTrial.getLeaveReason());
+		else {
+			// Try to leave current room.
+			Room nextRoom = player.getNextRoom(direction);
+			if (nextRoom != null) {
+				player.setCurrentRoom(nextRoom);
+				player.updateItems(player, nextRoom.getRoomID());
+				System.out.println(player.getRoomTravelDescription());
 
-			// LEGACY Init battles
-			//player.getRoom().startBattle(player);
-
-		} else System.out.println("That's not an option... You might be trapped.");
+				// LEGACY Init battles
+				//player.getRoom().startBattle(player);
+			} else System.out.println("That's not an option... You might be trapped.");
+		}
 	}
 
 	/*
