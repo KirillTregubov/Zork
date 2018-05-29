@@ -472,8 +472,17 @@ class Room {
 
 				}
 				else
-					System.out.println("Mission failed, run it again. (Loading entities has failed)");
+					System.out.println("Loading entities has failed");
 			}
 		}
+	}
+	
+	public void addEntity(Entity entity) {
+		if (entity.getType().equals(Entity.TYPES[Entity.ENEMY_INDEX])) {
+			getRoomEnemies().add(entity);
+		} else if (entity.getType().equals(Entity.TYPES[Entity.BOSS_INDEX])) {
+			getRoomBosses().add(entity);
+		} else
+			System.out.println("Loading entities has failed");
 	}
 }

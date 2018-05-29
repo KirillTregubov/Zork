@@ -74,7 +74,7 @@ public class Battle {
 		}
 		else if (!enemy.isAlive()) {
 			System.out.print("You have defeated " + enemy.toString() + ""
-					+ "\nYou have " + player.stats.getCurrentHP() + " health remaining, and");
+					+ "\nYou have " + player.stats.getCurrentHP() + " health remaining, ");
 			player.expCalculator(1, getCounters(), Entity.ENEMY_INDEX);
 			return 1; // Victory integer
 		}

@@ -13,14 +13,16 @@ import java.util.Scanner;
 
 public class Player extends Entity {
 
+	private Integer money;
 	private Room currentRoom;
 	public Inventory inventory;
 	public HashMap<String, Room> masterRoomMap;
 	private Item equippedWeapon;
 	private Item equippedArmor;
-
+	
 	Player() {
 		super("Player", Stats.PLAYER_INDEX, "1,0,0,10,10,2,0,1,0.9,0.1");
+		money = 0;
 		inventory = new Inventory();
 		inventory.forceAdd(Item.getItem(SPLINTERED_BRANCH));
 		inventory.forceAdd(Item.getItem(CARDBOARD_ARMOR));
@@ -135,6 +137,26 @@ public class Player extends Entity {
 	/*
 	 * Item & Inventory Methods
 	 */
+	public Integer getMoney() {
+		return money;
+	}
+
+	public String getMoneyString() {
+		return "You have $" + money + " in your wallet.";
+	}
+	
+	public void addMoney(Integer moneyAmount) {
+		money += moneyAmount;
+	}
+	
+	public boolean subtractMoney(Integer moneyAmount) {
+		if (money - moneyAmount > 0) {
+			money += moneyAmount;
+			return true;
+		}
+		else return false;
+	}
+	
 	public String checkEquippedItems() {
 		return "Equipped Weapon: " + equippedWeapon + "\nEquipped Armor: " + equippedArmor;
 	}
@@ -312,6 +334,7 @@ public class Player extends Entity {
 
 	public void expCalculator(int battleResult, ArrayList<Integer> counters, int enemyType) {
 		int expGained = 0;
+		int moneyGained = 0;
 		int attackCounter = counters.get(0);
 		int consumableUsageCounter = counters.get(1);
 		int critHitCounter = counters.get(2);
@@ -322,19 +345,25 @@ public class Player extends Entity {
 
 		// Base Exp Calculator
 		expGained += attackCounter * 5 + consumableUsageCounter * 10 + critHitCounter * 15;
+		moneyGained += attackCounter * 5 + critHitCounter * 10; 
 
 		// Battle Result Checker
 		if (battleResult == 2) {
 			expGained /= 2;
+			moneyGained = 0;
+		} else if (battleResult == 1) {
+			moneyGained += 20;
 		}
 
 		// Type Checker
 		if (enemyType == Entity.BOSS_INDEX) {
 			expGained *= 2;
+			moneyGained *= 2;
 		}
 
 		stats.setExp(stats.getExp() + expGained);
-		System.out.print(" gained " + expGained + " exp");
+		System.out.print("earned $" + moneyGained + ", gained " + expGained + " exp");
+		addMoney(moneyGained);
 		levelUp();
 	}
 

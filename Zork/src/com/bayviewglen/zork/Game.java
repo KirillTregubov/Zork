@@ -454,6 +454,7 @@ class Game {
 		} // check
 		else if (commandName.equalsIgnoreCase("check")) {
 			if (contextWord.equalsIgnoreCase("equipped")) System.out.println(player.checkEquippedItems());
+			else if (Utils.containsIgnoreCase(contextWord, "money") || Utils.containsIgnoreCase(contextWord, "cash")) System.out.println(player.getMoneyString());
 			else if (Utils.containsIgnoreCase(contextWord, "trial")) System.out.println(trialDriver);
 			else if (contextWord.equalsIgnoreCase("stats")) System.out.println(player.stats);
 			else System.out.println("You cannot check that!");
@@ -593,9 +594,6 @@ class Game {
 				player.setCurrentRoom(nextRoom);
 				player.updateItems(player, nextRoom.getRoomID());
 				System.out.println(player.getRoomTravelDescription());
-
-				// LEGACY Init battles
-				//player.getRoom().startBattle(player);
 			} else System.out.println("That's not an option... You might be trapped.");
 		}
 	}
@@ -603,7 +601,7 @@ class Game {
 	/*
 	 * Save Method
 	 */
-	public void save() {
+	public void save() { // save money, player stats
 		if (completingTrial) {
 			System.out.println("You cannot save while completing a trial!");
 			return;
