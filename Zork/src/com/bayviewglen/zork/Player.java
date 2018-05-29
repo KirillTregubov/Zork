@@ -1,31 +1,36 @@
 package com.bayviewglen.zork;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
-/** "Player" Class - a class that creates a player and stores their data.
+/** "Player" Class - generates and controls all of the player's information.
  * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.2-alpha
- * Current Date:    April 2018.
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.3-alpha
+ *  Published Date:	May 2018
  */
 
 public class Player extends Entity {
 
-	//public String name;
-	//public Stats stats;
+	private Integer money;
 	private Room currentRoom;
 	public Inventory inventory;
 	public HashMap<String, Room> masterRoomMap;
-
-
+	private Item equippedWeapon;
+	private Item equippedArmor;
+	
 	Player() {
-		super("Player", Stats.PLAYER_INDEX, "1,1,1,999,120,120,120,20,0.8,0.1");
+		super("Player", Stats.PLAYER_INDEX, "1,0,0,10,10,2,0,1,0.9,0.1");
+		money = 0;
 		inventory = new Inventory();
-		//stats = new Stats(Stats.ENTITY_INDEX, Stats.PLAYER_INDEX, "1,0,0,20,20,2,2,2,0.5,0.1");	
+		inventory.forceAdd(Item.getItem(SPLINTERED_BRANCH));
+		inventory.forceAdd(Item.getItem(CARDBOARD_ARMOR));
+		equippedWeapon = Item.getItem(SPLINTERED_BRANCH);
+		equippedArmor = Item.getItem(CARDBOARD_ARMOR);
 	}
 
-	public static Item items[] = {//};
+	public static Item items[] = {
 			// Weapons - Common
 			new Item("Splintered Branch", "A branch that hurts...a litle.", Item.WEAPON_INDEX, "2,0.0"),
 			new Item("Wooden Rapier", "A wooden sword with a cool name.", Item.WEAPON_INDEX, "3,0.0"),
@@ -34,22 +39,22 @@ public class Player extends Entity {
 
 			// Weapons - Rare
 			new Item("Steel Dagger", "A dagger crafted of the finest steel.", Item.WEAPON_INDEX, "7,0.0"),
-			new Item("Cobalt Broadsword", "A large attack sword crafted from cobalt.", Item.WEAPON_INDEX, "8,1.0"),
-			new Item("Iron Spear", "A powerful iron spear that can pack a punch.", Item.WEAPON_INDEX, "5,5.0"),
+			new Item("Cobalt Broadsword", "A large attack sword crafted from cobalt.", Item.WEAPON_INDEX, "8,0.01"),
+			new Item("Iron Spear", "A powerful iron spear that can pack a punch.", Item.WEAPON_INDEX, "5,0.05"),
 			new Item("Staff of Draining", "A magic staff crafted by the angels. It is said to steal the life force from any enemy it faces", Item.WEAPON_INDEX, "6,0.0,0.25", new int[]{ Stats.DMG_REFLECT_INDEX } ),
-			new Item("Golden Bamboo Sword", "A powerful sword crafted with the only golden bamboo wood on the planet.", Item.WEAPON_INDEX, "8,3.0"),
+			new Item("Golden Bamboo Sword", "A powerful sword crafted with the only golden bamboo wood on the planet.", Item.WEAPON_INDEX, "8,0.03"),
 
 			//Weapons - Epic
-			new Item("Titanium Scythe", "A scythe said to be wielded by the grim reaper himself.", Item.WEAPON_INDEX, "10,2.0"),
-			new Item("Gauntlet of Terror", "A gaunlet that strikes fear into the enemies it faces.", Item.WEAPON_INDEX, "12,2.0"),
-			new Item("Donkey Kong Hammer", "The hammer that Mario himself used to defeat Donkey Kong.", Item.WEAPON_INDEX, "15,3.0"), 
-			new Item("The Vile Blade", "It's a vile sword? It's cool don't worry.", Item.WEAPON_INDEX, "20,1.0"), 
+			new Item("Titanium Scythe", "A scythe said to be wielded by the grim reaper himself.", Item.WEAPON_INDEX, "10,0.02"),
+			new Item("Gauntlet of Terror", "A gaunlet that strikes fear into the enemies it faces.", Item.WEAPON_INDEX, "12,0.02"),
+			new Item("Donkey Kong Hammer", "The hammer that Mario himself used to defeat Donkey Kong.", Item.WEAPON_INDEX, "15,0.03"), 
+			new Item("The Vile Blade", "It's a vile sword? It's cool don't worry.", Item.WEAPON_INDEX, "20,0.01"), 
 
-			//Weapons - Legendary MSG: IMPLEMENT DAMAGE REFLECT AND DOUBLE ATTACK
+			//Weapons - Legendary
 			new Item("Genji's Dragonblade", "Ryujin no ken wo kurae!", Item.WEAPON_INDEX, "20,0.0,0.25", new int[]{ Stats.DMG_REFLECT_INDEX }),
 			new Item("Gandalf's Staff", "You shall not pass!", Item.WEAPON_INDEX, "20,0.0"),
-			new Item("Enchanted Sabre", "A sword crafted by God himself. So sharp, the edge of it's blade is a single atom thick.", Item.WEAPON_INDEX, "30,5.0,0.33", new int[]{ Stats.DMG_REFLECT_INDEX }),
-			new Item("Infinity Gauntlet", "The Infinity stones are not included.", Item.WEAPON_INDEX, "45,10.0,0.5", new int[]{ Stats.DMG_REFLECT_INDEX }),
+			new Item("Enchanted Sabre", "A sword crafted by God himself. So sharp, the edge of it's blade is a single atom thick.", Item.WEAPON_INDEX, "30,0.05,0.33", new int[]{ Stats.DMG_REFLECT_INDEX }),
+			new Item("Infinity Gauntlet", "The Infinity stones are not included.", Item.WEAPON_INDEX, "45,0.1,0.5", new int[]{ Stats.DMG_REFLECT_INDEX }),
 			new Item("Developer Sword", "A sword Retrieved from the very heart of the syntax. It seems to have markings on the side written in binary.", Item.WEAPON_INDEX, "10000,0.0"),
 
 			//Armor - Normal 
@@ -71,8 +76,8 @@ public class Player extends Entity {
 			new Item("Small Heal Potion", "A magical potion that restores 5 health.", Item.CONSUMABLE_INDEX, "5"),
 			new Item("Medium Heal Potion", "A magical potion that restores 20 health.", Item.CONSUMABLE_INDEX, "20"),
 			new Item("Large Heal Potion", "A magical potion that restores 50 health.", Item.CONSUMABLE_INDEX, "50"),
-			new Item("Skyfire Root", "A root that grows inside volcanos. It restores you to full health.", Item.CONSUMABLE_INDEX, "10000"),
-			new Item("Combat Potion", "Military grade potion that heals you to full health and boost attack power for 1 battle.", Item.CONSUMABLE_INDEX, "10000"),
+			new Item("Skyfire Root", "A root that grows inside volcanos. It restores you to full health.", Item.CONSUMABLE_INDEX, "999"),
+			new Item("Combat Potion", "Military grade potion that heals you to full health and boost attack power for 1 battle.", Item.CONSUMABLE_INDEX, "999"),
 
 			// Item Variables
 			new Item("First Item", "This is a test item 1."),
@@ -130,8 +135,39 @@ public class Player extends Entity {
 	}
 
 	/*
-	 * Inventory Methods
+	 * Item & Inventory Methods
 	 */
+	public Integer getMoney() {
+		return money;
+	}
+
+	public String getMoneyString() {
+		return "You have $" + money + " in your wallet.";
+	}
+	
+	public void addMoney(Integer moneyAmount) {
+		money += moneyAmount;
+	}
+	
+	public boolean subtractMoney(Integer moneyAmount) {
+		if (money - moneyAmount > 0) {
+			money += moneyAmount;
+			return true;
+		}
+		else return false;
+	}
+	
+	public String checkEquippedItems() {
+		return "Equipped Weapon: " + equippedWeapon + "\nEquipped Armor: " + equippedArmor;
+	}
+
+	public void setEquippedWeapon(Item equippedWeapon) {
+		this.equippedWeapon = equippedWeapon;
+	}
+
+	public void setEquippedArmor(Item equippedArmor) {
+		this.equippedArmor = equippedArmor;
+	}
 
 	public boolean didPickUpItem(String itemName, String roomID) {
 		if (inventory.containsItem(itemName) && inventory.getItem(itemName).roomID.contains(roomID)) return true;
@@ -212,11 +248,31 @@ public class Player extends Entity {
 		return "";
 	}
 
+	public boolean consumeItem(String itemName) {
+		if (inventory.containsItem(itemName)) {
+			//System.out.println(inventory.getItem(itemName) + " " + inventory.getItemAmount(itemName));
+			inventory.consumeItem(itemName);
+			int healingDone = Item.getItem(itemName).stats.getHealPoints();
+			if (healingDone == 999 || stats.getCurrentHP() + healingDone > stats.getMaximumHP()) stats.setCurrentHP(stats.getMaximumHP());
+			else stats.setCurrentHP(stats.getCurrentHP() + Item.getItem(itemName).stats.getHealPoints());
+			return true;
+		}
+		return false;
+	}
+
 	/*
 	 * Room Getters
 	 */
 	public Room getRoom() {
 		return currentRoom;
+	}
+
+	public String getRoomTrial() {
+		return currentRoom.getTrial();
+	}
+
+	public boolean doesRoomHaveTrial() {
+		return currentRoom.getTrial() != null;
 	}
 
 	public String getRoomID() {
@@ -250,6 +306,10 @@ public class Player extends Entity {
 	public int getRoomItemAmount(String itemName) {
 		return currentRoom.getItemAmount(itemName);
 	}
+	
+	public Entity getRoomEnemy(Player player, String enemyName) {
+		return currentRoom.findEnemy(player, enemyName);
+	}
 
 	public boolean doesRoomContainItem(String itemName) {
 		Item inputItem = Item.getItem(itemName);
@@ -267,44 +327,174 @@ public class Player extends Entity {
 		this.currentRoom = currentRoom;
 		//updateItems(player);
 	}
-	
+
 	public void setDefaultRoom() {
-		this.currentRoom = masterRoomMap.get("0");
+		this.currentRoom = masterRoomMap.get("0-0");
 	}
-	
-	public int nextLvlExp() {
-		return (int) ((0.5*(stats.getLevel()+1)*(stats.getLevel()+1))*100 - (0.5*stats.getLevel()*stats.getLevel())*100);
-	}
-	
-	public void expCalculator(int opLevel,int type) {
+
+	public void expCalculator(int battleResult, ArrayList<Integer> counters, int enemyType) {
 		int expGained = 0;
-		
-		if (opLevel<=stats.getLevel()) {
-			expGained = (int) (nextLvlExp()*(1/(3.0+stats.getLevel()-opLevel)));
+		int moneyGained = 0;
+		int attackCounter = counters.get(0);
+		int consumableUsageCounter = counters.get(1);
+		int critHitCounter = counters.get(2);
+
+		/*for (Integer counter : counters) { //test
+			System.out.println(counter);
+		}*/
+
+		// Base Exp Calculator
+		expGained += attackCounter * 5 + consumableUsageCounter * 10 + critHitCounter * 15;
+		moneyGained += attackCounter * 5 + critHitCounter * 10; 
+
+		// Battle Result Checker
+		if (battleResult == 2) {
+			expGained /= 2;
+			moneyGained = 0;
+		} else if (battleResult == 1) {
+			moneyGained += 20;
 		}
-		else {
-			int expGainEqual = (int) (nextLvlExp()*(1/(3.0)));
-			expGained = (int) (expGainEqual*Math.pow(1.25,opLevel-stats.getLevel()));
-		}
-		
-		if (type==NPC.TYPE_BOSS) {
+
+		// Type Checker
+		if (enemyType == Entity.BOSS_INDEX) {
 			expGained *= 2;
+			moneyGained *= 2;
 		}
-		
-		stats.setExp(stats.getExp()+expGained);
+
+		stats.setExp(stats.getExp() + expGained);
+		System.out.print("earned $" + moneyGained + ", gained " + expGained + " exp");
+		addMoney(moneyGained);
 		levelUp();
-		
 	}
-	
-	public void levelUp() {
-		
-		while(stats.getExp()>nextLvlExp()) {
-			stats.setExp(stats.getExp()-nextLvlExp());
-			stats.setLevel(stats.getLevel()+1);
-			stats.setAttributePoints(stats.getAttributePoints()+8);
+
+	public int nextLevelExp() {
+		int expNeeded = 20;
+
+		for (int i = 1; i < stats.getLevel(); i++) {
+			expNeeded *= 1.5;
 		}
-		
+
+		return expNeeded;
 	}
+
+	public void levelUp() {
+		/*int baseExpNeeded = 20;
+
+		//Create exp variable to account for level
+		int expNeeded = baseExpNeeded * stats.getLevel();*/
+
+		if (stats.getLevel() >= 99 || stats.getExp() < nextLevelExp()) System.out.println(".");
+		else {
+			while (stats.getExp() > nextLevelExp()) {
+				stats.setExp(stats.getExp() - nextLevelExp());
+				stats.setLevel(stats.getLevel() + 1);
+				if (stats.getLevel() < 11) 
+					stats.setAttributePoints(stats.getAttributePoints() + 1);
+				else if (stats.getLevel() < 21)
+					stats.setAttributePoints(stats.getAttributePoints() + 2);
+				else if (stats.getLevel() < 31)
+					stats.setAttributePoints(stats.getAttributePoints() + 3);
+				else if (stats.getLevel() < 41)
+					stats.setAttributePoints(stats.getAttributePoints() + 4);
+				else
+					stats.setAttributePoints(stats.getAttributePoints() + 5);
+			}
+			System.out.println(", levelling up to Lvl " + stats.getLevel() + "!"); // gained AP
+			System.out.println("You have " + stats.getAttributePoints() + " attribute points, would you like to spend them?");
+			Scanner input = new Scanner(System.in);
+			String answer = input.nextLine().toLowerCase();
+			if (answer.equals("yes")||answer.equals("sure")||answer.equals("ok")||answer.equals("fine")||answer.equals("sure thing")||answer.equals("why not")||answer.equals("why not?")||answer.equals("accept")||answer.equals("y"))
+				attributeSpender();
+
+		}
+	}	
+	
+	public void attributeSpender() {
+        System.out.println("\n\nWelcome to the Attribute spending screen.\nIf you would like an explanation on how to spend points, say \"Spend Help\".");
+        Scanner input = new Scanner(System.in);
+        int x = 0;
+        while (stats.getAttributePoints() > x) {
+              System.out.print("Command: ");
+              String command = input.nextLine().toLowerCase();
+              if (command.equals("spendhelp")||command.equals("spend help")||command.equals("help")||command.equals("help me")||command.equals("what do i do")||command.equals("what do i do?")) {
+                    System.out.println("\nEnter one of these values into the console to specify which stat to increase:\n"
+                                 + "1: Increase health by 1\n2: Increase attack by 1\n3: Increase defence by 1\n4: Increase speed by 1\n5: Increase accuracy by 1%\n6: Increase critical hit chance by 1%\n\"exit\"");
+              }
+              else if (command.equals("1")||command.equals("2")||command.equals("3")||command.equals("4")||command.equals("5")||command.equals("6")) {
+                     switch (command) {
+                     
+                           case "1": // Health
+                                 if (stats.getMaximumHP()>=150) {
+                                       System.out.println("Health is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                      stats.setMaximumHP(stats.getMaximumHP()+1);
+                                       stats.setCurrentHP(stats.getMaximumHP());
+                                       System.out.println("Health increased by 1, total: "+stats.getMaximumHP()+".");
+                                 }
+                                 break;
+                           case "2": // Attack
+                                 if (stats.getAttack()>=40) { 
+                                       System.out.println("Attack is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                       stats.setAttack(stats.getAttack()+1);
+                                       System.out.println("Attack increased by 1, total: "+stats.getAttack()+".");
+                                 }
+                                 break;
+                           case "3": // Defense
+                                 if (stats.getDefense()>=40) { 
+                                       System.out.println("Defence is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                       stats.setDefense(stats.getDefense()+1);
+                                       System.out.println("Defence increased by 1, total: "+stats.getDefense()+".");
+                                 }
+                                 break;
+                           case "4": // Speed
+                                 if (stats.getSpeed()>=40) { 
+                                       System.out.println("Speed is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                       stats.setSpeed(stats.getSpeed()+1);
+                                       System.out.println("Speed increased by 1, total: "+stats.getSpeed()+".");
+                                 }
+                                 break;
+                           case "5": // Accuracy
+                                 if (stats.getAccuracy()>=1.0) { 
+                                       System.out.println("Accuracy is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                     stats.setAccuracy(stats.getAccuracy()+0.01);
+                                       System.out.println("Accuracy increased by 1%, total: "+stats.getAccuracy()*100+"%.");
+                                 }
+                                 break;
+                           case "6": // Critical chance
+                                 if (stats.getCriticalChance()>=0.6) { 
+                                       System.out.println("Critical hit chance is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                 stats.setCriticalChance(stats.getCriticalChance()+0.01);
+                                       System.out.println("Critical hit chance increased by 1%, total: "+stats.getAttack()*100+"%.");
+                                 }
+                                 break;
+                           
+                     }
+              }
+              else if (command.equals("quit")||command.equals("stop")||command.equals("end"))
+                     x++;
+              else {
+                     System.out.print("Not a valid option.");
+              }
+        }
+ }
+
 	
 	public Inventory getInventory() {
 		return inventory;

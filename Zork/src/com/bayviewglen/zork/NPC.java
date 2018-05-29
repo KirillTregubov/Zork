@@ -1,24 +1,20 @@
 package com.bayviewglen.zork;
 
+/** "NPC" Class - generates NPCs.
+ * 
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.3-alpha
+ *  Published Date:	May 2018
+ */
+
 public class NPC extends Entity {
-	
-	private boolean doesAutoEngage; // implement
-	private int npcType;
-	public final static int TYPE_BOSS = 1;
-	public final static int TYPE_ENEMY = 2;
-	public final static int TYPE_NEUTRAL = 3;
-	
-	NPC(String name, int type, String stats) {
+
+	NPC(String name, String stats) {
 		super(name, Stats.ENEMY_INDEX, stats);
-		npcType = type;
 	}
-	
+
 	NPC(String name) {
 		super(name);
-		npcType = TYPE_NEUTRAL;
 	}
-	
-	public int getEntityType() {
-		return npcType;
-	}
+
 }

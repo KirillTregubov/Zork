@@ -3,16 +3,77 @@ package com.bayviewglen.zork;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /** "Utils" Class - a class that contains various utilities used by the rest of the code.
  * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.2-alpha
- * Current Date:    April 2018
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.3-alpha
+ *  Published Date:	May 2018
  */
 
 public class Utils {
+	
+	private static final int NUM_CHARS = 80;
+	
+	/** 
+	 * Print, but put spaces after a specific character amount
+	 */
+	public static void formattedPrint(boolean includeLineBreak, String inputString) {
+		if (includeLineBreak)
+			System.out.println("\n" + formatStringForPrinting(inputString));
+		else System.out.println(formatStringForPrinting(inputString));
+	}
+	
+	// ask DesLauriers how to fix
+	public static String formatStringForPrinting(String inputString) {
+		StringBuilder sb = new StringBuilder(inputString);
+		int i = 0;
+		int oldi = 0;
+		
+		while ((i = sb.indexOf(" ", i + NUM_CHARS)) != -1 && oldi < sb.length()) {
+			// double \n
+			if (sb.substring(oldi,i).contains("\n\n")) {
+				oldi = sb.indexOf("\n", oldi)+4;
+				i = sb.indexOf(" ", oldi + NUM_CHARS);
+				// double \n
+				if (sb.substring(oldi,i).contains("\n\n")) {
+					oldi = sb.indexOf("\n", oldi)+4;
+					i = sb.indexOf(" ", oldi + NUM_CHARS);
+					// single \n
+					if (sb.substring(oldi,i).contains("\n")) {
+						oldi = sb.indexOf("\n", oldi)+2;
+						i = sb.indexOf(" ", oldi + NUM_CHARS);
+						sb.replace(i, i + 1, "\n");	
+					} else {
+						sb.replace(i, i + 1, "\n");
+					}
+					// single \n
+				} else if (sb.substring(oldi,i).contains("\n")) {
+					oldi = sb.indexOf("\n", oldi)+2;
+					i = sb.indexOf(" ", oldi + NUM_CHARS);
+					sb.replace(i, i + 1, "\n");	
+					// normal \n
+				} else {
+					sb.replace(i, i + 1, "\n");
+				}
+				// single \n
+			} else if (sb.substring(oldi,i).contains("\n")) {
+				oldi = sb.indexOf("\n", oldi)+2;
+				i = sb.indexOf(" ", oldi + NUM_CHARS);
+				sb.replace(i, i + 1, "\n");
+			}
+			// normal \n
+			else {
+				sb.replace(i, i + 1, "\n");
+				oldi = i;
+			}
+		}
+
+		return sb.toString();
+	}
+
 	/** 
 	 * Find index of the specified occurrence of a character
 	 */
