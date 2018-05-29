@@ -21,6 +21,7 @@ class CommandWords {
 			{"list", "default", "Lists things. Usage: \"list commands\""}, // add an example if list gains more uses
 			{"start", "trial", "Starts a trial. Usage: \"start trial one\", \"start trial 2\""},
 			{"abandon", "default", "Abandon a trial. Usage: \"abandon trial one\", \"abandon trial 2\""},
+			{"heal", "default", "Heals you (if you are in the Healing Center). Usage: \"heal me\""},
 			{"go", "place", "Allows you to go places. Usage: \"go west\", \"go down\""},
 			{"walk", "place", "Allows you to walk places. Usage: \"walk west\", \"walkT down\""},
 			//{"teleport", "place", "\"Cheater\" command. Remove before final release!"},
