@@ -1,4 +1,5 @@
 package com.bayviewglen.zork;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -7,6 +8,13 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+
+/** "Sound" Class - controls all sounds of the game.
+ * 
+ *  Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Code Version:	0.2-alpha
+ *  Published Date:	May 2018
+ */
 
 public class Sound {
 	static private Clip clip;

@@ -1,21 +1,19 @@
 package com.bayviewglen.zork;
 
-/** "Zork" Class - the central class of the "Zork" game.
+/** "Zork" Class - the central class of the game.
  * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.2-alpha
- * Current Date:    April 2018
+ *  Original Code Author: 	Michael Kolling
+ *  Original Code Version:	1.0
+ *  Original Published Date: July 1999
+ * 
+ *  Current Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Current Code Version:	0.3-alpha
+ *  Current Published Date:	May 2018
  */
 
 public class Zork {
-
 	public static void main(String[] args) {	
 		Game game = new Game();
 		game.play();
-		
-		// Andy's Test data
-		//Gooblin Goebbels = new Gooblin("Goebbels",4);
-		//Goebbels.printStats();
 	}
-
 }

@@ -1,19 +1,17 @@
 package com.bayviewglen.zork;
 
-/** "Command Words" Class - part of the "Zork" game.
+/** "CommandWords" Class - stores all commands of the game.
  * 
- * Original Author:  Michael Kolling
- * Original Version: 1.0
- * Original Date:    July 1999
+ *  Original Code Author: 	Michael Kolling
+ *  Original Code Version:	1.0
+ *  Original Published Date: July 1999
  * 
- * Current Authors: Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
- * Current Version: 0.2-alpha
- * Current Date:    April 2018
+ *  Current Authors: 		Kirill Tregubov, Zacharia Burrafato, Andrew Douglas, Alim Halani
+ *  Current Code Version:	0.3-alpha
+ *  Current Published Date:	May 2018
  * 
- * This class holds an enumeration of all command words known to the game.
- * It is used to recognise commands as they are typed in.
- *
- * This class is part of the "Zork" game.
+ *  This class holds an enumeration of all command words known to the game.
+ *  It is used to recognize commands as they are typed in.
  */
 
 class CommandWords {
@@ -21,18 +19,48 @@ class CommandWords {
 	private static final String validCommands[][] = {
 			{"help", "default", "Prints the help message. Usage: \"help\""},
 			{"list", "default", "Lists things. Usage: \"list commands\""}, // add an example if list gains more uses
-			{"go", "place", "Allows you to go places. Usage: \"go west\", \"go down\""}, {"walk", "place", "Allows you to walk places. Usage: \"walk west\", \"walkT down\""},
-			{"teleport", "place", "\"Cheater\" command. Remove before final release!"}, {"tp", "place", "\"Cheater\" command. Remove before final release!"},
+			{"start", "trial", "Starts a trial. Usage: \"start trial one\", \"start trial 2\""},
+			{"abandon", "default", "Abandon a trial. Usage: \"abandon trial one\", \"abandon trial 2\""},
+			{"go", "place", "Allows you to go places. Usage: \"go west\", \"go down\""},
+			{"walk", "place", "Allows you to walk places. Usage: \"walk west\", \"walkT down\""},
+			//{"teleport", "place", "\"Cheater\" command. Remove before final release!"},
+			//{"tp", "place", "\"Cheater\" command. Remove before final release!"},
 			//{"give", "item", "\"Cheater\" command. Remove before final release!"},
-			{"eat", "item", "Allows you to eat stuff. Usage: \"eat apple\", \"eat sword\""}, {"consume", "item", "Allows you to consume stuff. Usage: \"consume apple\", \"consume sword\""},
-			{"look at", "inventory item place", "Allows you to look at things. Usage: \"look at inventory\", \"look at red apple\""}, {"inspect", "inventory item place", "Allows you to inspect things. Usage: \"inspect inventory\", \"inspect red apple\""},
-			{"take", "item", "Allows you to take things. Usage: \"take red apple\", \"take sword\""}, {"grab", "item", "Allows you to grab things. Usage: \"grab red apple\", \"grab sword\""},
-			{"pick up", "item", "Allows you to pick up things. Usage: \"pick up red apple\", \"pick up basic sword\""},
+			{"consume", "item", "Allows you to consume stuff. Usage: \"consume apple\", \"consume sword\""},
+			{"look", "inventory item place", "Allows you to look at things. Usage: \"look at inventory\", \"look at red apple\""},
+			{"inspect", "inventory item place", "Allows you to inspect things. Usage: \"inspect inventory\", \"inspect red apple\""},
+			{"take", "item", "Allows you to take things. Usage: \"take red apple\", \"take sword\""},
+			{"grab", "item", "Allows you to grab things. Usage: \"grab red apple\", \"grab sword\""},
+			{"pickup", "item", "Allows you to pick up things. Usage: \"pick up red apple\", \"pick up basic sword\""},
+			{"check", "default", "Allows you to check things. Usage: \"check equipped\""},
+			{"equip", "item", "Allows you to equip a weapon or armor. Usage: \"equip longsword\",\"equip titanium armor\""},
 			{"mute", "default", "Mutes the game's sound. Usage: \"mute game\""},
 			{"unmute", "default", "Unmutes the game's sound. Usage: \"unmute game\""},
 			{"save", "default", "Saves the current state of your playthrough. Usage: \"save\""},
 			{"quit", "default", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}, {"stop", "default", "Stops playing the game. Usage: \"stop game\", \"stop playing\""},
-			{"battle", "default", "battles an enemy. Usage: \"battle derpman\", \"battle Some dude\""}
+			{"battle", "battle", "Starts a battle with an enemy. Usage: \"battle the man\", \"battle some dude\""},
+			{"fight", "battle", "Start to fight an enemy. Usage: \"fight the man\", \"fight some dude\""},
+			{"attack", "battle", "Start to attack an enemy. Usage: \"attack the man\", \"attack some dude\""},
+			{"challenge", "battle", "Challenges an enemy to a battle. \"challenge the man\", \"challenge some dude\""}
+	};
+
+	private static final String validBattleCommands[][] = {
+			{"run", "run", ""},
+			{"flee", "run", ""},
+			{"escape", "run", ""},
+
+			{"attack", "attack", ""},
+			{"hit", "attack", ""},
+			{"swing", "attack", ""},
+			{"slash", "attack", ""},
+			{"stab", "attack", ""},
+			{"strike", "attack", ""},
+			{"bludgeon", "attack", ""},
+
+			{"use", "item", ""},
+			{"consume", "item", ""},
+
+			{"help", "help", "IGNORE"},
 	};
 
 	/**
@@ -46,11 +74,22 @@ class CommandWords {
 	 * Return all command names as an array
 	 **/
 	public String[] getValidCommands() {
-		String validCommands[] = new String[this.validCommands.length];
-		for (int i = 0; i < this.validCommands.length; i++) {
-			validCommands[i] = this.validCommands[i][0];
+		String returnCommands[] = new String[validCommands.length];
+		for (int i = 0; i < validCommands.length; i++) {
+			returnCommands[i] = validCommands[i][0];
 		}
-		return validCommands;
+		return returnCommands;
+	}
+
+	/**
+	 * Return all command names as an array
+	 **/
+	public String[] getValidBattleCommands() {
+		String returnCommands[] = new String[validBattleCommands.length];
+		for (int i = 0; i < validBattleCommands.length; i++) {
+			returnCommands[i] = validBattleCommands[i][0];
+		}
+		return returnCommands;
 	}
 
 	/**
@@ -60,6 +99,17 @@ class CommandWords {
 		for (int i = 0; i < validCommands.length; i++) {
 			if (validCommands[i][0] == commandName)
 				return validCommands[i][1];
+		}
+		return null;
+	}
+
+	/**
+	 * Return the type of a given command (using the name of it)
+	 **/
+	public String getBattleCommandType(String battleCommandName) {
+		for (int i = 0; i < validBattleCommands.length; i++) {
+			if (validBattleCommands[i][0] == battleCommandName)
+				return validBattleCommands[i][1];
 		}
 		return null;
 	}
@@ -75,17 +125,6 @@ class CommandWords {
 	}
 
 	/*
-	 * Returns true if command needs three variables.
-	 */
-	@Deprecated
-	public boolean needsThreeVariables(String command) {
-		for (int i = 0; i < validCommands.length; i++)
-			if (validCommands[i][0].equalsIgnoreCase(command) && validCommands[i][1].equals("3")) return true;
-		return false;
-	}
-
-
-	/*
 	 * Returns a string of all available commands and their description
 	 */
 	public String toString() {
@@ -95,4 +134,13 @@ class CommandWords {
 		return returnString;
 	}
 
+	/*
+	 * Returns a string of all available commands and their description
+	 */
+	public String listBattleCommands() {
+		String returnString = "";
+		for(int i = 0; i < validBattleCommands.length; i++)
+			if (validBattleCommands[i][2] != "IGNORE") returnString = returnString + validBattleCommands[i][0] + " - " + validBattleCommands[i][2] + "\n";
+		return returnString;
+	}
 }
