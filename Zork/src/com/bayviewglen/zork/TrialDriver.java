@@ -161,9 +161,10 @@ public class TrialDriver {
 							Entity easyEnt1 = new Entity("Training Bot",Entity.ENEMY_INDEX,"10,10,1,0,1,0.7,0.0");
 							Entity easyEnt2 = new Entity("Squire",Entity.ENEMY_INDEX,"10,10,1,1,1,0.7,0.0");
 							Entity easyEnt3 = new Entity("Samurai King",Entity.BOSS_INDEX,"15,15,3,2,2,0.7,0.0");
-							player.getRoom().addEntity(easyEnt1);
-							player.getRoom().addEntity(easyEnt2);
-							player.getRoom().addEntity(easyEnt3);
+							int rand = (int) (Math.random()+1*3);
+							if (rand == 1) player.getRoom().addEntity(easyEnt1);
+							else if (rand == 2) player.getRoom().addEntity(easyEnt2);
+							else if (rand == 3) player.getRoom().addEntity(easyEnt3);
 						}
 									
 						//Medium
@@ -174,9 +175,10 @@ public class TrialDriver {
 							Entity mediumEnt1 = new Entity("The Pharaoh",Entity.ENEMY_INDEX,"17,17,3,2,1,0.7,0.0");
 							Entity mediumEnt2 = new Entity("The Living Shadow",Entity.ENEMY_INDEX,"20,20,3,2,2,0.7,0.0");
 							Entity mediumEnt3 = new Entity("Sky-night Warrior",Entity.BOSS_INDEX,"22,22,4,2,2,0.7,0.0");
-							player.getRoom().addEntity(mediumEnt1);
-							player.getRoom().addEntity(mediumEnt2);
-							player.getRoom().addEntity(mediumEnt3);
+							int rand = (int) (Math.random()+1*3);
+							if (rand == 1) player.getRoom().addEntity(mediumEnt1);
+							else if (rand == 2) player.getRoom().addEntity(mediumEnt2);
+							else if (rand == 3) player.getRoom().addEntity(mediumEnt3);
 						}
 						//Hard
 						//3.	Lunatic (35HP/5ATK/2ARM/2PD) Drops: Gaunlet of Terror 40%, Donkey Kong Hammer 30%, Vile Blade 20%, Electromagnetic Shield Generator 30%, Medium Health Potion 50%
@@ -188,10 +190,11 @@ public class TrialDriver {
 							Entity hardEnt2 = new Entity("The Pharaoh",Entity.BOSS_INDEX,"40,40,6,4,2,0.9,0.0");
 							Entity hardEnt3 = new Entity("The Living Shadow",Entity.BOSS_INDEX,"45,45,10,5,3,0.9,0.0");
 							Entity hardEnt4 = new Entity("Derp",Entity.BOSS_INDEX,"60,60,15,10,5,0.9,0.0");
-							player.getRoom().addEntity(hardEnt1);
-							player.getRoom().addEntity(hardEnt2);
-							player.getRoom().addEntity(hardEnt3);
-							player.getRoom().addEntity(hardEnt4);
+							int rand = (int) (Math.random()+1*4);
+							if (rand == 1) player.getRoom().addEntity(hardEnt1);
+							else if (rand == 2) player.getRoom().addEntity(hardEnt2);
+							else if (rand == 3) player.getRoom().addEntity(hardEnt3);
+							else if (rand == 4) player.getRoom().addEntity(hardEnt4);
 						}
 
 
