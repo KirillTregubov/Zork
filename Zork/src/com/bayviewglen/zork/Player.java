@@ -2,6 +2,7 @@ package com.bayviewglen.zork;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 /** "Player" Class - generates and controls all of the player's information.
  * 
@@ -19,7 +20,7 @@ public class Player extends Entity {
 	private Item equippedArmor;
 
 	Player() {
-		super("Player", Stats.PLAYER_INDEX, "1,0,0,10,10,2,0,0,0.9,0.1");
+		super("Player", Stats.PLAYER_INDEX, "1,0,0,10,10,2,0,1,0.9,0.1");
 		inventory = new Inventory();
 		inventory.forceAdd(Item.getItem(SPLINTERED_BRANCH));
 		inventory.forceAdd(Item.getItem(CARDBOARD_ARMOR));
@@ -283,6 +284,10 @@ public class Player extends Entity {
 	public int getRoomItemAmount(String itemName) {
 		return currentRoom.getItemAmount(itemName);
 	}
+	
+	public Entity getRoomEnemy(Player player, String enemyName) {
+		return currentRoom.findEnemy(player, enemyName);
+	}
 
 	public boolean doesRoomContainItem(String itemName) {
 		Item inputItem = Item.getItem(itemName);
@@ -305,20 +310,16 @@ public class Player extends Entity {
 		this.currentRoom = masterRoomMap.get("0-0");
 	}
 
-	public int nextLvlExp() {
-		return (int) ((0.5 * (stats.getLevel() + 1) * (stats.getLevel() + 1)) * 100 - (0.5 * stats.getLevel() * stats.getLevel()) * 100);
-	}
-
 	public void expCalculator(int battleResult, ArrayList<Integer> counters, int enemyType) {
 		int expGained = 0;
 		int attackCounter = counters.get(0);
 		int consumableUsageCounter = counters.get(1);
 		int critHitCounter = counters.get(2);
-		
+
 		/*for (Integer counter : counters) { //test
 			System.out.println(counter);
 		}*/
-		
+
 		// Base Exp Calculator
 		expGained += attackCounter * 5 + consumableUsageCounter * 10 + critHitCounter * 15;
 
@@ -326,25 +327,146 @@ public class Player extends Entity {
 		if (battleResult == 2) {
 			expGained /= 2;
 		}
-		
+
 		// Type Checker
 		if (enemyType == Entity.BOSS_INDEX) {
 			expGained *= 2;
 		}
 
 		stats.setExp(stats.getExp() + expGained);
+		System.out.print(" gained " + expGained + " exp");
 		levelUp();
 	}
 
+	public int nextLevelExp() {
+		int expNeeded = 20;
+
+		for (int i = 1; i < stats.getLevel(); i++) {
+			expNeeded *= 1.5;
+		}
+
+		return expNeeded;
+	}
+
 	public void levelUp() {
-		if (stats.getLevel() >= 99) return;
-		while(stats.getExp() > nextLvlExp()) {
-			stats.setExp(stats.getExp()-nextLvlExp());
-			stats.setLevel(stats.getLevel()+1);
-			stats.setAttributePoints(stats.getAttributePoints()+8);
+		/*int baseExpNeeded = 20;
+
+		//Create exp variable to account for level
+		int expNeeded = baseExpNeeded * stats.getLevel();*/
+
+		if (stats.getLevel() >= 99 || stats.getExp() < nextLevelExp()) System.out.println(".");
+		else {
+			while (stats.getExp() > nextLevelExp()) {
+				stats.setExp(stats.getExp() - nextLevelExp());
+				stats.setLevel(stats.getLevel() + 1);
+				if (stats.getLevel() < 11) 
+					stats.setAttributePoints(stats.getAttributePoints() + 1);
+				else if (stats.getLevel() < 21)
+					stats.setAttributePoints(stats.getAttributePoints() + 2);
+				else if (stats.getLevel() < 31)
+					stats.setAttributePoints(stats.getAttributePoints() + 3);
+				else if (stats.getLevel() < 41)
+					stats.setAttributePoints(stats.getAttributePoints() + 4);
+				else
+					stats.setAttributePoints(stats.getAttributePoints() + 5);
+			}
+			System.out.println(", levelling up to Lvl " + stats.getLevel() + "!"); // gained AP
+			System.out.println("You have " + stats.getAttributePoints() + " attribute points, would you like to spend them?");
+			Scanner input = new Scanner(System.in);
+			String answer = input.nextLine().toLowerCase();
+			if (answer.equals("yes")||answer.equals("sure")||answer.equals("ok")||answer.equals("fine")||answer.equals("sure thing")||answer.equals("why not")||answer.equals("why not?")||answer.equals("accept")||answer.equals("y"))
+				attributeSpender();
+
 		}
 	}	
+	
+	public void attributeSpender() {
+        System.out.println("\n\nWelcome to the Attribute spending screen.\nIf you would like an explanation on how to spend points, say \"Spend Help\".");
+        Scanner input = new Scanner(System.in);
+        int x = 0;
+        while (stats.getAttributePoints() > x) {
+              System.out.print("Command: ");
+              String command = input.nextLine().toLowerCase();
+              if (command.equals("spendhelp")||command.equals("spend help")||command.equals("help")||command.equals("help me")||command.equals("what do i do")||command.equals("what do i do?")) {
+                    System.out.println("\nEnter one of these values into the console to specify which stat to increase:\n"
+                                 + "1: Increase health by 1\n2: Increase attack by 1\n3: Increase defence by 1\n4: Increase speed by 1\n5: Increase accuracy by 1%\n6: Increase critical hit chance by 1%\n\"exit\"");
+              }
+              else if (command.equals("1")||command.equals("2")||command.equals("3")||command.equals("4")||command.equals("5")||command.equals("6")) {
+                     switch (command) {
+                     
+                           case "1": // Health
+                                 if (stats.getMaximumHP()>=150) {
+                                       System.out.println("Health is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                      stats.setMaximumHP(stats.getMaximumHP()+1);
+                                       stats.setCurrentHP(stats.getMaximumHP());
+                                       System.out.println("Health increased by 1, total: "+stats.getMaximumHP()+".");
+                                 }
+                                 break;
+                           case "2": // Attack
+                                 if (stats.getAttack()>=40) { 
+                                       System.out.println("Attack is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                       stats.setAttack(stats.getAttack()+1);
+                                       System.out.println("Attack increased by 1, total: "+stats.getAttack()+".");
+                                 }
+                                 break;
+                           case "3": // Defense
+                                 if (stats.getDefense()>=40) { 
+                                       System.out.println("Defence is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                       stats.setDefense(stats.getDefense()+1);
+                                       System.out.println("Defence increased by 1, total: "+stats.getDefense()+".");
+                                 }
+                                 break;
+                           case "4": // Speed
+                                 if (stats.getSpeed()>=40) { 
+                                       System.out.println("Speed is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                       stats.setSpeed(stats.getSpeed()+1);
+                                       System.out.println("Speed increased by 1, total: "+stats.getSpeed()+".");
+                                 }
+                                 break;
+                           case "5": // Accuracy
+                                 if (stats.getAccuracy()>=1.0) { 
+                                       System.out.println("Accuracy is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                     stats.setAccuracy(stats.getAccuracy()+0.01);
+                                       System.out.println("Accuracy increased by 1%, total: "+stats.getAccuracy()*100+"%.");
+                                 }
+                                 break;
+                           case "6": // Critical chance
+                                 if (stats.getCriticalChance()>=0.6) { 
+                                       System.out.println("Critical hit chance is at maximum.");
+                                 }
+                                 else {
+                                 stats.setAttributePoints(stats.getAttributePoints()-1);
+                                 stats.setCriticalChance(stats.getCriticalChance()+0.01);
+                                       System.out.println("Critical hit chance increased by 1%, total: "+stats.getAttack()*100+"%.");
+                                 }
+                                 break;
+                           
+                     }
+              }
+              else if (command.equals("quit")||command.equals("stop")||command.equals("end"))
+                     x++;
+              else {
+                     System.out.print("Not a valid option.");
+              }
+        }
+ }
 
+	
 	public Inventory getInventory() {
 		return inventory;
 	}

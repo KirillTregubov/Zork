@@ -25,7 +25,7 @@ class Inventory {
 	public String saveInventory() { // save inventory
 		String inventoryString = "";
 		int i = 0;
-		for(i = 0; i < inventory.size(); i++) inventoryString = inventoryString + inventory.get(i) + "-" + inventory.get(i).getAmount() + "-" + inventory.get(i).stats + "-" + inventory.get(i).roomID.toString().replaceAll(",", "") + "-" + inventory.get(i).pickedUpAmounts.toString().replaceAll(",", "") + ", ";
+		for(i = 0; i < inventory.size(); i++) inventoryString = inventoryString + inventory.get(i) + "-" + inventory.get(i).getAmount() + "-" + inventory.get(i).roomID.toString().replaceAll(",", "") + "-" + inventory.get(i).pickedUpAmounts.toString().replaceAll(",", "") + ", ";
 		return inventoryString;
 	}
 
@@ -35,17 +35,24 @@ class Inventory {
 	public void loadInventory(String[] savedInventory) { // load inventory from save        this is breaking items when saved
 		inventory.clear();
 		for (int i = 0; i < savedInventory.length; i++) {
+			//System.out.println(savedInventory[i].substring(0, Utils.ordinalIndexOf(savedInventory[i], "-", 1)));
 			Item inputItem = Item.getItem(savedInventory[i].substring(0, Utils.ordinalIndexOf(savedInventory[i], "-", 1)));
+			//System.out.println(savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 1) + 1, Utils.ordinalIndexOf(savedInventory[i], "-", 2)));
 			inputItem.setAmount(Integer.parseInt(savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 1) + 1, Utils.ordinalIndexOf(savedInventory[i], "-", 2))));
-			inputItem.stats.loadStats(savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 2) + 1, Utils.ordinalIndexOf(savedInventory[i], "-", 3)));
-			String roomIDs[] = savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 3) + 2, Utils.ordinalIndexOf(savedInventory[i], "-", 4)-1).split(" ");
-			for (String j : roomIDs) {
-				inputItem.roomID.add(j);
+			//inputItem.stats.loadStats(savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 2) + 1, Utils.ordinalIndexOf(savedInventory[i], "-", 3)));
+			String roomIDString = savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 2) + 2, Utils.ordinalIndexOf(savedInventory[i], "-", 3)-1);
+			if (roomIDString.length() > 1) {
+				String roomIDs[] = roomIDString.split(" ");
+				for (String j : roomIDs) {
+					inputItem.roomID.add(j);
+				}
 			}
-
-			String pickedUpAmounts[] = savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 4) + 2, savedInventory[i].length()-1).split(" ");
-			for (String j : pickedUpAmounts) {
-				inputItem.pickedUpAmounts.add(Integer.parseInt(j));
+			String pickedUpAmountsString = savedInventory[i].substring(Utils.ordinalIndexOf(savedInventory[i], "-", 3) + 2, savedInventory[i].length()-1);
+			if (pickedUpAmountsString.length() > 1) {
+				String pickedUpAmounts[] = pickedUpAmountsString.split(" ");
+				for (String j : pickedUpAmounts) {
+					inputItem.pickedUpAmounts.add(Integer.parseInt(j));
+				}
 			}
 			inventory.add(inputItem);
 		}
@@ -152,7 +159,7 @@ class Inventory {
 			}
 			else returnString += " " + inventory.get(i);
 
-			if (i < inventory.size()-1) returnString += ",";
+			if (i < inventory.size() - 1) returnString += ",";
 			else returnString += ".";
 		}
 		return returnString;

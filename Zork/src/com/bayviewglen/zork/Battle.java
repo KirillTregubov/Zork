@@ -73,15 +73,17 @@ public class Battle {
 			return 0; // Retreat integer
 		}
 		else if (!enemy.isAlive()) {
-			System.out.println("You have defeated " + enemy.toString() + "!"
-					+ "\nYou have " + player.stats.getCurrentHP() + " health remaining.");
+			System.out.print("You have defeated " + enemy.toString() + ""
+					+ "\nYou have " + player.stats.getCurrentHP() + " health remaining, and");
+			player.expCalculator(1, getCounters(), Entity.ENEMY_INDEX);
 			return 1; // Victory integer
 		}
 		else if (!player.isAlive()) {
-			System.out.println("You have been defeated by " + enemy.toString() + "!");
+			System.out.println("You have been defeated by " + enemy.toString() + ",");
+			player.expCalculator(2, getCounters(), Entity.ENEMY_INDEX);
 			enemy.stats.setCurrentHP(enemy.stats.getMaximumHP()); // reset enemy HP
-			System.out.println("You have been returned to the Contest Hall.");
 			player.setDefaultRoom(); // teleport to Contest Hall
+			System.out.println("You have been returned to the " + player.getRoomName() + ".");
 			// might want to reset trial as well
 			return 2; // Loss integer
 		}
@@ -120,10 +122,6 @@ public class Battle {
 		}
 	}
 
-	/*attackCounter = 0;
-	consumableUsageCounter = 0;
-	critHitCounter = 0;
-	*/
 	private void damageDealingProcessor(boolean enemyIsAttacking) {
 		if (enemyIsAttacking) System.out.print("It attacks you, "); // add
 		else System.out.print("You attack "+ enemy.name + ", "); //add
