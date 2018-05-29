@@ -150,6 +150,7 @@ public class TrialDriver {
 	public Trial challengeGate(int sectionCounter, int difficulty, Player player) {
 		if (sectionCounter == 0) {
 			// easy, medium, hard
+
 						// easy, medium, hard || 0,1,2
 						//10,10,1,0,1,0.5,0.0	
 						//Easy: 
@@ -192,6 +193,7 @@ public class TrialDriver {
 							player.getRoom().addEntity(hardEnt3);
 							player.getRoom().addEntity(hardEnt4);
 						}
+
 
 
 		}
