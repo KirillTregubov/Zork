@@ -25,8 +25,7 @@ public class Utils {
 			System.out.println("\n" + formatStringForPrinting(inputString));
 		else System.out.println(formatStringForPrinting(inputString));
 	}
-	
-	// ask DesLauriers how to fix
+
 	public static String formatStringForPrinting(String inputString) {
 		StringBuilder sb = new StringBuilder(inputString);
 		int i = 0;
