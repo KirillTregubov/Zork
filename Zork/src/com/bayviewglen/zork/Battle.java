@@ -37,6 +37,8 @@ public class Battle {
 	}
 
 	public int startBattle() {
+		Game.musicMainTheme.pause();
+		Game.battleMusic.loop();
 		if (enemy.getType().equals(Entity.TYPES[Entity.BOSS_INDEX])) {
 			enemy.stats.setSpeed(999);
 		}
@@ -70,12 +72,18 @@ public class Battle {
 
 		if (didRunAway) {
 			System.out.println("You fled the battle in panic.");
+			Game.battleMusic.EndStop();
+			Game.musicMainTheme.reset();
+			Game.musicMainTheme.loop();
 			return 0; // Retreat integer
 		}
 		else if (!enemy.isAlive()) {
 			System.out.print("You have defeated " + enemy.toString() + ""
 					+ "\nYou have " + player.stats.getCurrentHP() + " health remaining, ");
 			player.expCalculator(1, getCounters(), Entity.ENEMY_INDEX);
+			Game.battleMusic.EndStop();
+			Game.musicMainTheme.reset();
+			Game.musicMainTheme.loop();
 			return 1; // Victory integer
 		}
 		else if (!player.isAlive()) {
@@ -85,6 +93,7 @@ public class Battle {
 			player.setDefaultRoom(); // teleport to Contest Hall
 			System.out.println("You have been returned to the " + player.getRoomName() + ".");
 			// might want to reset trial as well
+			Game.battleMusic.EndStop();
 			return 2; // Loss integer
 		}
 		return 0; // Retreat integer (or in case everything breaks and you somehow get here)

@@ -17,7 +17,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
  */
 
 public class Sound {
-	static private Clip clip;
+	public Clip clip;
 	public Sound(String fileLocation) {
 		// specify the sound to play
 		// (assuming the sound can be played by the audio system)
@@ -60,11 +60,14 @@ public class Sound {
 	public void loop(){ // play the clip and loops it 
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
-	public static void stop(){ //stops all sound
+	public void EndStop(){ //stops all sound
 		clip.close();
 	}
 	public void pause() {// will pause the music and when resumed will continue from where it left off
 		clip.stop(); 
 		
+	}
+	public void reset() { //rewind
+		clip.setFramePosition(0);
 	}
 }

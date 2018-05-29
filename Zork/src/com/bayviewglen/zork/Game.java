@@ -43,10 +43,11 @@ class Game {
 	public static final String FILE_LOCATION = "data\\"; // Change to "data/save.dat" if using Mac
 	private final String DEFAULT_ROOM = "0-1";
 	private Player player;
-	private Sound musicMainTheme;
+	public static Sound musicMainTheme;
 	private TrialDriver trialDriver;
 	private Trial currentTrial;
 	private boolean completingTrial;
+	public static Sound battleMusic = new Sound(Game.FILE_LOCATION + "battlemusic.wav");
 
 	// This is a MASTER object that contains all of the rooms and is easily accessible.
 	// The key will be the name of the room -> no spaces (Use all caps and underscore -> Great Room would have a key of GREAT_ROOM
@@ -83,8 +84,7 @@ class Game {
 	 */
 	public void play() {
 		// Initiate Music
-		Sound mainmusic = new Sound(FILE_LOCATION + "music1.wav");
-		mainmusic.loop();
+		musicMainTheme.loop();
 		//FlashingImages welcomeImage = new FlashingImages(FILE_LOCATION+"max.jpg",3000); //unused for now
 
 		printWelcome();
@@ -100,7 +100,8 @@ class Game {
 
 		// End Game
 		System.out.println("Thank you for playing. Goodbye!");
-		Sound.stop();
+		musicMainTheme.EndStop();
+		battleMusic.EndStop();
 	}
 
 	private void initRooms(String fileName) throws Exception {
