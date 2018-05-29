@@ -8,7 +8,7 @@ Entities:
 
 ID: 0 10
 Name: Small White Room
-Description: There is a sharp high pitch ring in your ears as you vanish and appear in another room, much smaller than the one you were in before, with a sparring robot standing in front of you. It begins to speak.
+Description: 
 Exits: U=0-0
 Items:
 Trial:
@@ -32,19 +32,19 @@ Entities:
 
 ID: 1 1
 Name: Second Room of Trial 1
-Description: Welcome to Trial 1. (instructions)
-Exits: D=1,U=1-2
+Description: 
+Exits: U=1-2
 Items: 39-4
 Trial:
 Entities: Squire <Enemy> <10,10,1,0,1,0.5,0.0>
 
 ID: 1 10
 Name: Third Room of Trial 1
-Description: Welcome to Trial 1. (instructions)
-Exits: D=1-1, U=0-0
+Description: 
+Exits: U=0-0
 Items: 39-4
 Trial:
-Entities: 
+Entities: Samurai King <Boss> <10,10,1,0,1,0.5,0.0>
 
 ID: 10
 Name: Trial 2 Start

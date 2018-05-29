@@ -3,6 +3,7 @@ package com.bayviewglen.zork;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /** "Utils" Class - a class that contains various utilities used by the rest of the code.
@@ -19,8 +20,10 @@ public class Utils {
 	/** 
 	 * Print, but put spaces after a specific character amount
 	 */
-	public static void formattedPrint(String inputString) {
-		System.out.println(formatStringForPrinting(inputString));
+	public static void formattedPrint(boolean includeLineBreak, String inputString) {
+		if (includeLineBreak)
+			System.out.println("\n" + formatStringForPrinting(inputString));
+		else System.out.println(formatStringForPrinting(inputString));
 	}
 	
 	// ask DesLauriers how to fix
@@ -70,7 +73,6 @@ public class Utils {
 
 		return sb.toString();
 	}
-
 
 	/** 
 	 * Find index of the specified occurrence of a character
