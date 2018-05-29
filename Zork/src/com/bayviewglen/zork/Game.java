@@ -62,6 +62,7 @@ class Game {
 		try {
 			// Load Player
 			player = new Player();
+			Shop shop = new Shop(player);
 			initRooms(FILE_LOCATION + "rooms.dat");
 			musicMainTheme = new Sound(FILE_LOCATION + "music1.wav");
 			trialDriver = new TrialDriver();
@@ -362,6 +363,10 @@ class Game {
 				player.setCurrentRoom(nextRoom);
 				System.out.println(player.getRoomTravelDescription());
 			}
+		} // heal
+		else if (commandName.equalsIgnoreCase("heal")) {
+			if (player.getRoomID().equals("12")) new HealingCenter(player);
+			else System.out.println("You are not in the Healing Center, therefore you cannot be healed!s");
 			/*} // give
 		else if (commandName.equalsIgnoreCase("give")) {
 		System.out.println("What would you like to receive?");
@@ -457,7 +462,7 @@ class Game {
 			if (contextWord.equalsIgnoreCase("equipped")) System.out.println(player.checkEquippedItems());
 			else if (Utils.containsIgnoreCase(contextWord, "money") || Utils.containsIgnoreCase(contextWord, "cash")) System.out.println(player.getMoneyString());
 			else if (Utils.containsIgnoreCase(contextWord, "trial")) System.out.println(trialDriver);
-			else if (contextWord.equalsIgnoreCase("stats")) System.out.println(player.stats);
+			else if (Utils.containsIgnoreCase(contextWord, "stat") || Utils.containsIgnoreCase(contextWord, "info")) System.out.println(player.stats);
 			else System.out.println("You cannot check that!");
 		} // equip
 		else if (commandName.equalsIgnoreCase("equip")) {
@@ -595,6 +600,7 @@ class Game {
 				player.setCurrentRoom(nextRoom);
 				player.updateItems(player, nextRoom.getRoomID());
 				System.out.println(player.getRoomTravelDescription());
+				//if (nextRoom.equals("Shop")) // shop if
 			} else System.out.println("That's not an option... You might be trapped.");
 		}
 	}

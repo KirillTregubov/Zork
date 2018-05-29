@@ -127,8 +127,8 @@ Trial:
 Entities:
 
 ID: 1100
-Name: Trading Centre
-Description: Welcome to the Trading Centre. (instructions)
+Name: Healing Centre
+Description: Welcome to the Healing Center! You can get healed here.
 Exits: W=0-0
 Items: 
 Trial:
