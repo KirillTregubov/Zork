@@ -2,9 +2,12 @@ package com.bayviewglen.zork;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+
+import com.sun.corba.se.impl.javax.rmi.CORBA.Util;
 
 /** "Parser" Class - part of the "Zork" game.
  * 
@@ -31,12 +34,14 @@ import java.util.Scanner;
 class Parser {
 
 	private CommandWords commands;  // holds all valid command words
+	private Player player;
 
-	public Parser() {
+	public Parser(Player player) {
+		this.player = player;
 		commands = new CommandWords();
 	}
 
-	public Command getCommand(Player player) {
+	public Command getCommand() {
 		try {
 			// Initialize variables
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -45,7 +50,6 @@ class Parser {
 			String actualCommand = null; // holds the command
 			String commandType = null; // holds command type
 			Integer numbers[] = null; // temporary workaround before parser is fixed
-			boolean check = false;
 
 			// Take input
 			System.out.print("> "); // print prompt
@@ -57,9 +61,9 @@ class Parser {
 
 			//Dirty fix
 			if (Utils.containsCompareBoth("pick up", inputLine)) inputLine = inputLine.substring(0, inputLine.indexOf("pick")) + "pickup" + inputLine.substring(inputLine.indexOf("pick up")+7);
-			//System.out.println(inputLine);
-			String inputArr[] = inputLine.split(" ");
 
+			String inputArr[] = inputLine.split(" ");
+			// Format Input String
 			for (String inputString : inputArr) {
 				for (String validCommand : commands.getValidCommands()) {
 					if (inputString.equalsIgnoreCase(validCommand)) {
@@ -75,34 +79,27 @@ class Parser {
 							break;
 						}
 					}
-
 				}
 			}
-			//System.out.println(inputLine + " : " + command + " " + actualCommand + " " + commandType);
 
-			try {
-				if (command.equalsIgnoreCase("teleport") || command.equalsIgnoreCase("tp")) {
-					check = true;
+			// Format input / numbers
+			inputLine = Utils.detectNumbers(inputLine);
+			if (inputLine.matches(".*\\d+.*")) {
+				List<String> numberInput = Arrays.asList(inputLine.replaceAll("[^-?0-9]+", " ").trim().split(" ")); //Arrays.asList()
+				int x = 0;
+				numbers = new Integer[numberInput.size()];
+				for (String i : numberInput) {
+					numbers[x] = Integer.parseInt(i);
+					x++;
 				}
-			} catch (Exception e) { }
-			if (!check) {
-				// Format input / numbers
-				inputLine = Utils.detectNumbers(inputLine);
-				if (inputLine.matches(".*\\d+.*")) {
-					List<String> numberInput = Arrays.asList(inputLine.replaceAll("[^-?0-9]+", " ").trim().split(" ")); //Arrays.asList()
-					int x = 0;
-					numbers = new Integer[numberInput.size()];
-					for (String i : numberInput) {
-						numbers[x] = Integer.parseInt(i);
-						x++;
-					}
-				}
-				// Update inputLine
-				inputLine = inputLine.replaceAll("\\d","").replaceAll(" +", " ");
-				if (actualCommand == null) inputLine = Utils.removeBeforeSubstring(inputLine, command);
-				else inputLine = Utils.removeBeforeSubstring(inputLine, actualCommand);
 			}
 
+			// Update inputLine
+			inputLine = inputLine.replaceAll("\\d","").replaceAll(" +", " ");
+			if (actualCommand == null) inputLine = Utils.removeBeforeSubstring(inputLine, command);
+			else inputLine = Utils.removeBeforeSubstring(inputLine, actualCommand);
+
+			// Update Command Type
 			inputArr = inputLine.split(" ");
 			if (command != null) {
 				commandType = commands.getCommandType(command);
@@ -115,12 +112,12 @@ class Parser {
 						if (typeArray[i].equals("item")) {
 							if (numbers != null) {
 								try {
-									String item = findItemRemovePlural(player, inputArr);
+									String item = findItemRemovePlural(inputArr);
 									if (item != null) return new Command(command, typeArray[i], item.toLowerCase(), numbers);
 								} catch (Exception e) {}
 							} else {
 								try {
-									String item = findItem(player, inputArr);
+									String item = findItem(command, inputArr);
 									if (item != null) return new Command(command, typeArray[i], item.toLowerCase());
 								} catch (Exception e) {}
 							}
@@ -129,14 +126,14 @@ class Parser {
 							if (Utils.containsIgnoreCase(inputLine, "inventory")) return new Command(command, typeArray[i], "inventory");
 						} // Place
 						else if (typeArray[i].equals("place")) {
-							String direction = findDirection(player, inputArr);
-							String roomName = findRoom(player, inputArr);
+							String direction = findDirection(inputArr);
+							String roomName = findRoom(inputArr);
 							if (direction != null) return new Command(command, typeArray[i], direction.toLowerCase());
 							else if (roomName != null) return new Command(command, typeArray[i], roomName.toLowerCase());
 							else if (Utils.containsIgnoreCase(inputLine, "room")) return new Command(command, typeArray[i], "room");
 							//else return new Command(command, typeArray[i], inputLine.toLowerCase());
 						} else if (typeArray[i].equals("enemy")) {
-							String enemy = findEnemy(player, inputArr);
+							String enemy = findEnemy(inputArr);
 							if (enemy != null) return new Command(command, "enemy", enemy);
 						}
 					}
@@ -151,10 +148,10 @@ class Parser {
 					// Item
 					else if (commandType.equals("item")) { // multiple item fix
 						if (numbers != null) {
-							String item = findItemRemovePlural(player, inputArr);
+							String item = findItemRemovePlural(inputArr);
 							if (item != null) return new Command(command, commandType, item.toLowerCase(), numbers);
 						} else {
-							String item = findItem(player, inputArr);
+							String item = findItem(command, inputArr);
 							if (item != null) return new Command(command, commandType, item.toLowerCase());
 						}
 					} // Inventory
@@ -164,18 +161,18 @@ class Parser {
 					} // Place
 					else if (commandType.equals("place")) {
 						if (command.equals("teleport") || command.equals("tp")) {
-							String room = findRoomToTeleport(player, inputArr);
+							String room = findRoomToTeleport(inputArr);
 							if (room != null) return new Command(command, commandType, room.toLowerCase());
 						} else {
-							String direction = findDirection(player, inputArr);
-							String roomName = findRoom(player, inputArr);
+							String direction = findDirection(inputArr);
+							String roomName = findRoom(inputArr);
 							if (direction != null) return new Command(command, commandType, direction.toLowerCase());
 							else if (roomName != null) return new Command(command, commandType, roomName.toLowerCase());
 							else return new Command(command, commandType, inputLine.toLowerCase());
 						} 
 					} // Battle
 					else if (commandType.equals("battle")) {
-						String enemy = findEnemy(player, inputArr);
+						String enemy = findEnemy(inputArr);
 						if (enemy != null) return new Command(command, commandType, enemy);
 						else return new Command(command, commandType, null);
 					}
@@ -188,14 +185,14 @@ class Parser {
 		return new Command(null, null);
 	}
 
-	public Command getBattleCommand(Player player) {
+	public Command getBattleCommand() {
 		try {
 			// Initialize variables
 			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 			String inputLine = null; // will hold the full input line
 			String command = null; // holds the command
+			String actualCommand = null;
 			String commandType = null; // holds command type
-			boolean check = false;
 
 			// Take input
 			System.out.print("> "); // print prompt
@@ -205,25 +202,36 @@ class Parser {
 				System.out.println ("There was an error reading input: " + e.getMessage());
 			}
 
-			for (int i = 0; i < commands.getValidBattleCommands().length; i++) {
-				if (Utils.containsIgnoreCase(inputLine, commands.getValidBattleCommands()[i])) {
-					command = commands.getValidBattleCommands()[i];
-					commandType = commands.getBattleCommandType(command);
+			String inputArr[] = inputLine.split(" ");
+			// Format Input String
+			for (String inputString : inputArr) {
+				for (String validCommand : commands.getValidBattleCommands()) {
+					if (inputString.equalsIgnoreCase(validCommand)) {
+						command = validCommand;
+						commandType = commands.getBattleCommandType(command);
+						break;
+					}
+					for (String alternativeCommand : commands.getBattleCommandAlternatives(validCommand)) {
+						if (inputString.equalsIgnoreCase(alternativeCommand)) {
+							actualCommand = alternativeCommand;
+							command = validCommand;
+							commandType = commands.getBattleCommandType(command);
+							break;
+						}
+					}
 				}
 			}
 
 			// Update inputLine
 			inputLine = inputLine.replaceAll("\\d","").replaceAll(" +", " ");
-			inputLine = Utils.removeBeforeSubstring(inputLine, command);
-			String inputArr[] = inputLine.split(" ");
-
-			//System.out.println(command + " and " + commandType + " and " + inputArr[0]);
+			if (actualCommand == null) inputLine = Utils.removeBeforeSubstring(inputLine, command);
+			else inputLine = Utils.removeBeforeSubstring(inputLine, actualCommand);
+			inputArr = inputLine.split(" ");
 
 			if (commandType != null) {
 				if (commandType.equals("attack") || commandType.equals("run") || commandType.equals("help")) return new Command(command, commandType);
 				else if (commandType.equals("item")) {
-					String item = findItem(player, inputArr);
-					//System.out.println(item);
+					String item = findItem(command, inputArr);
 					if (item != null) return new Command(command, commandType, item.toLowerCase());
 				} else return new Command(null,null);	
 			}
@@ -235,6 +243,83 @@ class Parser {
 		}
 	}
 
+	public Command getShopCommand(Shop shop) {
+		try {
+			// Initialize variables
+			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+			String inputLine = null; // will hold the full input line
+			String command = null; // holds the command
+			String actualCommand = null;
+			String commandType = null; // holds command type
+
+			// Take input
+			System.out.print("> "); // print prompt
+			try {
+				inputLine = reader.readLine();
+			} catch(java.io.IOException e) {
+				System.out.println ("There was an error reading input: " + e.getMessage());
+			}
+
+			String inputArr[] = inputLine.split(" ");
+			// Format Input String
+			for (String inputString : inputArr) {
+				for (String validCommand : commands.getValidShopCommands()) {
+					if (inputString.equalsIgnoreCase(validCommand)) {
+						command = validCommand;
+						commandType = commands.getShopCommandType(command);
+						break;
+					}
+					for (String alternativeCommand : commands.getShopCommandAlternatives(validCommand)) {
+						if (inputString.equalsIgnoreCase(alternativeCommand)) {
+							actualCommand = alternativeCommand;
+							command = validCommand;
+							commandType = commands.getShopCommandType(command);
+							break;
+						}
+					}
+				}
+			}
+
+			// Update inputLine
+			inputLine = inputLine.replaceAll("\\d","").replaceAll(" +", " ");
+			if (actualCommand == null) inputLine = Utils.removeBeforeSubstring(inputLine, command);
+			else inputLine = Utils.removeBeforeSubstring(inputLine, actualCommand);
+			inputArr = inputLine.split(" ");
+
+			if (commandType != null) {
+				if (Utils.containsIgnoreCase(commandType, "check")) {
+					try {
+						if (findShopItem(shop, inputLine) != null) {
+							String inputItem = findShopItem(shop, inputLine);
+							return new Command (command, "check", inputItem);
+						} else return new Command (command, "price", inputLine.toLowerCase());
+					} catch (Exception e) {
+						return new Command (command, "price", inputLine.toLowerCase());
+					}
+
+				} else if (commandType.equals("help")) {
+					return new Command(command, commandType, inputLine.toLowerCase());
+				} else if (commandType.equals("place")) {
+					if (command.equals("teleport") || command.equals("tp")) {
+						String room = findRoomToTeleport(inputArr);
+						if (room != null) return new Command(command, commandType, room.toLowerCase());
+					} else {
+						String direction = findDirection(inputArr);
+						String roomName = findRoom(inputArr);
+						if (direction != null) return new Command(command, commandType, direction.toLowerCase());
+						else if (roomName != null) return new Command(command, commandType, roomName.toLowerCase());
+						else return new Command(command, commandType, inputLine.toLowerCase());
+					} 
+				} else {
+					String item = findShopItem(shop, inputLine);
+					if (item != null) return new Command(command, commandType, item.toLowerCase());
+				}
+			}
+		} catch (Exception e) {}
+		return new Command(null, null);
+	}
+
+
 	public static boolean getYesNoAnswer() {
 		System.out.print("\n> ");
 		Scanner nameInput = new Scanner(System.in);
@@ -245,7 +330,7 @@ class Parser {
 		return false;
 	}
 
-	public Command getSecondaryCommand(Player player) {
+	public Command getSecondaryCommand() {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		String inputLine = null; // will hold the full input line
 		Integer numbers[] = null; // temporary workaround before parser is fixed
@@ -275,17 +360,17 @@ class Parser {
 		return new Command(true, inputLine, numbers);
 	}
 
-	public String findItem (Player player, String inputArr[]) {
+	public String findItem (String commandName, String inputArr[]) {
 		for (String inputString : inputArr) {
 			if (player.getRoomHasItem(inputString))
 				return inputString;
-			if (player.inventory.hasItem(inputString))
+			if (!commandName.equals("take") && player.inventory.hasItem(inputString))
 				return inputString;
 		}
 		return null;
 	}
 
-	public String findItemRemovePlural(Player player, String inputArr[]) {
+	public String findItemRemovePlural(String inputArr[]) {
 		for (String inputString : inputArr) {
 			if (player.getRoomHasItem(inputString.substring(0, inputString.length()-1)))
 				return inputString.substring(0, inputString.length()-1);
@@ -295,7 +380,14 @@ class Parser {
 		return null;
 	}
 
-	public String findDirection(Player player, String inputArr[]) {
+	public String findShopItem (Shop shop, String inputLine) { // remake to concatenate items
+		for (Item item : shop.getItems())
+			if (Utils.containsIgnoreCase(item.toString(), inputLine))
+				return inputLine;
+		return null;
+	}
+
+	public String findDirection(String inputArr[]) {
 		for (int i = 0; i < inputArr.length; i++) {
 			Room nextRoom = player.getNextRoom(inputArr[i].toLowerCase()); // TO:DO refactor
 			if (nextRoom != null) {
@@ -305,26 +397,26 @@ class Parser {
 		return null;
 	}
 
-	public String findRoom(Player player, String inputArr[]) {
+	public String findRoom(String inputArr[]) {
 		for (int i = 0; i < inputArr.length; i++) {
 			if (Utils.containsCompareBoth(inputArr[i].toLowerCase(), player.getRoomName())) return inputArr[i];
 		}
 		return null;
 	}
 
-	public String findRoomToTeleport(Player player, String inputArr[]) {
+	public String findRoomToTeleport(String inputArr[]) {
 		for (int i = 0; i < inputArr.length; i++) 
 			if (player.teleport(inputArr[i]) != null) return player.teleport(inputArr[i]);
 		return null;
 	}
 
-	public String findEnemy(Player player, String inputArr[]) {
-		if (player.getRoom().hasEnemies() || player.getRoom().hasBosses()) {
+	public String findEnemy(String inputArr[]) {
+		if (player.getRoomHasEnemies() || player.getRoomHasBosses()) {
 			for (String inputWord : inputArr) {
-				for (Entity enemy : player.getRoom().getRoomEnemies()) {
+				for (Entity enemy : player.getRoomEnemies()) {
 					if (Utils.containsIgnoreCase(enemy.toString(), inputWord)) return inputWord;
 				}
-				for (Entity boss: player.getRoom().getRoomBosses()) {
+				for (Entity boss: player.getRoomBosses()) {
 					if (Utils.containsIgnoreCase(boss.toString(), inputWord)) return inputWord;
 				}
 			}
@@ -344,5 +436,12 @@ class Parser {
 	 */
 	public String listBattleCommands() {
 		return commands.listBattleCommands();
+	}
+
+	/*
+	 * Print out a list of valid command words.
+	 */
+	public String listShopCommands() {
+		return commands.listShopCommands();
 	}
 }

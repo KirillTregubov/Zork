@@ -180,7 +180,8 @@ public class Stats {
 
 	public void loadStats(String inputStats) {
 		String[] inputArr = inputStats.split("/");
-
+		
+		stats = new ArrayList<Double>();
 		for (int i = 0; i < inputArr.length; i++) {
 			stats.add(Double.parseDouble(inputArr[i]));
 		}
@@ -322,6 +323,24 @@ public class Stats {
 		}
 	}
 
+	public String save() {
+		String returnString = "";
+		if (lvlIndex != null) returnString += getLevel() + "/";
+		if (expIndex != null) returnString += getExp() + "/";
+		if (apIndex != null) returnString += getAttributePoints() + "/";
+		if (currHPIndex != null) returnString += getCurrentHP() + "/";
+		if (maxHPIndex != null) returnString += getMaximumHP() + "/";
+		if (atkIndex != null) returnString += getAttack() + "/";
+		if (defIndex != null) returnString += getDefense() + "/";
+		if (speedIndex != null) returnString += getSpeed() + "/";
+		if (accuracyIndex != null) returnString += getAccuracy() + "/";
+		if (critIndex != null) returnString += getCriticalChance() + "/";
+		if (healPointsIndex != null) returnString += getHealPoints() + "/";
+		if (lifeStealIndex != null) returnString += getLifeSteal() + "/";
+		if (dmgReflectIndex != null) returnString += getDamageReflection() + "/";
+		return returnString;
+	}
+
 	// Returns string of object name 
 	public String toString(){
 		if (stats == null) return "There are no stats to display!";
@@ -331,7 +350,7 @@ public class Stats {
 			if (usedIndexes.get(i) == LVL_INDEX && getLevel() != 0) returnArr.add(statNames.get(i) + ": " + getLevel());
 			if (usedIndexes.get(i) == EXP_INDEX && getExp() != 0) returnArr.add(statNames.get(i) + ": " + getExp());
 			if (usedIndexes.get(i) == AP_INDEX && getAttributePoints() != 0) returnArr.add(statNames.get(i) + ": " + getAttributePoints());
-			//if (usedIndexes.get(i) == CURR_HP_INDEX && getCurrentHP() != 0) returnArr.add(statNames.get(i) + ": " + getCurrentHP()); //should probably have a check health command
+			if (usedIndexes.get(i) == CURR_HP_INDEX && getCurrentHP() != getMaximumHP()) returnArr.add(statNames.get(i) + ": " + getCurrentHP()); //should probably have a check health command
 			if (usedIndexes.get(i) == MAX_HP_INDEX && getMaximumHP() != 0) returnArr.add(statNames.get(i) + ": " + getMaximumHP());
 			if (usedIndexes.get(i) == ATK_INDEX && getAttack() != 0) returnArr.add(statNames.get(i) + ": " + getAttack());
 			if (usedIndexes.get(i) == DEF_INDEX && getDefense() != 0) returnArr.add(statNames.get(i) + ": " + getDefense());

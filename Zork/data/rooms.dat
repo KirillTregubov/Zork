@@ -122,7 +122,7 @@ ID: 1011
 Name: Shop
 Description: Welcome to the Shop. (instructions)
 Exits: E=0-0
-Items: 3
+Items: 
 Trial:
 Entities:
 

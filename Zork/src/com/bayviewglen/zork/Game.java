@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.Scanner;
 
 /** "Game" Class - the main class of the game.
  * 
@@ -48,6 +47,7 @@ class Game {
 	private Trial currentTrial;
 	private boolean completingTrial;
 	public static Sound battleMusic = new Sound(Game.FILE_LOCATION + "battlemusic.wav");
+	Shop shop;
 
 	// This is a MASTER object that contains all of the rooms and is easily accessible.
 	// The key will be the name of the room -> no spaces (Use all caps and underscore -> Great Room would have a key of GREAT_ROOM
@@ -62,17 +62,18 @@ class Game {
 		try {
 			// Load Player
 			player = new Player();
+			shop = new Shop(player);
 			Shop shop = new Shop(player);
 			initRooms(FILE_LOCATION + "rooms.dat");
 			musicMainTheme = new Sound(FILE_LOCATION + "music1.wav");
-			trialDriver = new TrialDriver();
+			trialDriver = new TrialDriver(player);
+
+			// Create Parser
+			parser = new Parser(player);
 
 			// Load game if saved
 			if (gameIsSaved()) load();
 			else player.setCurrentRoom(player.masterRoomMap.get(DEFAULT_ROOM));
-
-			// Create Parser
-			parser = new Parser();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -227,7 +228,7 @@ class Game {
 
 	private boolean executeCommand() {
 		System.out.println("");
-		Command command = parser.getCommand(player);
+		Command command = parser.getCommand();
 		return processCommand(command);
 	}
 
@@ -238,17 +239,57 @@ class Game {
 		if (currentTrial == null) {
 			int i = 0;
 			if (player.doesRoomHaveTrial() && player.getRoomTrial().equals("tutorial")) {
-				currentTrial = trialDriver.tutorial(i, player);
+				currentTrial = trialDriver.tutorial(i);
 				i++;
 			}
 
-			while (!finished && player.getRoom().hasEnemies()) finished = executeCommand();
+			while (!finished && player.getRoomHasEnemies()) finished = executeCommand();
 			if (finished) return true;
 			else { 
-				currentTrial = trialDriver.tutorial(i, player);
+				currentTrial = trialDriver.tutorial(i);
 				completingTrial = false;
 				return false;
 			}
+		} // Shop
+		else if (currentTrial.toString().equals("Shop")) {
+			int i = 1;
+
+			while (!finished) {
+				System.out.println("");
+				Command command = parser.getShopCommand(shop);
+				//System.out.println(command.getCommand() + " " + command.getCommandType() + " " + command.getContextWord());
+
+				try {
+					if (command.getCommand().equals("go") && command.getContextWord().equals("east")) {
+						currentTrial = trialDriver.shop(i, shop);
+						completingTrial = false;
+						return false;
+					}
+				} catch (Exception e) {}
+
+				String commandType = command.getCommandType();
+				String contextWord = command.getContextWord();
+				if (commandType == null)
+					System.out.println("You cannot do that...");
+				else if (commandType.equals("buy"))
+					shop.purchaseItem(contextWord);
+				else if (commandType.equals("check"))
+					System.out.println("The " + Item.getItem(contextWord) + " costs $" + shop.getPrice(contextWord) + ".");
+				else if (commandType.equals("price"))
+					System.out.println(player.getMoneyString());
+				else if (commandType.equals("go"))
+					System.out.println("That's not an option... You might be trapped.");
+				else if (commandType.equals("help")) {
+					System.out.println("Here are the commands you can use in the shop:");
+					System.out.print(parser.listShopCommands());
+				}
+			}
+			if (finished) return true;
+			return false; // should be unreachable
+		} // Challenge Gate
+		else if (currentTrial.toString().equals("Challenge Gate")) {
+
+			// code here
 
 		} // Trial One
 		else if (currentTrial.toString().equals("Trial One")) {
@@ -257,22 +298,51 @@ class Game {
 			if (finished) return true;
 			else if (!completingTrial) return false;
 			else {
-				currentTrial = trialDriver.trialOne(i, player);
-				while (completingTrial && !finished && player.getRoom().hasEnemies()) finished = executeCommand();
+				currentTrial = trialDriver.trialOne(i);
+				while (completingTrial && !finished && player.getRoomHasEnemies()) finished = executeCommand();
 				if (finished) return true;
 				else if (!completingTrial) return false;
 				else {
-					currentTrial = trialDriver.trialOne(++i, player);
+					currentTrial = trialDriver.trialOne(++i);
 					while (completingTrial && !finished && player.getRoomID().equals("1-1")) finished = executeCommand();
 					if (finished) return true;
 					else if (!completingTrial) return false;
 					else { 
-						currentTrial = trialDriver.trialOne(++i, player);
-						while (completingTrial && !finished && player.getRoom().hasBosses()) finished = executeCommand();
+						currentTrial = trialDriver.trialOne(++i);
+						while (completingTrial && !finished && player.getRoomHasBosses()) finished = executeCommand();
 						if (finished) return true;
 						else if (!completingTrial) return false;
 						else { 
-							currentTrial = trialDriver.trialOne(++i, player);
+							currentTrial = trialDriver.trialOne(++i);
+							completingTrial = false;
+							return false;
+						}
+					}
+				}
+			}
+		} // Trial Two
+		else if (currentTrial.toString().equals("Trial Two")) {
+			int i = 1;
+			while (completingTrial && !finished && player.getRoomID().equals("1")) finished = executeCommand();
+			if (finished) return true;
+			else if (!completingTrial) return false;
+			else {
+				currentTrial = trialDriver.trialOne(i);
+				while (completingTrial && !finished && player.getRoomHasEnemies()) finished = executeCommand();
+				if (finished) return true;
+				else if (!completingTrial) return false;
+				else {
+					currentTrial = trialDriver.trialOne(++i);
+					while (completingTrial && !finished && player.getRoomID().equals("1-1")) finished = executeCommand();
+					if (finished) return true;
+					else if (!completingTrial) return false;
+					else { 
+						currentTrial = trialDriver.trialOne(++i);
+						while (completingTrial && !finished && player.getRoomHasBosses()) finished = executeCommand();
+						if (finished) return true;
+						else if (!completingTrial) return false;
+						else { 
+							currentTrial = trialDriver.trialOne(++i);
 							completingTrial = false;
 							return false;
 						}
@@ -313,10 +383,15 @@ class Game {
 			}
 			try {
 				if (command.getFirstNumber() == 1) {
-					currentTrial = trialDriver.trialOne(0, player);
-					/*} else if (command.getFirstNumber() == 2) {
-
-				} else if (command.getFirstNumber() == 3) {
+					currentTrial = trialDriver.trialOne(0);
+				} else if (command.getFirstNumber() == 2) {
+					if (trialDriver.isFirstTrialComplete())
+						currentTrial = trialDriver.trialTwo(0);
+					else {
+						completingTrial = false;
+						System.out.println("You must complete Trial One first!");
+					}
+					/* } else if (command.getFirstNumber() == 3) {
 
 				} else if (command.getFirstNumber() == 4) {
 
@@ -364,19 +439,19 @@ class Game {
 			if (contextWord == null) {
 				System.out.println("You cannot battle that!");
 			} else {
-				if (player.getRoom().hasRepeatedEnemies(contextWord)) {
+				if (player.getRoomHasRepeatedEnemies(contextWord)) {
 					System.out.println("There are multiple enemies in this room with that name! Please be more specific!");
-				} else if (player.getRoom().hasEnemies() && player.getRoom().findEnemy(player, contextWord).getType().equals(Entity.TYPES[Entity.BOSS_INDEX])) {
+				} else if (player.getRoomHasEnemies() && player.getRoomFindEnemy(contextWord).getType().equals(Entity.TYPES[Entity.BOSS_INDEX])) {
 					System.out.println("You must defeat all enemies before challenging the boss!");
 				}
 				else {
-					int battleResult = player.getRoom().startCustomBattle(player,contextWord);
+					int battleResult = player.getRoomStartBattle(contextWord);
 					if (battleResult == 2) {
 						player.setDefaultRoom();
 						System.out.println("Respawning...");
-						System.out.println("\n"+player.getRoom().longDescription());
+						System.out.println("\n"+player.getRoomDescription());
 						player.stats.setCurrentHP(player.stats.getMaximumHP());
-					} else if (!completingTrial || battleResult == 0) System.out.println("\n" + player.getRoom().longDescription());
+					} else if (!completingTrial || battleResult == 0) System.out.println("\n" + player.getRoomDescription());
 				}
 			}
 		} // eat
@@ -463,18 +538,15 @@ class Game {
 		} // take
 		else if (commandName.equalsIgnoreCase("take") || (commandName.equalsIgnoreCase("pickup") || (commandName.equalsIgnoreCase("grab")))) { // add way to pick up amounts of stackable items
 			if (contextWord != null) {
-				//System.out.println(player.itemCanBePickedUp(givenItem)); test command
 				if (player.itemCanBePickedUp(contextWord).equals("roomrepeated"))
 					System.out.println("Please be more specific. There are multiple items with this name!");
 				else if (player.itemCanBePickedUp(contextWord).equals("inventorycontains")) //may be needed in the future
 					System.out.println("This item is already in your inventory!");
 				else if (player.itemCanBePickedUp(contextWord).equals("roomnotcontains"))
 					System.out.println("There is no " + Item.getItem(contextWord) + " in this room!");
-				
-				
+
 				else if (player.itemCanBePickedUp(contextWord).isEmpty()) {
 					if (numbers != null) {
-						System.out.println("One");
 						if (player.pickUpItem(contextWord, player.getRoomID(), numbers) == null) {
 							player.updateItems(player, player.getRoomID());
 							if (numbers[0] > 1) System.out.println(numbers[0] + " " + Item.getItem(contextWord) + "s were added to your inventory!");
@@ -572,7 +644,7 @@ class Game {
 		}
 		String direction = command.getContextWord();
 
-		if (completingTrial && (player.getRoom().hasEnemies() || player.getRoom().hasBosses()))
+		if (completingTrial && (player.getRoomHasEnemies() || player.getRoomHasBosses()))
 			System.out.println(currentTrial.getLeaveReason());
 		else {
 			// Try to leave current room.
@@ -581,7 +653,10 @@ class Game {
 				player.setCurrentRoom(nextRoom);
 				player.updateItems(player, nextRoom.getRoomID());
 				System.out.println(player.getRoomTravelDescription());
-				//if (nextRoom.equals("Shop")) // shop if
+				if (nextRoom.toString().equals("Shop")) {
+					currentTrial = trialDriver.shop(0, shop);
+					completingTrial = true;
+				}
 			} else System.out.println("That's not an option... You might be trapped.");
 		}
 	}
@@ -598,9 +673,9 @@ class Game {
 			writer = new BufferedWriter(new FileWriter(FILE_LOCATION + "save.dat", true));
 			writer.write("Name: " + player.name + "; ");	// save room currently in
 			writer.write("Room: " + player.getRoomID() + "; ");	// save room currently in
-			if (!player.inventory.isEmpty()) { // check to make sure inventory isn't empty
-				writer.write("Inventory: " + player.inventory.saveInventory() + "; ");	// save inventory	
-			}
+			writer.write("Inventory: " + player.inventory.saveInventory() + "; ");	// save inventory	
+			writer.write("Money: " + player.getMoney() + "; ");
+			writer.write("Stats: " + player.stats.save() + "; ");
 			writer.write("Time Saved: " + LocalDateTime.now() + "; ");
 			if(trialDriver.areAnyTrialsComplete()) writer.write(trialDriver.toString());
 			writer.newLine();
@@ -634,16 +709,11 @@ class Game {
 				while ((line = reader.readLine()) != null) {
 					saveFile = line;
 				}
-				if (saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 3) - 1, Utils.ordinalIndexOf(saveFile, ":", 3)).equals("y")) // check if inventory was saved
-					return saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 4)+13, Utils.ordinalIndexOf(saveFile, ":", 4)+21)
-							+ " on " + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 4) + 10, Utils.ordinalIndexOf(saveFile, ":", 4) + 12)
-							+ "/" + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 4) + 7, Utils.ordinalIndexOf(saveFile, ":", 4) + 9)
-							+ "/" + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 4) + 2, Utils.ordinalIndexOf(saveFile, ":", 4) + 6);
-				else
-					return saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 3) + 13, Utils.ordinalIndexOf(saveFile, ":", 3) + 21)
-							+ " on " + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 3) + 10, Utils.ordinalIndexOf(saveFile, ":", 3) + 12)
-							+ "/" + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 3) + 7, Utils.ordinalIndexOf(saveFile, ":", 3) + 9)
-							+ "/" + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 3) + 2, Utils.ordinalIndexOf(saveFile, ":", 3) + 6);
+
+				return saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6)+13, Utils.ordinalIndexOf(saveFile, ":", 6)+21)
+						+ " on " + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6) + 10, Utils.ordinalIndexOf(saveFile, ":", 6) + 12)
+						+ "/" + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6) + 7, Utils.ordinalIndexOf(saveFile, ":", 6) + 9)
+						+ "/" + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6) + 2, Utils.ordinalIndexOf(saveFile, ":", 6) + 6);
 			}
 		} catch(IOException e) { }
 		return null;
@@ -686,6 +756,10 @@ class Game {
 					player.inventory.loadInventory(savedInventory);
 					player.updateItems(player, player.getRoomID());
 				}
+
+				player.loadMoney(Integer.parseInt(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 4)+2, Utils.ordinalIndexOf(saveFile, ";", 4))));
+				player.stats.loadStats(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 5)+2, Utils.ordinalIndexOf(saveFile, ";", 5)));
+				
 				completingTrial = false;
 				if (saveFile.substring(saveFile.lastIndexOf(':')-16, saveFile.lastIndexOf(':')).equals("Completed Trials"))
 					trialDriver.loadTrials(saveFile.substring(saveFile.lastIndexOf(':')+2));

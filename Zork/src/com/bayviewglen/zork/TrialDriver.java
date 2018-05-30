@@ -1,9 +1,6 @@
 package com.bayviewglen.zork;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /** "Trial Driver" Class - is in charge of processing and leading the player through trials.
@@ -40,8 +37,9 @@ public class TrialDriver {
 	private boolean trialSixComplete;
 	private boolean trialSevenComplete;
 	private boolean trialEightComplete;
+	private Player player;
 
-	TrialDriver() {
+	TrialDriver(Player player) {
 		tutorialComplete = false;
 		trialOneComplete = false;
 		trialTwoComplete = false;
@@ -51,16 +49,18 @@ public class TrialDriver {
 		trialSixComplete = false;
 		trialSevenComplete = false;
 		trialEightComplete = false;
+
+		this.player = player;
 	}
 
 	//starts tutorial
-	public Trial tutorial(int sectionCounter, Player player) {	
+	public Trial tutorial(int sectionCounter) {	
 		if (sectionCounter == 0) {
 			System.out.println(player.getRoomShortDescription()); // fix exits?
 			System.out.println("");
 			player.setCurrentRoom(player.masterRoomMap.get("0-2"));
 			System.out.println(player.getRoomDescription());
-			
+
 			Utils.formattedPrint(true, "There is a sharp high pitch ring in your ears as you vanish and appear in another room, much smaller than the one"
 					+ " you were in before, with a sparring robot standing in front of you. It begins to speak:");
 			System.out.println("\nRobot: Hello contest number 29886-E, please enter your name below.");
@@ -97,7 +97,7 @@ public class TrialDriver {
 	}
 
 	//starts trial 1
-	public Trial trialOne(int sectionCounter, Player player) {
+	public Trial trialOne(int sectionCounter) {
 		if (sectionCounter == 0) {
 			player.setCurrentRoom(player.masterRoomMap.get("1"));
 			System.out.println(player.getRoomDescription());
@@ -135,19 +135,39 @@ public class TrialDriver {
 		return null;
 	}
 
-	//starts trial 2 and checks if necessary trials are completed
-	public Trial trialTwo() {
+	public Trial shop(int sectionCounter, Shop shop) {
+		if (sectionCounter == 0) {
+			System.out.println("\nWelcome to the shop! We offer the best items at the lowest possible prices!" + shop.displayItems());
+			return new Trial(2, "Shop", "");
+		} else if (sectionCounter == 1) {
+			Utils.formattedPrint(false, "Leave Shop"); // print before going east?
+			player.setDefaultRoom();
+			System.out.println("\n" + player.getRoomTravelDescription());
+			return null;
+		}
+		return null;
+	}
 
+	//starts trial 2 and checks if necessary trials are completed
+	public Trial trialTwo(int sectionCounter) {
 		/* Check if needed trials are completed
 		if (!trialOneComplete)
 			exitString += "needT1";//"You cannot access this trial until you complete Trial 1.";
 		 */
-		// Return Trial
-		return new Trial(1, "trialtwo", "");  // change int
-		//return new Trial(exitString, dialogue);
+		if (sectionCounter == 0) {
+			player.setCurrentRoom(player.masterRoomMap.get("1"));
+			System.out.println(player.getRoomDescription());
+			// Return Trial
+			return new Trial(2, "trialtwo", "");  // change int
+		} else if (sectionCounter == 1) {
+			
+			// Return Trial
+			return new Trial(2, "trialtwo", "");  // change int
+		}
+		return null;
 	}
 
-	public Trial challengeGate(int sectionCounter, int difficulty, Player player) {
+	/*public Trial challengeGate(int sectionCounter, int difficulty, Player player) {
 		if (sectionCounter == 0) {
 			// easy, medium, hard
 
@@ -166,7 +186,7 @@ public class TrialDriver {
 				else if (rand == 2) player.getRoom().addEntity(easyEnt2);
 				else if (rand == 3) player.getRoom().addEntity(easyEnt3);
 			}
-						
+
 			//Medium
 			//1.	The Pharaoh (17HP/3ATK/2ARM/1SPD) Drops: Steel Dagger 40%, Cobalt Broadsword 30%, Knight’s Armor 70%, Iron Spear 20%, Small Heal Potion 60%
 			//2.	The Living Shadow (20HP/3ATK/2ARM/2SPD) Drops: Iron Spear 60%, Staff of Life Drain 30%, Golden Bamboo Sword 20%, Titanium Blast Plate Armor 30% Small Heal Potion 60%
@@ -201,7 +221,7 @@ public class TrialDriver {
 
 		}
 		return new Trial(1, "challenge", "");
-	}
+	}*/
 
 	/*
 	//starts trial 3 and checks if necessary trials are completed
@@ -220,7 +240,7 @@ public class TrialDriver {
 			return true;
 
 	}
-	
+
 	public void loadTrials(String inputBooleans) {
 		if (Utils.containsIgnoreCase(inputBooleans, "tutorial")) tutorialComplete = true;
 		if (Utils.containsIgnoreCase(inputBooleans, "one")) trialOneComplete = true;
@@ -236,15 +256,23 @@ public class TrialDriver {
 	public boolean isTutorialComplete() {
 		return tutorialComplete;
 	}
+	
+	public boolean isFirstTrialComplete() {
+		return tutorialComplete && trialOneComplete;
+	}
 
-	public boolean areBaseTrialsComplete() {
-		return tutorialComplete && trialOneComplete && trialTwoComplete && trialThreeComplete && trialFourComplete && trialFiveComplete && trialSixComplete && trialSevenComplete;
+	public boolean areFiveTrialsComplete() {
+		return tutorialComplete && trialOneComplete && trialTwoComplete && trialThreeComplete && trialFourComplete && trialFiveComplete;
+	}
+	
+	public boolean areSixTrialsComplete() {
+		return tutorialComplete && trialOneComplete && trialTwoComplete && trialThreeComplete && trialFourComplete && trialFiveComplete && trialSixComplete;
 	}
 
 	public boolean isGameBeaten() { 
 		return trialEightComplete;
 	}
-	
+
 	public boolean areAnyTrialsComplete() {
 		return tutorialComplete || trialOneComplete || trialTwoComplete || trialThreeComplete || trialFourComplete || trialFiveComplete || trialSixComplete || trialSevenComplete || trialEightComplete;
 	}
@@ -253,7 +281,7 @@ public class TrialDriver {
 	public String toString(){
 		if (!areAnyTrialsComplete()) return "You haven't completed any trials!";
 		ArrayList<String> returnArray = new ArrayList<String>(); //"Completed Trials: ";
-		
+
 		if (tutorialComplete) returnArray.add("Tutorial");
 		if (trialOneComplete) returnArray.add("\nTrial One");
 		if (trialTwoComplete) returnArray.add("\nTrial Two");
@@ -263,7 +291,7 @@ public class TrialDriver {
 		if (trialSixComplete) returnArray.add("\nTrial Six");
 		if (trialSevenComplete) returnArray.add("\nTrial Seven");
 		if (trialEightComplete) returnArray.add("\nTrial Eight");
-		
+
 		String returnString = "Completed Trials:";
 		for (int i = 0; i < returnArray.size(); i++) {
 			returnString += " " + returnArray.get(i);
@@ -271,7 +299,7 @@ public class TrialDriver {
 			if (i < returnArray.size() - 1) returnString += ",";
 			else returnString += ".";
 		}
-		
+
 		return returnString;
 	}
 }

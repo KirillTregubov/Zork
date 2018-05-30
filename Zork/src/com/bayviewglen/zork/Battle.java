@@ -12,12 +12,12 @@ import java.util.Scanner;
 
 public class Battle {
 
-	public Player player;
-	public Entity enemy;
-	public boolean didRunAway;
-	public int attackCounter;
-	public int consumableUsageCounter;
-	public int critHitCounter;
+	private Player player;
+	private Entity enemy;
+	private boolean didRunAway;
+	private int attackCounter;
+	private int consumableUsageCounter;
+	private int critHitCounter;
 
 	public Battle(Player player, Entity enemy) {
 		this.player = player;
@@ -99,8 +99,8 @@ public class Battle {
 
 	private void processUserInput() {
 		System.out.println("You have " + player.stats.getCurrentHP() + " HP left. Choose an action. Enter 'help' if you need any.");
-		Parser parser = new Parser();
-		Command command = parser.getBattleCommand(player);
+		Parser parser = new Parser(player);
+		Command command = parser.getBattleCommand();
 		String commandName = command.getCommand();
 		String commandType = command.getCommandType();
 		String contextWord = command.getContextWord();
@@ -110,6 +110,7 @@ public class Battle {
 			System.out.println("You cannot do that...\n");
 			processUserInput();
 		} else if (commandType.equals("help")) {
+			System.out.println("Here are all the commands you can use in battle:");
 			System.out.println(parser.listBattleCommands());
 			processUserInput();
 		} else if (commandType.equals("attack")) {

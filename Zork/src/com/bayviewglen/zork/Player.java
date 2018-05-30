@@ -19,7 +19,7 @@ public class Player extends Entity {
 	public HashMap<String, Room> masterRoomMap;
 	private Item equippedWeapon;
 	private Item equippedArmor;
-	
+
 	Player() {
 		super("Player", Stats.PLAYER_INDEX, "1,0,0,10,10,2,0,1,0.9,0.1");
 		money = 0;
@@ -140,23 +140,27 @@ public class Player extends Entity {
 	public Integer getMoney() {
 		return money;
 	}
+	
+	public void loadMoney(Integer money) {
+		this.money = money;
+	}
 
 	public String getMoneyString() {
-		return "You have $" + money + " in your wallet.";
+		return "You have $" + money + " left in your wallet.";
 	}
-	
+
 	public void addMoney(Integer moneyAmount) {
 		money += moneyAmount;
 	}
-	
+
 	public boolean subtractMoney(Integer moneyAmount) {
 		if (money - moneyAmount > 0) {
-			money += moneyAmount;
+			money -= moneyAmount;
 			return true;
 		}
 		else return false;
 	}
-	
+
 	public String checkEquippedItems() {
 		return "Equipped Weapon: " + equippedWeapon + "\nEquipped Armor: " + equippedArmor;
 	}
@@ -185,8 +189,7 @@ public class Player extends Entity {
 				inputItem.setAmount(1 + inventory.getItem(itemName).getAmount());
 			else
 				if (inputItem.isStackable) inputItem.setAmount(1); // change so that user can specify how many to pick up*/
-
-			System.out.println(inputItem.pickedUpAmounts.get(inputItem.roomID.indexOf(roomID)));
+			
 			if (!inputItem.roomID.contains(roomID)) {
 				inputItem.roomID.add(roomID);
 				inputItem.pickedUpAmounts.add(1);
@@ -208,7 +211,7 @@ public class Player extends Entity {
 
 			int amount = 1;
 			if (inputItem.isStackable) amount = numbers[0];
-
+			
 			if (inventory.hasItem(itemName) && inventory.getItem(itemName).getAmount() < currentRoom.getItem(itemName).getAmount())
 				inputItem.setAmount(amount + inventory.getItem(itemName).getAmount());
 			else if (inventory.hasItem(itemName) && amount + inventory.getItem(itemName).getAmount() >= currentRoom.getItem(itemName).getAmount())
@@ -266,9 +269,9 @@ public class Player extends Entity {
 	/*
 	 * Room Getters
 	 */
-	public Room getRoom() {
+	/*public Room getRoom() {
 		return currentRoom;
-	}
+	}*/
 
 	public String getRoomTrial() {
 		return currentRoom.getTrial();
@@ -309,11 +312,39 @@ public class Player extends Entity {
 	public int getRoomItemAmount(String itemName) {
 		return currentRoom.getItemAmount(itemName);
 	}
-	
+
 	public boolean getRoomHasItem(String itemName) {
 		return currentRoom.hasItem(Item.getItem(itemName));
 	}
-	
+
+	public ArrayList<Entity> getRoomEnemies() {
+		return currentRoom.getRoomEnemies();
+	}
+
+	public ArrayList<Entity> getRoomBosses() {
+		return currentRoom.getRoomBosses();
+	}
+
+	public boolean getRoomHasEnemies() {
+		return currentRoom.hasEnemies();
+	}
+
+	public boolean getRoomHasRepeatedEnemies(String enemyName) {
+		return currentRoom.hasRepeatedEnemies(enemyName);
+	}
+
+	public boolean getRoomHasBosses() {
+		return currentRoom.hasBosses();
+	}
+
+	public Entity getRoomFindEnemy(String enemyName) {
+		return currentRoom.findEnemy(this, enemyName);
+	}
+
+	public int getRoomStartBattle(String enemyName) {
+		return currentRoom.startCustomBattle(this, enemyName);
+	}
+
 	public Entity getRoomEnemy(Player player, String enemyName) {
 		return currentRoom.findEnemy(player, enemyName);
 	}
@@ -349,7 +380,7 @@ public class Player extends Entity {
 		/*for (Integer counter : counters) { //test
 			System.out.println(counter);
 		}*/
-		
+
 		// Base Exp Calculator
 		expGained += attackCounter * 5 + consumableUsageCounter * 10 + critHitCounter * 15;
 		moneyGained += attackCounter * 5 + critHitCounter * 10; 
@@ -415,94 +446,94 @@ public class Player extends Entity {
 
 		}
 	}	
-	
-	public void attributeSpender() {
-        System.out.println("\n\nWelcome to the Attribute spending screen.\nIf you would like an explanation on how to spend points, say \"Spend Help\".");
-        Scanner input = new Scanner(System.in);
-        int x = 0;
-        while (stats.getAttributePoints() > x) {
-              System.out.print("Command: ");
-              String command = input.nextLine().toLowerCase();
-              if (command.equals("spendhelp")||command.equals("spend help")||command.equals("help")||command.equals("help me")||command.equals("what do i do")||command.equals("what do i do?")) {
-                    System.out.println("\nEnter one of these values into the console to specify which stat to increase:\n"
-                                 + "1: Increase health by 1\n2: Increase attack by 1\n3: Increase defence by 1\n4: Increase speed by 1\n5: Increase accuracy by 1%\n6: Increase critical hit chance by 1%\n\"exit\"");
-              }
-              else if (command.equals("1")||command.equals("2")||command.equals("3")||command.equals("4")||command.equals("5")||command.equals("6")) {
-                     switch (command) {
-                     
-                           case "1": // Health
-                                 if (stats.getMaximumHP()>=150) {
-                                       System.out.println("Health is at maximum.");
-                                 }
-                                 else {
-                                 stats.setAttributePoints(stats.getAttributePoints()-1);
-                                      stats.setMaximumHP(stats.getMaximumHP()+1);
-                                       stats.setCurrentHP(stats.getMaximumHP());
-                                       System.out.println("Health increased by 1, total: "+stats.getMaximumHP()+".");
-                                 }
-                                 break;
-                           case "2": // Attack
-                                 if (stats.getAttack()>=40) { 
-                                       System.out.println("Attack is at maximum.");
-                                 }
-                                 else {
-                                 stats.setAttributePoints(stats.getAttributePoints()-1);
-                                       stats.setAttack(stats.getAttack()+1);
-                                       System.out.println("Attack increased by 1, total: "+stats.getAttack()+".");
-                                 }
-                                 break;
-                           case "3": // Defense
-                                 if (stats.getDefense()>=40) { 
-                                       System.out.println("Defence is at maximum.");
-                                 }
-                                 else {
-                                 stats.setAttributePoints(stats.getAttributePoints()-1);
-                                       stats.setDefense(stats.getDefense()+1);
-                                       System.out.println("Defence increased by 1, total: "+stats.getDefense()+".");
-                                 }
-                                 break;
-                           case "4": // Speed
-                                 if (stats.getSpeed()>=40) { 
-                                       System.out.println("Speed is at maximum.");
-                                 }
-                                 else {
-                                 stats.setAttributePoints(stats.getAttributePoints()-1);
-                                       stats.setSpeed(stats.getSpeed()+1);
-                                       System.out.println("Speed increased by 1, total: "+stats.getSpeed()+".");
-                                 }
-                                 break;
-                           case "5": // Accuracy
-                                 if (stats.getAccuracy()>=1.0) { 
-                                       System.out.println("Accuracy is at maximum.");
-                                 }
-                                 else {
-                                 stats.setAttributePoints(stats.getAttributePoints()-1);
-                                     stats.setAccuracy(stats.getAccuracy()+0.01);
-                                       System.out.println("Accuracy increased by 1%, total: "+stats.getAccuracy()*100+"%.");
-                                 }
-                                 break;
-                           case "6": // Critical chance
-                                 if (stats.getCriticalChance()>=0.6) { 
-                                       System.out.println("Critical hit chance is at maximum.");
-                                 }
-                                 else {
-                                 stats.setAttributePoints(stats.getAttributePoints()-1);
-                                 stats.setCriticalChance(stats.getCriticalChance()+0.01);
-                                       System.out.println("Critical hit chance increased by 1%, total: "+stats.getAttack()*100+"%.");
-                                 }
-                                 break;
-                           
-                     }
-              }
-              else if (command.equals("quit")||command.equals("stop")||command.equals("end"))
-                     x++;
-              else {
-                     System.out.print("Not a valid option.");
-              }
-        }
- }
 
-	
+	public void attributeSpender() {
+		System.out.println("\n\nWelcome to the Attribute spending screen.\nIf you would like an explanation on how to spend points, say \"Spend Help\".");
+		Scanner input = new Scanner(System.in);
+		int x = 0;
+		while (stats.getAttributePoints() > x) {
+			System.out.print("Command: ");
+			String command = input.nextLine().toLowerCase();
+			if (command.equals("spendhelp")||command.equals("spend help")||command.equals("help")||command.equals("help me")||command.equals("what do i do")||command.equals("what do i do?")) {
+				System.out.println("\nEnter one of these values into the console to specify which stat to increase:\n"
+						+ "1: Increase health by 1\n2: Increase attack by 1\n3: Increase defence by 1\n4: Increase speed by 1\n5: Increase accuracy by 1%\n6: Increase critical hit chance by 1%\n\"exit\"");
+			}
+			else if (command.equals("1")||command.equals("2")||command.equals("3")||command.equals("4")||command.equals("5")||command.equals("6")) {
+				switch (command) {
+
+				case "1": // Health
+					if (stats.getMaximumHP()>=150) {
+						System.out.println("Health is at maximum.");
+					}
+					else {
+						stats.setAttributePoints(stats.getAttributePoints()-1);
+						stats.setMaximumHP(stats.getMaximumHP()+1);
+						stats.setCurrentHP(stats.getMaximumHP());
+						System.out.println("Health increased by 1, total: "+stats.getMaximumHP()+".");
+					}
+					break;
+				case "2": // Attack
+					if (stats.getAttack()>=40) { 
+						System.out.println("Attack is at maximum.");
+					}
+					else {
+						stats.setAttributePoints(stats.getAttributePoints()-1);
+						stats.setAttack(stats.getAttack()+1);
+						System.out.println("Attack increased by 1, total: "+stats.getAttack()+".");
+					}
+					break;
+				case "3": // Defense
+					if (stats.getDefense()>=40) { 
+						System.out.println("Defence is at maximum.");
+					}
+					else {
+						stats.setAttributePoints(stats.getAttributePoints()-1);
+						stats.setDefense(stats.getDefense()+1);
+						System.out.println("Defence increased by 1, total: "+stats.getDefense()+".");
+					}
+					break;
+				case "4": // Speed
+					if (stats.getSpeed()>=40) { 
+						System.out.println("Speed is at maximum.");
+					}
+					else {
+						stats.setAttributePoints(stats.getAttributePoints()-1);
+						stats.setSpeed(stats.getSpeed()+1);
+						System.out.println("Speed increased by 1, total: "+stats.getSpeed()+".");
+					}
+					break;
+				case "5": // Accuracy
+					if (stats.getAccuracy()>=1.0) { 
+						System.out.println("Accuracy is at maximum.");
+					}
+					else {
+						stats.setAttributePoints(stats.getAttributePoints()-1);
+						stats.setAccuracy(stats.getAccuracy()+0.01);
+						System.out.println("Accuracy increased by 1%, total: "+stats.getAccuracy()*100+"%.");
+					}
+					break;
+				case "6": // Critical chance
+					if (stats.getCriticalChance()>=0.6) { 
+						System.out.println("Critical hit chance is at maximum.");
+					}
+					else {
+						stats.setAttributePoints(stats.getAttributePoints()-1);
+						stats.setCriticalChance(stats.getCriticalChance()+0.01);
+						System.out.println("Critical hit chance increased by 1%, total: "+stats.getAttack()*100+"%.");
+					}
+					break;
+
+				}
+			}
+			else if (command.equals("quit")||command.equals("stop")||command.equals("end"))
+				x++;
+			else {
+				System.out.print("Not a valid option.");
+			}
+		}
+	}
+
+
 	public Inventory getInventory() {
 		return inventory;
 	}

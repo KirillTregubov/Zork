@@ -331,9 +331,8 @@ class Room {
 	}
 
 	/*
-	 *  Andy Entity Stuff
+	 *  Battle Method
 	 */
-
 	public String listEnemies() {
 		liveCheck();
 		String returnString = "";
@@ -437,10 +436,10 @@ class Room {
 	}
 
 	public Entity findEnemy(Player player, String entityName) {
-		for (Entity entity : player.getRoom().getRoomEnemies()) {
+		for (Entity entity : getRoomEnemies()) {
 			if (Utils.containsIgnoreCase(entity.toString(), entityName)) return entity;
 		}
-		for (Entity entity : player.getRoom().getRoomBosses()) {
+		for (Entity entity : getRoomBosses()) {
 			if (Utils.containsIgnoreCase(entity.toString(), entityName)) return entity;
 		}
 		return null;
