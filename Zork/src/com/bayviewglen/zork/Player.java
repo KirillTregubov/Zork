@@ -170,7 +170,7 @@ public class Player extends Entity {
 	}
 
 	public boolean didPickUpItem(String itemName, String roomID) {
-		if (inventory.containsItem(itemName) && inventory.getItem(itemName).roomID.contains(roomID)) return true;
+		if (inventory.hasItem(itemName) && inventory.getItem(itemName).roomID.contains(roomID)) return true;
 		return false;
 	}
 
@@ -181,15 +181,18 @@ public class Player extends Entity {
 
 			if (1 > currentRoom.getItem(itemName).getAmount())
 				return "toomuch";
-			else if (inventory.containsItem(itemName))
+			else if (inventory.hasItem(itemName))
 				inputItem.setAmount(1 + inventory.getItem(itemName).getAmount());
 			else
 				if (inputItem.isStackable) inputItem.setAmount(1); // change so that user can specify how many to pick up*/
 
+			System.out.println(inputItem.pickedUpAmounts.get(inputItem.roomID.indexOf(roomID)));
 			if (!inputItem.roomID.contains(roomID)) {
 				inputItem.roomID.add(roomID);
 				inputItem.pickedUpAmounts.add(1);
-			} else inputItem.pickedUpAmounts.add(inputItem.roomID.indexOf(roomID), 1);
+			} else {
+				inputItem.pickedUpAmounts.set(inputItem.roomID.indexOf(roomID), inputItem.pickedUpAmounts.get(inputItem.roomID.indexOf(roomID))+1); //(inputItem.roomID.indexOf(roomID), 1);
+			}
 
 			inventory.addToInventory(inputItem, itemName, roomID);
 			return null;
@@ -206,9 +209,9 @@ public class Player extends Entity {
 			int amount = 1;
 			if (inputItem.isStackable) amount = numbers[0];
 
-			if (inventory.containsItem(itemName) && inventory.getItem(itemName).getAmount() < currentRoom.getItem(itemName).getAmount())
+			if (inventory.hasItem(itemName) && inventory.getItem(itemName).getAmount() < currentRoom.getItem(itemName).getAmount())
 				inputItem.setAmount(amount + inventory.getItem(itemName).getAmount());
-			else if (inventory.containsItem(itemName) && amount + inventory.getItem(itemName).getAmount() >= currentRoom.getItem(itemName).getAmount())
+			else if (inventory.hasItem(itemName) && amount + inventory.getItem(itemName).getAmount() >= currentRoom.getItem(itemName).getAmount())
 				return "toomuch";
 			else if (amount > currentRoom.getItem(itemName).getAmount()) 
 				return "toomuch";
@@ -236,20 +239,20 @@ public class Player extends Entity {
 		}
 		if (currentRoom.hasRepeatedItems(itemName)) return "roomrepeated";
 		//else if (inventory.hasRepeatedItems(itemName)) return "inventoryrepeated";
-		else if (!currentRoom.containsItem(inputItem)) return "roomnotcontains";
-		//else if (inventory.containsItem(itemName)) return "inventorycontains";
+		else if (!currentRoom.hasItem(inputItem)) return "roomnotcontains";
+		else if (inventory.hasItem(itemName) && !Item.getItem(itemName).isStackable) return "inventorycontains";
 		else return "";
 	}
 
 	public String itemCanBeLookedAt(String itemName) {
 		//Item inputItem = Item.getItem(itemName);
 		if (currentRoom.hasRepeatedItems(itemName)) return "roomrepeated";
-		else if (inventory.containsItem(itemName) || currentRoom.containsItem(Item.getItem(itemName))) return "contains";
+		else if (inventory.hasItem(itemName) || currentRoom.hasItem(Item.getItem(itemName))) return "contains";
 		return "";
 	}
 
 	public boolean consumeItem(String itemName) {
-		if (inventory.containsItem(itemName)) {
+		if (inventory.hasItem(itemName)) {
 			//System.out.println(inventory.getItem(itemName) + " " + inventory.getItemAmount(itemName));
 			inventory.consumeItem(itemName);
 			int healingDone = Item.getItem(itemName).stats.getHealPoints();
@@ -307,13 +310,17 @@ public class Player extends Entity {
 		return currentRoom.getItemAmount(itemName);
 	}
 	
+	public boolean getRoomHasItem(String itemName) {
+		return currentRoom.hasItem(Item.getItem(itemName));
+	}
+	
 	public Entity getRoomEnemy(Player player, String enemyName) {
 		return currentRoom.findEnemy(player, enemyName);
 	}
 
 	public boolean doesRoomContainItem(String itemName) {
 		Item inputItem = Item.getItem(itemName);
-		return currentRoom.containsItem(inputItem);
+		return currentRoom.hasItem(inputItem);
 	}
 
 	public void updateItems(Player player, String roomID) {
@@ -335,14 +342,14 @@ public class Player extends Entity {
 	public void expCalculator(int battleResult, ArrayList<Integer> counters, int enemyType) {
 		int expGained = 0;
 		int moneyGained = 0;
-		int attackCounter = counters.get(0);
+		int attackCounter = counters.get(0) - counters.get(2);
 		int consumableUsageCounter = counters.get(1);
 		int critHitCounter = counters.get(2);
 
 		/*for (Integer counter : counters) { //test
 			System.out.println(counter);
 		}*/
-
+		
 		// Base Exp Calculator
 		expGained += attackCounter * 5 + consumableUsageCounter * 10 + critHitCounter * 15;
 		moneyGained += attackCounter * 5 + critHitCounter * 10; 

@@ -88,7 +88,7 @@ public class TrialDriver {
 			return new Trial(2, "tutorial", "You must battle the Sparring Robot first!");
 		} else {
 			System.out.println("\nThe dummy breaks and collapses on the floor. It continues to speak..."
-					+ "\nRobot: Congratulations, you will now be sent to the contest hall. Good luck!\n");
+					+ "\n\nRobot: Congratulations, you will now be sent to the contest hall. Good luck!\n");
 			player.setDefaultRoom();
 			System.out.println(player.getRoomTravelDescription());
 			tutorialComplete = true;
