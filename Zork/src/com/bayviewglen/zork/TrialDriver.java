@@ -216,6 +216,9 @@ public class TrialDriver {
 				else if (rand == 3) player.getRoom().addEntity(hardEnt3);
 				else if (rand == 4) player.getRoom().addEntity(hardEnt4);
 			}
+			else {
+				System.out.println("No difficulty specified.");
+			}
 
 
 
