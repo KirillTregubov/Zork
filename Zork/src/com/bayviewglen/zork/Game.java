@@ -384,12 +384,14 @@ class Game {
 			try {
 				if (command.getFirstNumber() == 1) {
 					currentTrial = trialDriver.trialOne(0);
+					completingTrial = true;
 				} else if (command.getFirstNumber() == 2) {
-					if (trialDriver.isFirstTrialComplete())
+					if (trialDriver.isFirstTrialComplete()) {
 						currentTrial = trialDriver.trialTwo(0);
-					else {
-						completingTrial = false;
+						completingTrial = true;
+					} else {
 						System.out.println("You must complete Trial One first!");
+						completingTrial = false;
 					}
 					/* } else if (command.getFirstNumber() == 3) {
 
@@ -406,7 +408,6 @@ class Game {
 					System.out.println("Unable to start that trial! Please try again.");
 					return false;
 				}
-				completingTrial = true;
 			} catch (Exception e) {
 				System.out.println("Unable to start that trial! Please try again.");
 				return false;
@@ -652,11 +653,10 @@ class Game {
 			if (nextRoom != null) {
 				player.setCurrentRoom(nextRoom);
 				player.updateItems(player, nextRoom.getRoomID());
-				System.out.println(player.getRoomTravelDescription());
 				if (nextRoom.toString().equals("Shop")) {
 					currentTrial = trialDriver.shop(0, shop);
 					completingTrial = true;
-				}
+				} else System.out.println(player.getRoomTravelDescription());
 			} else System.out.println("That's not an option... You might be trapped.");
 		}
 	}

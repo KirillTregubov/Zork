@@ -83,7 +83,7 @@ public class TrialDriver {
 					+ " attacks first. When an attack is initiated, the entities defense stat along with any armor they have will negate some or most damage dealt,"
 					+ " with the minimum being 1. The battle will continue in a turn-based fashion until one entity loses all their HP. You have been given a free"
 					+ " Splintered Branch as a gift.");
-			System.out.println("\nTo engage in battle, type in 'battle', followed by my name. You should end up typing:\nbattle Sparring Robot");
+			System.out.println("\nTo engage in battle, type in 'battle', followed by the enemy's name. You should end up typing:\nbattle Sparring Robot");
 
 			return new Trial(2, "tutorial", "You must battle the Sparring Robot first!");
 		} else {
@@ -150,12 +150,8 @@ public class TrialDriver {
 
 	//starts trial 2 and checks if necessary trials are completed
 	public Trial trialTwo(int sectionCounter) {
-		/* Check if needed trials are completed
-		if (!trialOneComplete)
-			exitString += "needT1";//"You cannot access this trial until you complete Trial 1.";
-		 */
 		if (sectionCounter == 0) {
-			player.setCurrentRoom(player.masterRoomMap.get("1"));
+			player.setCurrentRoom(player.masterRoomMap.get("2"));
 			System.out.println(player.getRoomDescription());
 			// Return Trial
 			return new Trial(2, "trialtwo", "");  // change int
