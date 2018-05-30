@@ -74,7 +74,7 @@ public class Shop {
 		Item inputItem = Item.getItem(itemName);
 		if (money < shopItemPrices.get(shopItems.indexOf(inputItem)))
 			System.out.println("You do not have enough money to purchase this item.");
-		else if (player.inventory.containsItem(inputItem))
+		else if (player.inventory.hasItem(inputItem))
 			System.out.print("You already own this item.");
 		else {
 			money = money - shopItemPrices.get(shopItems.indexOf(inputItem));
@@ -88,7 +88,7 @@ public class Shop {
 		Item inputItem = Item.getItem(itemName);
 		if (money < shopItemPrices.get(shopItems.indexOf(inputItem)))
 			System.out.println("You do not have enough money to purchase this item.");
-		else if (player.inventory.containsItem(inputItem))
+		else if (player.inventory.hasItem(inputItem))
 			System.out.print("You already own this item.");
 		else {
 			money = money - shopItemPrices.get(shopItems.indexOf(inputItem));

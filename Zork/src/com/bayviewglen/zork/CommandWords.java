@@ -15,8 +15,30 @@ package com.bayviewglen.zork;
  */
 
 class CommandWords {
-	// a constant array that holds all valid command words
+	// A constant array that holds all valid commands, their types, and their descriptions
 	private static final String validCommands[][] = {
+			{"help", "assist aid", "default", "Prints the help message. Usage: \"help\""},
+			{"list", "", "default", "Lists things. Usage: \"list commands\""}, // add an example if list gains more uses
+			
+			{"go", "walk move advance", "place", "Allows you to go places. Usage: \"go west\", \"go down\""},
+			{"look", "glance inspect examine explore", "inventory item place enemy", "Allows you to look at things. Usage: \"look at inventory\", \"look at red apple\""},
+			{"check", "", "default", "Allows you to check things. Usage: \"check equipped\", \"check stats\""},
+			{"take", "grab acquire obtain pickup", "item", "Allows you to take things. Usage: \"take red apple\", \"take sword\""},
+			{"equip", "", "item", "Allows you to equip a weapon or armor. Usage: \"equip longsword\",\"equip titanium armor\""},
+			{"consume", "use ingest", "item", "Allows you to consume stuff. Usage: \"consume apple\", \"consume sword\""},
+			
+			{"battle", "fight attack strike challenge", "battle", "Starts a battle with an enemy. Usage: \"battle the man\", \"battle some dude\""},
+			{"start", "begin commence", "trial", "Starts a trial. Usage: \"start trial one\", \"start trial 2\""},
+			{"abandon", "stop surrender leave", "default", "Abandon a trial. Usage: \"abandon trial one\", \"abandon trial 2\""},
+			
+			{"heal", "treat", "default", "Ask to heal yourself (if you are in the Healing Center). Usage: \"heal me\""},
+			{"mute", "silence deafen", "default", "Mutes the game's sound. Usage: \"mute game\""},
+			{"unmute", "resume", "default", "Unmutes the game's sound. Usage: \"unmute game\""},
+			{"save", "record store", "default", "Saves the current state of your playthrough. Usage: \"save\""},
+			{"quit", "", "default", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}, {"stop", "default", "Stops playing the game. Usage: \"stop game\", \"stop playing\""}
+	};
+	
+	/*private static final String validCommands[][] = {
 			{"help", "default", "Prints the help message. Usage: \"help\""},
 			{"list", "default", "Lists things. Usage: \"list commands\""}, // add an example if list gains more uses
 			{"start", "trial", "Starts a trial. Usage: \"start trial one\", \"start trial 2\""},
@@ -43,7 +65,7 @@ class CommandWords {
 			{"fight", "battle", "Start to fight an enemy. Usage: \"fight the man\", \"fight some dude\""},
 			{"attack", "battle", "Start to attack an enemy. Usage: \"attack the man\", \"attack some dude\""},
 			{"challenge", "battle", "Challenges an enemy to a battle. \"challenge the man\", \"challenge some dude\""}
-	};
+	};*/
 
 	private static final String validBattleCommands[][] = {
 			{"run", "run", ""},
@@ -96,16 +118,40 @@ class CommandWords {
 	/**
 	 * Return the type of a given command (using the name of it)
 	 **/
-	public String getCommandType(String commandName) {
+	public String[] getCommandAlternatives(String commandName) {
 		for (int i = 0; i < validCommands.length; i++) {
 			if (validCommands[i][0] == commandName)
-				return validCommands[i][1];
+				return validCommands[i][1].split(" ");
 		}
 		return null;
 	}
 
 	/**
 	 * Return the type of a given command (using the name of it)
+	 **/
+	@Deprecated
+	public String[] getBattleCommandAlternatives(String commandName) { // change this
+		for (int i = 0; i < validBattleCommands.length; i++) {
+			if (validBattleCommands[i][0] == commandName);
+				//return validBattleCommands[i][1].split(" "); change
+		}
+		return null;
+	}
+	
+
+	/**
+	 * Return the type of a given command (using the name of it)
+	 **/
+	public String getCommandType(String commandName) {
+		for (int i = 0; i < validCommands.length; i++) {
+			if (validCommands[i][0] == commandName)
+				return validCommands[i][2];
+		}
+		return null;
+	}
+
+	/**
+	 * Return the type of a given battle command (using the name of it)
 	 **/
 	public String getBattleCommandType(String battleCommandName) {
 		for (int i = 0; i < validBattleCommands.length; i++) {
@@ -131,12 +177,12 @@ class CommandWords {
 	public String toString() {
 		String returnString = "";
 		for(int i = 0; i < validCommands.length; i++)
-			if (validCommands[i][2] != "IGNORE") returnString = returnString + validCommands[i][0] + " - " + validCommands[i][2] + "\n";
+			if (validCommands[i][2] != "IGNORE") returnString = returnString + validCommands[i][0] + " - " + validCommands[i][3] + "\n";
 		return returnString;
 	}
 
 	/*
-	 * Returns a string of all available commands and their description
+	 * Returns a string of all available battle commands and their description
 	 */
 	public String listBattleCommands() {
 		String returnString = "";

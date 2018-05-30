@@ -51,8 +51,7 @@ public class Battle {
 			if (player.stats.getSpeed() >= enemy.stats.getSpeed()) {
 				System.out.print("You move first. ");
 				processUserInput();
-
-				if (enemy.isAlive()) {
+				if (!didRunAway && enemy.isAlive()) {
 					System.out.print("\n" + enemy.toString() + " will now move. It has " + enemy.stats.getCurrentHP() + " HP left. ");
 					damageDealingProcessor(true);
 				}
@@ -68,8 +67,6 @@ public class Battle {
 			}
 		}
 
-		System.out.println("");
-
 		if (didRunAway) {
 			System.out.println("You fled the battle in panic.");
 			Game.battleMusic.EndStop();
@@ -78,7 +75,7 @@ public class Battle {
 			return 0; // Retreat integer
 		}
 		else if (!enemy.isAlive()) {
-			System.out.print("You have defeated " + enemy.toString() + ""
+			System.out.print("\nYou have defeated " + enemy.toString() + ""
 					+ "\nYou have " + player.stats.getCurrentHP() + " health remaining, ");
 			player.expCalculator(1, getCounters(), Entity.ENEMY_INDEX);
 			Game.battleMusic.EndStop();
@@ -87,7 +84,7 @@ public class Battle {
 			return 1; // Victory integer
 		}
 		else if (!player.isAlive()) {
-			System.out.println("You have been defeated by " + enemy.toString() + ",");
+			System.out.println("\nYou have been defeated by " + enemy.toString() + ",");
 			player.expCalculator(2, getCounters(), Entity.ENEMY_INDEX);
 			enemy.stats.setCurrentHP(enemy.stats.getMaximumHP()); // reset enemy HP
 			player.setDefaultRoom(); // teleport to Contest Hall
@@ -120,7 +117,7 @@ public class Battle {
 		} else if (commandType.equals("run")) {
 			didRunAway = true;
 		} else if(commandType.equals("item")) {
-			if (player.inventory.containsItem(contextWord)) {
+			if (player.inventory.hasItem(contextWord)) {
 				player.consumeItem(contextWord);
 				consumableUsageCounter++;
 				System.out.println("You have successfully consumed " + Item.getItem(contextWord) + "!");

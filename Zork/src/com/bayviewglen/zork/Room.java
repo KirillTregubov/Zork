@@ -222,7 +222,7 @@ class Room {
 	/**
 	 * Returns true if the room contains the given item.
 	 */
-	public boolean containsItem(Item item) {
+	public boolean hasItem(Item item) {
 		for (int i = 0; i < items.size(); i++) {
 			if (Utils.containsCompareBoth(items.get(i).toString(), item.toString())) return true;
 		}
@@ -295,7 +295,8 @@ class Room {
 
 	public void updateItems(Player player, String roomID) {
 		for (int i = 0; i < items.size(); i++) {
-			if (player.inventory.containsItem(items.get(i).toString()) && player.didPickUpItem(items.get(i).toString(), roomID)) {
+			if (player.inventory.hasItem(items.get(i).toString()) && player.didPickUpItem(items.get(i).toString(), roomID)) {
+				
 				if (items.get(i).isStackable) {
 					Item oldItem = new Item(items.get(i));
 					oldItem.setAmount(originalItemAmounts.get(i)

@@ -138,6 +138,6 @@ ID: 1101
 Name: Challenge Gate
 Description: Welcome to the Challenge Gate. (instructions)
 Exits: D=0-0
-Items: 
+Items: 39-4, 40
 Trial:
 Entities: OP Squire <Boss> <15,15,2,0,2,0.5,0.1>/ Goofy Goober <Enemy> <10,10,1,0,1,0.5,0.0>/ Green Gooblin <Enemy> <10,10,1,0,1,0.5,0.0>

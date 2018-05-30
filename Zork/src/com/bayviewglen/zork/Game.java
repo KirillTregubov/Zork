@@ -67,7 +67,6 @@ class Game {
 			musicMainTheme = new Sound(FILE_LOCATION + "music1.wav");
 			trialDriver = new TrialDriver();
 
-
 			// Load game if saved
 			if (gameIsSaved()) load();
 			else player.setCurrentRoom(player.masterRoomMap.get(DEFAULT_ROOM));
@@ -81,7 +80,7 @@ class Game {
 
 	/**
 	 * 
-	 *  Main play routine (loops until quit
+	 *  Main play routine (loops until quit)
 	 */
 	public void play() {
 		// Initiate Music
@@ -304,7 +303,7 @@ class Game {
 		// list
 		else if (commandName.equalsIgnoreCase("list")) printCommands(); // might need to add contextWord
 		// go
-		else if (commandName.equalsIgnoreCase("go") || commandName.equalsIgnoreCase("walk")) { 
+		else if (commandName.equalsIgnoreCase("go")) { 
 			goRoom(command, commandName);
 		} // start
 		else if (commandType.equalsIgnoreCase("trial")) {
@@ -356,21 +355,10 @@ class Game {
 				player.setDefaultRoom();
 				System.out.println("\n" + player.getRoomTravelDescription());
 			} return false;
-		} // teleport
-		else if (commandName.equalsIgnoreCase("teleport") || commandName.equalsIgnoreCase("tp")) {
-			Room nextRoom = player.masterRoomMap.get(contextWord);
-			if (nextRoom != null) {
-				player.setCurrentRoom(nextRoom);
-				System.out.println(player.getRoomTravelDescription());
-			}
 		} // heal
 		else if (commandName.equalsIgnoreCase("heal")) {
 			if (player.getRoomID().equals("12")) new HealingCenter(player);
-			else System.out.println("You are not in the Healing Center, therefore you cannot be healed!s");
-			/*} // give
-		else if (commandName.equalsIgnoreCase("give")) {
-		System.out.println("What would you like to receive?");
-		continueCommand(commandName);*/
+			else System.out.println("You are not in the Healing Center, therefore you cannot be healed!");
 		} // battle
 		else if (commandType.equalsIgnoreCase("battle")) { // || commandName.equalsIgnoreCase("fight") || commandName.equalsIgnoreCase("challenge") || commandName.equalsIgnoreCase("attack")
 			if (contextWord == null) {
@@ -397,36 +385,36 @@ class Game {
 				try {
 					try {
 						if (command.getFirstNumber() != null) {
-							System.out.println("You can only eat one thing at a time! How big do you think your mouth is?!");
+							System.out.println("You can only consume one thing at a time! How big do you think your mouth is?!");
 							return false;
 						}
 					} catch (Exception e) {
 					}
 					if (player.consumeItem(contextWord)) {
 						System.out.println("You consumed " + Item.getItem(contextWord));
-					} else if (!player.inventory.containsItem(contextWord)) System.out.println("That item is not in your inventory!");
+					} else if (!player.inventory.hasItem(contextWord)) System.out.println("That item is not in your inventory!");
 					else System.out.println("You cannot consume that.");
 				} catch (Exception e) {
-					System.out.println("That's not an item! Even if it was, do you really think you should be eating at a time like this?");
+					System.out.println("That's not an item! Even if it was, do you really think you should be consuming something at a time like this?");
 				}
 			} else System.out.println("What would you like to consume?");
-			//continueCommand("eat");
 		} // look
-		else if (commandName.equalsIgnoreCase("look") || commandName.equalsIgnoreCase("inspect")) { // might want to add look around?
+		else if (commandName.equalsIgnoreCase("look")) { // might want to add look around?
 			if (contextWord != null) {
-				if (commandType.contains(" ")) System.out.println("You are not able to inspect that! Please be more specific.");
+				if (commandType.contains(" ")) System.out.println("You cannot look at that! Please be more specific.");
+				// Item
 				if (commandType.equals("item")) {
-					if (contextWord.equalsIgnoreCase("equipped")) {
-						System.out.println(player.checkEquippedItems());
-					}
+					if (contextWord.equalsIgnoreCase("equipped")) System.out.println(player.checkEquippedItems());
 					String check = player.itemCanBeLookedAt(contextWord);
 					if (check.equals("roomrepeated")) System.out.println("Please be more specific. There are multiple items with this name!");
 					else if (check.equals("contains")) System.out.println(Item.getItem(contextWord).getDescription() + "\n" + Item.getItem(contextWord).stats);
 					else System.out.println("That item is not in your inventory or in the " + player.getRoomName() + ".");
-				} else if (commandType.equals("inventory")) {
+				} // Inventory
+				else if (commandType.equals("inventory")) {
 					if (player.inventory.isEmpty()) System.out.println("Your inventory is empty!");
 					else Utils.formattedPrint(false, "Your inventory contains:" + player.inventory);
-				} else if (commandType.equals("place")) {
+				} // Place
+				else if (commandType.equals("place")) {
 					if (contextWord.equals("")) System.out.println(player.getRoomDescription());
 					else {
 						int count = 0;
@@ -441,22 +429,17 @@ class Game {
 						if (count == 1) {
 							if (roomName.equals(player.getRoomName()))  // doesn't work well / at all
 								System.out.println(player.getRoomDescription());
-							else
-								System.out.println("In the future, you will be able to get directions to the " + roomName); // implement more
+							else System.out.println("In the future, you will be able to get directions to the " + roomName); // implement more
 						}
-						else System.out.println("You are not able to inspect that! Please be more specific.");
+						else System.out.println("You cannot look at that! Please be more specific.");
 					}		
-				} else if (commandType.equals("enemy")) {
+				} // Enemy
+				else if (commandType.equals("enemy")) {
 					Entity enemy = player.getRoomEnemy(player, contextWord);
-					if (enemy != null)
-						System.out.println(enemy.toString() + "'s stats are: " + "\n" + enemy.stats);
-					else System.out.println("You are not able to inspect that! Please be more specific.");
+					if (enemy != null) System.out.println(enemy.toString() + "'s stats are: " + "\n" + enemy.stats);
+					else System.out.println("You cannot look at that! Please be more specific.");
 				}
-			} else {
-				System.out.print("What would you like to ");
-				if (commandName.equalsIgnoreCase("look")) System.out.println("look at?");
-				else System.out.println(commandName + "?");
-			}
+			} else System.out.print("What would you like to look at?");
 		} // check
 		else if (commandName.equalsIgnoreCase("check")) {
 			if (contextWord.equalsIgnoreCase("equipped")) System.out.println(player.checkEquippedItems());
@@ -467,28 +450,31 @@ class Game {
 		} // equip
 		else if (commandName.equalsIgnoreCase("equip")) {
 			if (Item.isItem(contextWord)) {
-				if (player.inventory.containsItem(contextWord)) {
+				if (player.inventory.hasItem(contextWord)) {
 					if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.WEAPON_INDEX])) {
 						player.setEquippedWeapon(player.inventory.getItem(contextWord));
-						// print
+						System.out.println("You successfully equipped " + player.inventory.getItem(contextWord) + "!");
 					} else if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.WEAPON_INDEX])) {
 						player.setEquippedArmor(player.inventory.getItem(contextWord));
-						// print
-					} else System.out.println("The given item is not armor or a weapon.");
-				} else System.out.println("An item must be in your inventory for it to be equipped!");
-			} else System.out.println("You are not able to equip that! Check your spelling, otherwise it probably doesn't exist.");
+						System.out.println("You successfully equipped " + player.inventory.getItem(contextWord) + "!");
+					} else System.out.println("The given item is not a piece of armor, or a weapon.");
+				} else System.out.println("You can only equip items in your inventory!");
+			} else System.out.println("What would you like to equip?");
 		} // take
 		else if (commandName.equalsIgnoreCase("take") || (commandName.equalsIgnoreCase("pickup") || (commandName.equalsIgnoreCase("grab")))) { // add way to pick up amounts of stackable items
 			if (contextWord != null) {
 				//System.out.println(player.itemCanBePickedUp(givenItem)); test command
-				if (player.itemCanBePickedUp(contextWord).equals("roomrepeated")) {
+				if (player.itemCanBePickedUp(contextWord).equals("roomrepeated"))
 					System.out.println("Please be more specific. There are multiple items with this name!");
-					/*} else if (player.itemCanBePickedUp(givenItem).equals("inventorycontains")) { may be needed in the future
-					System.out.println("This item is already in your inventory!");*/
-				} else if (player.itemCanBePickedUp(contextWord).equals("roomnotcontains")) {
+				else if (player.itemCanBePickedUp(contextWord).equals("inventorycontains")) //may be needed in the future
+					System.out.println("This item is already in your inventory!");
+				else if (player.itemCanBePickedUp(contextWord).equals("roomnotcontains"))
 					System.out.println("There is no " + Item.getItem(contextWord) + " in this room!");
-				} else if (player.itemCanBePickedUp(contextWord).isEmpty()) {
+				
+				
+				else if (player.itemCanBePickedUp(contextWord).isEmpty()) {
 					if (numbers != null) {
+						System.out.println("One");
 						if (player.pickUpItem(contextWord, player.getRoomID(), numbers) == null) {
 							player.updateItems(player, player.getRoomID());
 							if (numbers[0] > 1) System.out.println(numbers[0] + " " + Item.getItem(contextWord) + "s were added to your inventory!");
@@ -504,12 +490,7 @@ class Game {
 						else if (player.pickUpItem(contextWord, player.getRoomID()) == "toomuch") System.out.println("TOO MUCH");
 						else System.out.println("Encountered an error while adding the item to your inventory!");
 					}
-				} else {
-					System.out.print("You weren't able to ");
-					if (contextWord.equalsIgnoreCase("take")) System.out.print("take");
-					else System.out.print("pick up");
-					System.out.println(" this item... It probably doesn't exist.");
-				}
+				} else System.out.println("You cannot take that! Please be more specific.");
 			} else {
 				System.out.print("You cannot");
 				if (commandName.equalsIgnoreCase("take")) System.out.println("take that.");
@@ -529,7 +510,7 @@ class Game {
 		else if (commandName.equalsIgnoreCase("quit") || commandName.equalsIgnoreCase("stop")) { // player wants to quit
 			return true;
 		} // wrong command
-		else System.out.println("The command " + commandName + " has been unaccounted for. Valve, please fix!");
+		else System.out.println("The command " + commandName + " has been unaccounted for. Kirill, please fix!");
 		return false;
 	}
 
