@@ -656,6 +656,9 @@ class Game {
 				if (nextRoom.toString().equals("Shop")) {
 					currentTrial = trialDriver.shop(0, shop);
 					completingTrial = true;
+				} else if (nextRoom.toString().equals("Challenge Gate")) {
+					currentTrial = trialDriver.challengeGate(0, 0);
+					completingTrial = true;
 				} else System.out.println(player.getRoomTravelDescription());
 			} else System.out.println("That's not an option... You might be trapped.");
 		}

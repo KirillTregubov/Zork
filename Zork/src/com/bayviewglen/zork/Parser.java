@@ -329,6 +329,20 @@ class Parser {
 		}
 		return false;
 	}
+	
+	public static int getDifficultyAnswer() {
+		System.out.print("\n> ");
+		Scanner difficultyInput = new Scanner(System.in);
+		String inputString = difficultyInput.nextLine().toLowerCase();
+		if (Utils.containsIgnoreCase(inputString, "easy") || Utils.containsIgnoreCase(inputString,"ez")) {
+			return 0;
+		} else if (Utils.containsIgnoreCase(inputString, "medium") || Utils.containsIgnoreCase(inputString,"mid")) {
+			return 1;
+		} else if (Utils.containsIgnoreCase(inputString, "hard") || Utils.containsIgnoreCase(inputString,"extreme") || Utils.containsIgnoreCase(inputString,"impossible")) {
+			return 2;
+		}
+		return 0;
+	}
 
 	public Command getSecondaryCommand() {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

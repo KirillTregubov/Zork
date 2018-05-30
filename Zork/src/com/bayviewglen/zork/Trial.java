@@ -14,12 +14,20 @@ public class Trial {
 	private int sections;
 	private String trialName;
 	String leaveReason = "";
+	int difficulty;
 	//private ArrayList<String> dialogue;
 
 	Trial(int sections, String trialName, String leaveReason) {
 		this.sections = sections;
 		this.trialName = trialName;
 		this.leaveReason = leaveReason;
+	}
+	
+	Trial(int sections, String trialName, String leaveReason, int difficulty) {
+		this.sections = sections;
+		this.trialName = trialName;
+		this.leaveReason = leaveReason;
+		this.difficulty = difficulty;
 	}
 
 	public int getSections() {
@@ -28,6 +36,10 @@ public class Trial {
 
 	public String getLeaveReason() {
 		return leaveReason;
+	}
+	
+	public int getDifficulty() {
+		return difficulty;
 	}
 
 	// toString method

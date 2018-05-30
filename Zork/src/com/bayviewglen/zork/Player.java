@@ -348,6 +348,10 @@ public class Player extends Entity {
 	public Entity getRoomEnemy(Player player, String enemyName) {
 		return currentRoom.findEnemy(player, enemyName);
 	}
+	
+	public void getRoomAddEntity(Entity entity) {
+		currentRoom.addEntity(entity);
+	}
 
 	public boolean doesRoomContainItem(String itemName) {
 		Item inputItem = Item.getItem(itemName);
