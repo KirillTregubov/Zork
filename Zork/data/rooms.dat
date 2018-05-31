@@ -16,17 +16,17 @@ Entities: Sparring Robot <Enemy> <10,10,1,0,1,0.5,0.0>
 
 ID: 0 0
 Name: Contest Hall
-Description: This is room<br>1
+Description: A grand hall with many contestants hurrying around, trying to complete all the trials.
 Exits: U=13, W=11, E=12
-Items: 39-4, 40, 41
+Items:
 Trial:
-Entities: OP Squire <Boss> <15,15,2,0,2,0.5,0.1>/ Sparring Robot <Enemy> <10,10,1,0,1,0.5,0.0>
+Entities:
 
 ID: 1
 Name: First Room of Trial 1
 Description: 
 Exits: U=1-1
-Items: 39-4
+Items: 
 Trial:
 Entities: 
 
@@ -34,7 +34,7 @@ ID: 1 1
 Name: Second Room of Trial 1
 Description: 
 Exits: U=1-2
-Items: 39-4
+Items: 
 Trial:
 Entities: Squire <Enemy> <10,10,1,0,1,0.7,0.0>
 
@@ -42,17 +42,49 @@ ID: 1 10
 Name: Third Room of Trial 1
 Description: 
 Exits: U=0-0
-Items: 39-4
+Items:
 Trial:
 Entities: Samurai King <Boss> <10,10,1,0,1,0.8,0.0>
 
 ID: 10
 Name: First Room of Trial 2
-Description: Welcome to Trial 2. (instructions)
-Exits: D=2, U=4
-Items: 
+Description: 
+Exits: U=2-1
+Items: 29-2
 Trial:
 Entities: 
+
+ID: 10 1
+Name: Second Room of Trial 2
+Description: 
+Exits: W=2-2, U=2-3, E=2-4
+Items: 
+Trial:
+Entities:
+
+ID: 10 10
+Name: West Room of Trial 2
+Description: 
+Exits: D=2
+Items: 
+Trial:
+Entities: The Living Shadow <Boss> <20,20,3,1,2,0.8,0.0>
+
+ID: 10 11
+Name: Top Room of Trial 2
+Description: 
+Exits: D=2
+Items: 
+Trial:
+Entities: Sky-Night Warrior <Boss> <22,22,4,1,2,0.8,0.0>
+
+ID: 10 100
+Name: East Room of Trial 2
+Description: 
+Exits: D=2
+Items: 
+Trial:
+Entities: The Pharaoh <Boss> <15,15,3,2,1,0.8,0.0>
 
 ID: 11
 Name: Trial 3 Start

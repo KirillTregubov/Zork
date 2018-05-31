@@ -154,13 +154,35 @@ public class TrialDriver {
 		if (sectionCounter == 0) {
 			player.setCurrentRoom(player.masterRoomMap.get("2"));
 			System.out.println(player.getRoomDescription());
+			
+			Utils.formattedPrint(true, "Narrator: You enter a spherical room surrounded by darkness. As you walk into the room you feel your feet lift off the ground."
+					+ " The room has no gravity. On the other side of the room you notice George, the hotel concierge sitting on an office chair next to a desk, floating"
+					+ " around the room. There is a small door on the other side of the room. You make your way to George by pushing off the wall behind you. George"
+					+ " notices you and motions for you to come to him.");
+			Utils.formattedPrint(true, "George: Hey there! Welcome to the second trial! I'm hoping you aren't challenging this trial before doing the first one. That"
+					+ " wouldn't be very smart. Anyways if you still want to continue, just head on through. Oh, and... You might want to take the heal potions over there."
+					+ " They might help. Good luck!");
+			
 			// Return Trial
-			return new Trial(2, "trialtwo", "");  // change int
+			return new Trial(3, "Trial Two", "");  // change int
 		} else if (sectionCounter == 1) {
-
+			Utils.formattedPrint(true, "Narrator: You are now in a plain white room. A bright light shines above you that hurts your eyes to look at. You hear noises"
+					+ " ahead of you, to your left and to your right. There is a sign levitating in front of you.");
+			System.out.println("\nSign:\n"
+					+ "Now you must choose one of your foes\n"
+					+ "Ahead stands a great mighty pharaoh\n" 
+					+ "To your left a nest of the best of the sky\n"
+					+ "To your right lie fright from danger within night.");
 			// Return Trial
-			return new Trial(2, "trialtwo", "");  // change int
+			return new Trial(3, "Trial Two", "");  // change int
+		} else if (sectionCounter == 2) {
+			Utils.formattedPrint(true, "Narator: Congratulations! You have beaten the boss. You are being teleported back to the Contest Hall. On your trial keychain the trial 2 key appears.");
+			player.setDefaultRoom();
+			System.out.println("\n" + player.getRoomTravelDescription());
+			trialTwoComplete = true;
+			return null;
 		}
+		
 		return null;
 	}
 

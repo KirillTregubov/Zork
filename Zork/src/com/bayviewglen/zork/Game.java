@@ -216,11 +216,11 @@ class Game {
 			System.out.print("Welcome back, " + player.name
 					+ "\nAutomatically loaded game state from " + timeGameWasSaved()
 					+ "\nLast known location: " + player.getRoomName());
-			
+
 			String inventoryString = " Nothing was found...";
 			if (!player.inventory.isEmpty()) inventoryString = player.inventory + "\n";
 			Utils.formattedPrint(true, "Last known items in inventory:" + inventoryString);
-			
+
 			if (completingTrial) System.out.println("WARNING: You are currently completing a trial!");
 			System.out.println(player.getRoomDescription());
 		} else {
@@ -307,6 +307,7 @@ class Game {
 				finished = processCommand(command);
 			}
 			if (finished) return true;
+			else if (!completingTrial) return false;
 			else { 
 				i++;
 				currentTrial = null;
@@ -351,25 +352,18 @@ class Game {
 			if (finished) return true;
 			else if (!completingTrial) return false;
 			else {
-				currentTrial = trialDriver.trialOne(i);
-				while (completingTrial && !finished && player.getRoomHasEnemies()) finished = executeCommand();
+				currentTrial = trialDriver.trialTwo(i);
+				while (completingTrial && !finished && player.getRoomID().equals("2-1")) finished = executeCommand();
 				if (finished) return true;
 				else if (!completingTrial) return false;
 				else {
-					currentTrial = trialDriver.trialOne(++i);
-					while (completingTrial && !finished && player.getRoomID().equals("1-1")) finished = executeCommand();
+					while (completingTrial && !finished && player.getRoomHasBosses()) finished = executeCommand();
 					if (finished) return true;
 					else if (!completingTrial) return false;
 					else { 
-						currentTrial = trialDriver.trialOne(++i);
-						while (completingTrial && !finished && player.getRoomHasBosses()) finished = executeCommand();
-						if (finished) return true;
-						else if (!completingTrial) return false;
-						else { 
-							currentTrial = trialDriver.trialOne(++i);
-							completingTrial = false;
-							return false;
-						}
+						currentTrial = trialDriver.trialTwo(++i);
+						completingTrial = false;
+						return false;
 					}
 				}
 			}
@@ -778,7 +772,7 @@ class Game {
 					else
 						savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ",", i)+2, Utils.ordinalIndexOf(saveFile, ",", i+1));
 				}
-				
+
 				player.inventory.loadInventory(savedInventory);
 				player.updateItems(player, player.getRoomID());
 

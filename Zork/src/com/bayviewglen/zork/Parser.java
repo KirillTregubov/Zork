@@ -62,25 +62,12 @@ class Parser {
 			//Dirty fix
 			if (Utils.containsCompareBoth("pick up", inputLine)) inputLine = inputLine.substring(0, inputLine.indexOf("pick")) + "pickup" + inputLine.substring(inputLine.indexOf("pick up")+7);
 
-			String inputArr[] = inputLine.split(" ");
 			// Format Input String
-			for (String inputString : inputArr) {
-				for (String validCommand : commands.getValidCommands()) {
-					if (inputString.equalsIgnoreCase(validCommand)) {
-						command = validCommand;
-						commandType = commands.getCommandType(command);
-						break;
-					}
-					for (String alternativeCommand : commands.getCommandAlternatives(validCommand)) {
-						if (inputString.equalsIgnoreCase(alternativeCommand)) {
-							actualCommand = alternativeCommand;
-							command = validCommand;
-							commandType = commands.getCommandType(command);
-							break;
-						}
-					}
-				}
-			}
+			String inputArr[] = inputLine.split(" ");
+			Command inputCommand = getCommandInString(inputArr);
+			command = inputCommand.getCommand();
+			commandType = inputCommand.getCommandType();
+			if (inputCommand.hasActualCommand()) actualCommand = inputCommand.getActualCommand();
 
 			// Format input / numbers
 			inputLine = Utils.detectNumbers(inputLine);
@@ -185,6 +172,21 @@ class Parser {
 		return new Command(null, null);
 	}
 
+	public Command getCommandInString(String[] inputArr) {
+		// Format Input String
+		for (String inputString : inputArr) {
+			for (String validCommand : commands.getValidCommands()) {
+				if (inputString.equalsIgnoreCase(validCommand))
+					return new Command(validCommand, commands.getCommandType(validCommand));
+				for (String alternativeCommand : commands.getCommandAlternatives(validCommand)) {
+					if (inputString.equalsIgnoreCase(alternativeCommand))
+						return new Command(true, validCommand, commands.getCommandType(validCommand), alternativeCommand);
+				}
+			}
+		}
+		return null;
+	}
+
 	public Command getBattleCommand() {
 		try {
 			// Initialize variables
@@ -202,25 +204,12 @@ class Parser {
 				System.out.println ("There was an error reading input: " + e.getMessage());
 			}
 
-			String inputArr[] = inputLine.split(" ");
 			// Format Input String
-			for (String inputString : inputArr) {
-				for (String validCommand : commands.getValidBattleCommands()) {
-					if (inputString.equalsIgnoreCase(validCommand)) {
-						command = validCommand;
-						commandType = commands.getBattleCommandType(command);
-						break;
-					}
-					for (String alternativeCommand : commands.getBattleCommandAlternatives(validCommand)) {
-						if (inputString.equalsIgnoreCase(alternativeCommand)) {
-							actualCommand = alternativeCommand;
-							command = validCommand;
-							commandType = commands.getBattleCommandType(command);
-							break;
-						}
-					}
-				}
-			}
+			String inputArr[] = inputLine.split(" ");
+			Command inputCommand = getBattleCommandInString(inputArr);
+			command = inputCommand.getCommand();
+			commandType = inputCommand.getCommandType();
+			if (inputCommand.hasActualCommand()) actualCommand = inputCommand.getActualCommand();
 
 			// Update inputLine
 			inputLine = inputLine.replaceAll("\\d","").replaceAll(" +", " ");
@@ -242,6 +231,21 @@ class Parser {
 			return new Command(null, null);
 		}
 	}
+	
+	public Command getBattleCommandInString(String[] inputArr) {
+		// Format Input String
+		for (String inputString : inputArr) {
+			for (String validCommand : commands.getValidBattleCommands()) {
+				if (inputString.equalsIgnoreCase(validCommand))
+					return new Command(validCommand, commands.getBattleCommandType(validCommand));
+				for (String alternativeCommand : commands.getBattleCommandAlternatives(validCommand)) {
+					if (inputString.equalsIgnoreCase(alternativeCommand))
+						return new Command(true, validCommand, commands.getBattleCommandType(validCommand), alternativeCommand);
+				}
+			}
+		}
+		return null;
+	}
 
 	public Command getShopCommand(Shop shop) {
 		try {
@@ -260,25 +264,12 @@ class Parser {
 				System.out.println ("There was an error reading input: " + e.getMessage());
 			}
 
-			String inputArr[] = inputLine.split(" ");
 			// Format Input String
-			for (String inputString : inputArr) {
-				for (String validCommand : commands.getValidShopCommands()) {
-					if (inputString.equalsIgnoreCase(validCommand)) {
-						command = validCommand;
-						commandType = commands.getShopCommandType(command);
-						break;
-					}
-					for (String alternativeCommand : commands.getShopCommandAlternatives(validCommand)) {
-						if (inputString.equalsIgnoreCase(alternativeCommand)) {
-							actualCommand = alternativeCommand;
-							command = validCommand;
-							commandType = commands.getShopCommandType(command);
-							break;
-						}
-					}
-				}
-			}
+			String inputArr[] = inputLine.split(" ");
+			Command inputCommand = getShopCommandInString(inputArr);
+			command = inputCommand.getCommand();
+			commandType = inputCommand.getCommandType();
+			if (inputCommand.hasActualCommand()) actualCommand = inputCommand.getActualCommand();
 
 			// Update inputLine
 			inputLine = inputLine.replaceAll("\\d","").replaceAll(" +", " ");
@@ -318,7 +309,21 @@ class Parser {
 		} catch (Exception e) {}
 		return new Command(null, null);
 	}
-
+	
+	public Command getShopCommandInString(String[] inputArr) {
+		// Format Input String
+		for (String inputString : inputArr) {
+			for (String validCommand : commands.getValidShopCommands()) {
+				if (inputString.equalsIgnoreCase(validCommand))
+					return new Command(validCommand, commands.getShopCommandType(validCommand));
+				for (String alternativeCommand : commands.getShopCommandAlternatives(validCommand)) {
+					if (inputString.equalsIgnoreCase(alternativeCommand))
+						return new Command(true, validCommand, commands.getShopCommandType(validCommand), alternativeCommand);
+				}
+			}
+		}
+		return null;
+	}
 
 	public static boolean getYesNoAnswer() {
 		System.out.print("\n> ");
@@ -329,7 +334,7 @@ class Parser {
 		}
 		return false;
 	}
-	
+
 	public static int getDifficultyAnswer() {
 		System.out.print("\n> ");
 		Scanner difficultyInput = new Scanner(System.in);

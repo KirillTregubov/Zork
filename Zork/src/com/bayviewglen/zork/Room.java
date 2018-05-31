@@ -98,7 +98,7 @@ class Room {
 	public String longDescription() {
 		String returnString = "Currently in: " + roomName;
 		if (description.length() > 1) returnString += "\n" + description;
-		returnString += "\n" + listExits();
+		returnString += "\n" + listExits(); // hide trial exits if (!roomID.equals("2-1")) 
 		if (hasItems()) returnString += "\n" + listItems();
 		if (hasEnemies()) returnString += "\n" + listEnemies();
 		if (hasBosses()) returnString += "\n" + listBosses();
@@ -112,7 +112,7 @@ class Room {
 	public String travelDescription() {
 		String returnString = "Going to: " + roomName;
 		if (description.length() > 1) returnString += "\n" + description;
-		returnString += "\n" + listExits();
+		returnString += "\n" + listExits(); // hide trial exits
 		if (hasItems()) returnString += "\n" + listItems();
 		if (hasEnemies()) returnString += "\n" + listEnemies();
 		if (hasBosses()) returnString += "\n" + listBosses();

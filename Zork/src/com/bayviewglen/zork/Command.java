@@ -29,6 +29,7 @@ package com.bayviewglen.zork;
 class Command {
 	private String command;
 	private String commandType;
+	private String actualCommand;
 	private String contextWord;
 	private Integer numbers[];
 
@@ -61,6 +62,12 @@ class Command {
 		this.contextWord = contextWord;
 		this.numbers = numbers;
 	}
+	
+	public Command (boolean isAlternate, String command, String commandType, String actualCommand) {
+		this.command = command;
+		this.commandType = commandType;
+		this.actualCommand = actualCommand;
+	}
 
 	public String getCommand() {
 		return command;
@@ -72,6 +79,14 @@ class Command {
 
 	public String getContextWord() {
 		return contextWord;
+	}
+	
+	public String getActualCommand() {
+		return actualCommand;
+	}
+	
+	public boolean hasActualCommand() {
+		return actualCommand != null;
 	}
 
 	public Integer[] getNumbers() {
