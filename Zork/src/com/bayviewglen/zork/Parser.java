@@ -340,8 +340,9 @@ class Parser {
 			return 1;
 		} else if (Utils.containsIgnoreCase(inputString, "hard") || Utils.containsIgnoreCase(inputString,"extreme") || Utils.containsIgnoreCase(inputString,"impossible")) {
 			return 2;
+		} else {
+			return -1;
 		}
-		return 0;
 	}
 
 	public Command getSecondaryCommand() {

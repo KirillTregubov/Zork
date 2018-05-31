@@ -288,7 +288,29 @@ class Game {
 			return false; // should be unreachable
 		} // Challenge Gate
 		else if (currentTrial.toString().equals("Challenge Gate")) {
-
+			int i = 1;
+			currentTrial = trialDriver.challengeGate(i, currentTrial.getDifficulty());
+			System.out.println("\n" + player.getRoomDescription());
+			while (!finished && player.getRoomID().equals("13")) {
+				System.out.println("");
+				Command command = parser.getCommand();
+				if (command.getCommand().equals("go") && command.getContextWord().equals("down")) {
+					if (player.getRoomHasEnemies()) {
+						Utils.formattedPrint(false, "You did not kill the enemy you challenged. They got bored waiting for you to battle them, and left.\n");
+						player.getRoomResetEntities();
+					}
+					currentTrial = null;
+					completingTrial = false;
+				}
+				finished = processCommand(command);
+			}
+			if (finished) return true;
+			else { 
+				i++;
+				currentTrial = null;
+				completingTrial = false;
+				return false;
+			}
 			// code here
 
 		} // Trial One
@@ -511,7 +533,7 @@ class Game {
 					}		
 				} // Enemy
 				else if (commandType.equals("enemy")) {
-					Entity enemy = player.getRoomEnemy(player, contextWord);
+					Entity enemy = player.getRoomEnemy(contextWord);
 					if (enemy != null) System.out.println(enemy.toString() + "'s stats are: " + "\n" + enemy.stats);
 					else System.out.println("You cannot look at that! Please be more specific.");
 				}

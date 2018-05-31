@@ -364,7 +364,12 @@ class Room {
 		}
 		return returnString;
 	}
-
+	
+	public void resetEntities() {
+		enemies = null;
+		bosses = null;
+		npcs = null;
+	}
 
 	public ArrayList<Entity> getRoomEnemies() {
 		return enemies;

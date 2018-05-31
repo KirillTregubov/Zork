@@ -345,12 +345,16 @@ public class Player extends Entity {
 		return currentRoom.startCustomBattle(this, enemyName);
 	}
 
-	public Entity getRoomEnemy(Player player, String enemyName) {
-		return currentRoom.findEnemy(player, enemyName);
+	public Entity getRoomEnemy(String enemyName) {
+		return currentRoom.findEnemy(this, enemyName);
 	}
 	
 	public void getRoomAddEntity(Entity entity) {
 		currentRoom.addEntity(entity);
+	}
+	
+	public void getRoomResetEntities() {
+		currentRoom.resetEntities();
 	}
 
 	public boolean doesRoomContainItem(String itemName) {

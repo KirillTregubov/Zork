@@ -156,7 +156,7 @@ public class TrialDriver {
 			// Return Trial
 			return new Trial(2, "trialtwo", "");  // change int
 		} else if (sectionCounter == 1) {
-			
+
 			// Return Trial
 			return new Trial(2, "trialtwo", "");  // change int
 		}
@@ -165,13 +165,19 @@ public class TrialDriver {
 
 	public Trial challengeGate(int sectionCounter, int difficulty) {
 		if (sectionCounter == 0) {
-			Utils.formattedPrint(true, "Welcome to the Challenge Gate! Please select a difficulty: easy, medium, or hard.");
-			int inputDifficulty = Parser.getDifficultyAnswer();
-			
-			return new Trial(3, "challenge", "", inputDifficulty);
+			Utils.formattedPrint(false, "Welcome to the Challenge Gate! Please select a difficulty: easy, medium, or hard.");
+			int inputDifficulty = -2;
+			while (inputDifficulty != 0 && inputDifficulty != 1 && inputDifficulty != 2) {
+				inputDifficulty = Parser.getDifficultyAnswer();
+				if (inputDifficulty == -1)
+					System.out.println("Please try again...");
+			}
+
+			return new Trial(3, "Challenge Gate", "", inputDifficulty);
 		} else if (sectionCounter == 1) {
 			// easy, medium, hard
-
+			String difficultyString = "";
+			String enemyName = "";
 			// easy, medium, hard || 0,1,2
 			//10,10,1,0,1,0.5,0.0	
 			//Easy: 
@@ -179,13 +185,21 @@ public class TrialDriver {
 			//2.	Squire (10HP/1ATK/1ARM/1SPD) Drops: Wooden Rapier 70%, Copper Katana 50%, Silver Longsword 10%, Leather Suit 80%
 			//3.	Samurai King (Boss) (15HP/3ATK/2ARM/2SPD) Drops: Copper Katana 100%, Silver Longsword 40%, Small Healing Potion 100%, Steel Dagger 20%
 			if (difficulty == 0) {
+				difficultyString = "easy";
 				Entity easyEnt1 = new Entity("Training Bot",Entity.ENEMY_INDEX,"10,10,1,0,1,0.7,0.0");
 				Entity easyEnt2 = new Entity("Squire",Entity.ENEMY_INDEX,"10,10,1,1,1,0.7,0.0");
 				Entity easyEnt3 = new Entity("Samurai King",Entity.BOSS_INDEX,"15,15,3,2,2,0.7,0.0");
-				int rand = (int) (Math.random() + 1 * 3);
-				if (rand == 1) player.getRoomAddEntity(easyEnt1);
-				else if (rand == 2) player.getRoomAddEntity(easyEnt2);
-				else if (rand == 3) player.getRoomAddEntity(easyEnt3);
+				int rand = (int) (Math.random()* 3 + 1);
+				if (rand == 1) {
+					player.getRoomAddEntity(easyEnt1);
+					enemyName = easyEnt1.name;
+				} else if (rand == 2) {
+					player.getRoomAddEntity(easyEnt2);
+					enemyName = easyEnt2.name;
+				} else if (rand == 3) {
+					player.getRoomAddEntity(easyEnt3);
+					enemyName = easyEnt3.name;
+				}
 			}
 
 			//Medium
@@ -193,13 +207,21 @@ public class TrialDriver {
 			//2.	The Living Shadow (20HP/3ATK/2ARM/2SPD) Drops: Iron Spear 60%, Staff of Life Drain 30%, Golden Bamboo Sword 20%, Titanium Blast Plate Armor 30% Small Heal Potion 60%
 			//3.	Sky-night Warrior (22HP/4ATK/2ARM/2SPD) Drops: Titanium Scythe 40%, Gauntlet of Terror 20%, Donkey Kong Hammer 10%, Vibranium Heavy Armor 30%, Small Heal Potion 60%
 			else if (difficulty == 1) {
+				difficultyString = "medium";
 				Entity mediumEnt1 = new Entity("The Pharaoh",Entity.ENEMY_INDEX,"17,17,3,2,1,0.7,0.0");
 				Entity mediumEnt2 = new Entity("The Living Shadow",Entity.ENEMY_INDEX,"20,20,3,2,2,0.7,0.0");
 				Entity mediumEnt3 = new Entity("Sky-night Warrior",Entity.BOSS_INDEX,"22,22,4,2,2,0.7,0.0");
-				int rand = (int) (Math.random()+1*3);
-				if (rand == 1) player.getRoomAddEntity(mediumEnt1);
-				else if (rand == 2) player.getRoomAddEntity(mediumEnt2);
-				else if (rand == 3) player.getRoomAddEntity(mediumEnt3);
+				int rand = (int) (Math.random() * 3 + 1);
+				if (rand == 1) {
+					player.getRoomAddEntity(mediumEnt1);
+					enemyName = mediumEnt1.name;
+				} else if (rand == 2) {
+					player.getRoomAddEntity(mediumEnt2);
+					enemyName = mediumEnt2.name;
+				} else if (rand == 3) {
+					player.getRoomAddEntity(mediumEnt3);
+					enemyName = mediumEnt3.name;
+				}
 			}
 			//Hard
 			//3.	Lunatic (35HP/5ATK/2ARM/2PD) Drops: Gaunlet of Terror 40%, Donkey Kong Hammer 30%, Vile Blade 20%, Electromagnetic Shield Generator 30%, Medium Health Potion 50%
@@ -207,20 +229,35 @@ public class TrialDriver {
 			//5.	The Titan King Kronos (45HP/10ATK/5ARM/3SPD) Staff of Gandalf 40%, Dark Angel Armor 20%, Medium Heal Potion 30%
 			//6.	Our Lord and Savior George (60HP/15ATK/10ARM/5SPD)
 			else if (difficulty == 2) {
+				difficultyString = "hard";
 				Entity hardEnt1 = new Entity("Lunatic",Entity.ENEMY_INDEX,"35,35,5,2,2,0.9,0.0");
 				Entity hardEnt2 = new Entity("The Pharaoh",Entity.BOSS_INDEX,"40,40,6,4,2,0.9,0.0");
 				Entity hardEnt3 = new Entity("The Living Shadow",Entity.BOSS_INDEX,"45,45,10,5,3,0.9,0.0");
 				Entity hardEnt4 = new Entity("Derp",Entity.BOSS_INDEX,"60,60,15,10,5,0.9,0.0");
-				int rand = (int) (Math.random()+1*4);
-				if (rand == 1) player.getRoomAddEntity(hardEnt1);
-				else if (rand == 2) player.getRoomAddEntity(hardEnt2);
-				else if (rand == 3) player.getRoomAddEntity(hardEnt3);
-				else if (rand == 4) player.getRoomAddEntity(hardEnt4);
+				int rand = (int) (Math.random()* 4 + 1);
+				if (rand == 1) {
+					player.getRoomAddEntity(hardEnt1);
+					enemyName = hardEnt1.name;
+				} else if (rand == 2) {
+					player.getRoomAddEntity(hardEnt2);
+					enemyName = hardEnt2.name;
+				} else if (rand == 3) {
+					player.getRoomAddEntity(hardEnt3);
+					enemyName = hardEnt3.name;
+				} else if (rand == 4) {
+					player.getRoomAddEntity(hardEnt4);
+					enemyName = hardEnt4.name;
+				}
+				
 			}
 			else {
 				System.out.println("No difficulty specified.");
 			}
-			return new Trial(3, "challenge", "");
+			
+			if (!difficultyString.isEmpty()) {
+				Utils.formattedPrint(false, "You selected the " + difficultyString + " difficulty. You will now face " + enemyName + "!");
+			}
+			return new Trial(3, "Challenge Gate", "");
 		}
 		return null;
 	}
@@ -258,7 +295,7 @@ public class TrialDriver {
 	public boolean isTutorialComplete() {
 		return tutorialComplete;
 	}
-	
+
 	public boolean isFirstTrialComplete() {
 		return tutorialComplete && trialOneComplete;
 	}
@@ -266,7 +303,7 @@ public class TrialDriver {
 	public boolean areFiveTrialsComplete() {
 		return tutorialComplete && trialOneComplete && trialTwoComplete && trialThreeComplete && trialFourComplete && trialFiveComplete;
 	}
-	
+
 	public boolean areSixTrialsComplete() {
 		return tutorialComplete && trialOneComplete && trialTwoComplete && trialThreeComplete && trialFourComplete && trialFiveComplete && trialSixComplete;
 	}
