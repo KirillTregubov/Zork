@@ -47,7 +47,7 @@ Trial:
 Entities: Samurai King <Boss> <10,10,1,0,1,0.8,0.0>
 
 ID: 10
-Name: Trial 2 Start
+Name: First Room of Trial 2
 Description: Welcome to Trial 2. (instructions)
 Exits: D=2, U=4
 Items: 

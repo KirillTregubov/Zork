@@ -116,7 +116,8 @@ public class TrialDriver {
 					+ " silver armor holding a large attack sword. He raises his sword posing to fight.");
 			return new Trial(5, "Trial One", "You must battle the Squire before continuing!"); // change int
 		} else if (sectionCounter == 2) {
-			Utils.formattedPrint(true, "Narrator: You can now proceed to the right through to the next room. You hear an unsheathing sword through the door to the right.");
+			System.out.println("\nNarrator: You can now proceed up to the next room."
+					+ "\n\nYou hear an unsheathing sword through the door.");
 			return new Trial(5, "Trial One", "");
 		} else if (sectionCounter == 3) {
 			Utils.formattedPrint(true, "Narrator: You enter a large throne room. On the throne at the far end of the room sits the king who towers over you by at least"
@@ -322,14 +323,14 @@ public class TrialDriver {
 		ArrayList<String> returnArray = new ArrayList<String>(); //"Completed Trials: ";
 
 		if (tutorialComplete) returnArray.add("Tutorial");
-		if (trialOneComplete) returnArray.add("\nTrial One");
-		if (trialTwoComplete) returnArray.add("\nTrial Two");
-		if (trialThreeComplete) returnArray.add("\nTrial Threee");
-		if (trialFourComplete) returnArray.add("\nTrial Four");
-		if (trialFiveComplete) returnArray.add("\nTrial Five");
-		if (trialSixComplete) returnArray.add("\nTrial Six");
-		if (trialSevenComplete) returnArray.add("\nTrial Seven");
-		if (trialEightComplete) returnArray.add("\nTrial Eight");
+		if (trialOneComplete) returnArray.add("Trial One");
+		if (trialTwoComplete) returnArray.add("Trial Two");
+		if (trialThreeComplete) returnArray.add("Trial Threee");
+		if (trialFourComplete) returnArray.add("Trial Four");
+		if (trialFiveComplete) returnArray.add("Trial Five");
+		if (trialSixComplete) returnArray.add("Trial Six");
+		if (trialSevenComplete) returnArray.add("Trial Seven");
+		if (trialEightComplete) returnArray.add("Trial Eight");
 
 		String returnString = "Completed Trials:";
 		for (int i = 0; i < returnArray.size(); i++) {

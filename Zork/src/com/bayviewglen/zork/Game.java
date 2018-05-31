@@ -215,10 +215,12 @@ class Game {
 		if (gameIsSaved()) {
 			System.out.print("Welcome back, " + player.name
 					+ "\nAutomatically loaded game state from " + timeGameWasSaved()
-					+ "\nLast known location: " + player.getRoomName()
-					+ "\nLast known items in inventory:");
-			if (player.inventory.isEmpty()) System.out.println(" Nothing was found...");
-			else System.out.println(player.inventory + "\n");
+					+ "\nLast known location: " + player.getRoomName());
+			
+			String inventoryString = " Nothing was found...";
+			if (!player.inventory.isEmpty()) inventoryString = player.inventory + "\n";
+			Utils.formattedPrint(true, "Last known items in inventory:" + inventoryString);
+			
 			if (completingTrial) System.out.println("WARNING: You are currently completing a trial!");
 			System.out.println(player.getRoomDescription());
 		} else {
@@ -296,7 +298,7 @@ class Game {
 				Command command = parser.getCommand();
 				if (command.getCommand().equals("go") && command.getContextWord().equals("down")) {
 					if (player.getRoomHasEnemies()) {
-						Utils.formattedPrint(false, "You did not kill the enemy you challenged. They got bored waiting for you to battle them, and left.\n");
+						Utils.formattedPrint(false, "You did not kill the enemy you challenged. They got bored waiting for you and left.\n");
 						player.getRoomResetEntities();
 					}
 					currentTrial = null;
@@ -345,7 +347,7 @@ class Game {
 		} // Trial Two
 		else if (currentTrial.toString().equals("Trial Two")) {
 			int i = 1;
-			while (completingTrial && !finished && player.getRoomID().equals("1")) finished = executeCommand();
+			while (completingTrial && !finished && player.getRoomID().equals("2")) finished = executeCommand();
 			if (finished) return true;
 			else if (!completingTrial) return false;
 			else {
@@ -762,29 +764,28 @@ class Game {
 				player.setCurrentRoom(player.masterRoomMap.get(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 2) + 2, Utils.ordinalIndexOf(saveFile, ";", 2))));
 
 				// Find and load inventory
-				if (Utils.ordinalIndexOf(saveFile, ":", 3) != -1) { // check if inventory was saved
-					int x = 0, index = 0;
-					for (int i = 1; x != -1; i++) {
-						index = i;
-						x = Utils.ordinalIndexOf(saveFile, ",", index);
-						if (x == -1)
-							index--;
-					}
-					String[] savedInventory = new String[index];
-					for (int i = 0; i < index; i++) { // assign saved inventory to an array
-						if (i == 0)
-							savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 3)+2, Utils.ordinalIndexOf(saveFile, ",", i));
-						else
-							savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ",", i)+2, Utils.ordinalIndexOf(saveFile, ",", i+1));
-					}
-
-					player.inventory.loadInventory(savedInventory);
-					player.updateItems(player, player.getRoomID());
+				int x = 0, index = 0;
+				for (int i = 1; x != -1; i++) {
+					index = i;
+					x = Utils.ordinalIndexOf(saveFile, ",", index);
+					if (x == -1)
+						index -= 2;
 				}
+				String[] savedInventory = new String[index];
+				for (int i = 0; i < index; i++) { // assign saved inventory to an array
+					if (i == 0)
+						savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 3)+2, Utils.ordinalIndexOf(saveFile, ",", i));
+					else
+						savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ",", i)+2, Utils.ordinalIndexOf(saveFile, ",", i+1));
+				}
+				
+				player.inventory.loadInventory(savedInventory);
+				player.updateItems(player, player.getRoomID());
+
 
 				player.loadMoney(Integer.parseInt(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 4)+2, Utils.ordinalIndexOf(saveFile, ";", 4))));
 				player.stats.loadStats(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 5)+2, Utils.ordinalIndexOf(saveFile, ";", 5)));
-				
+
 				completingTrial = false;
 				if (saveFile.substring(saveFile.lastIndexOf(':')-16, saveFile.lastIndexOf(':')).equals("Completed Trials"))
 					trialDriver.loadTrials(saveFile.substring(saveFile.lastIndexOf(':')+2));
