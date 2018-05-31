@@ -231,7 +231,7 @@ class Parser {
 			return new Command(null, null);
 		}
 	}
-	
+
 	public Command getBattleCommandInString(String[] inputArr) {
 		// Format Input String
 		for (String inputString : inputArr) {
@@ -309,7 +309,7 @@ class Parser {
 		} catch (Exception e) {}
 		return new Command(null, null);
 	}
-	
+
 	public Command getShopCommandInString(String[] inputArr) {
 		// Format Input String
 		for (String inputString : inputArr) {

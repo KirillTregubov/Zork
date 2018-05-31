@@ -180,7 +180,7 @@ public class Stats {
 
 	public void loadStats(String inputStats) {
 		String[] inputArr = inputStats.split("/");
-		
+
 		stats = new ArrayList<Double>();
 		for (int i = 0; i < inputArr.length; i++) {
 			stats.add(Double.parseDouble(inputArr[i]));

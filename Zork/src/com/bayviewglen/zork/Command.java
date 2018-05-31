@@ -62,7 +62,7 @@ class Command {
 		this.contextWord = contextWord;
 		this.numbers = numbers;
 	}
-	
+
 	public Command (boolean isAlternate, String command, String commandType, String actualCommand) {
 		this.command = command;
 		this.commandType = commandType;
@@ -80,11 +80,11 @@ class Command {
 	public String getContextWord() {
 		return contextWord;
 	}
-	
+
 	public String getActualCommand() {
 		return actualCommand;
 	}
-	
+
 	public boolean hasActualCommand() {
 		return actualCommand != null;
 	}

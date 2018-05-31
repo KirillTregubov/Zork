@@ -140,7 +140,7 @@ public class Player extends Entity {
 	public Integer getMoney() {
 		return money;
 	}
-	
+
 	public void loadMoney(Integer money) {
 		this.money = money;
 	}
@@ -189,7 +189,7 @@ public class Player extends Entity {
 				inputItem.setAmount(1 + inventory.getItem(itemName).getAmount());
 			else
 				if (inputItem.isStackable) inputItem.setAmount(1); // change so that user can specify how many to pick up*/
-			
+
 			if (!inputItem.roomID.contains(roomID)) {
 				inputItem.roomID.add(roomID);
 				inputItem.pickedUpAmounts.add(1);
@@ -211,7 +211,7 @@ public class Player extends Entity {
 
 			int amount = 1;
 			if (inputItem.isStackable) amount = numbers[0];
-			
+
 			if (inventory.hasItem(itemName) && inventory.getItem(itemName).getAmount() < currentRoom.getItem(itemName).getAmount())
 				inputItem.setAmount(amount + inventory.getItem(itemName).getAmount());
 			else if (inventory.hasItem(itemName) && amount + inventory.getItem(itemName).getAmount() >= currentRoom.getItem(itemName).getAmount())
@@ -348,11 +348,11 @@ public class Player extends Entity {
 	public Entity getRoomEnemy(String enemyName) {
 		return currentRoom.findEnemy(this, enemyName);
 	}
-	
+
 	public void getRoomAddEntity(Entity entity) {
 		currentRoom.addEntity(entity);
 	}
-	
+
 	public void getRoomResetEntities() {
 		currentRoom.resetEntities();
 	}

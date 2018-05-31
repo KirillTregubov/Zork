@@ -138,9 +138,11 @@ class Game {
 					// An array of strings in the format "E-RoomName"
 					String[] rooms = roomExits.split(":")[1].split(",");
 					HashMap<String, String> temp = new HashMap<String, String>(); 
-					for (String s : rooms)
-						temp.put(s.split("=")[0].trim(), s.split("=")[1]);
-					// LEGACY exits.put(roomName.substring(10).trim().toUpperCase().replaceAll(" ",  "_"), temp);
+					try {
+						for (String s : rooms)
+							temp.put(s.split("=")[0].trim(), s.split("=")[1]);
+						// LEGACY exits.put(roomName.substring(10).trim().toUpperCase().replaceAll(" ",  "_"), temp);
+					} catch (Exception e) {}
 					exits.put(roomID, temp);
 
 					// Read items, assign to array, and store it
@@ -296,14 +298,17 @@ class Game {
 			while (!finished && player.getRoomID().equals("13")) {
 				System.out.println("");
 				Command command = parser.getCommand();
-				if (command.getCommand().equals("go") && command.getContextWord().equals("down")) {
-					if (player.getRoomHasEnemies()) {
-						Utils.formattedPrint(false, "You did not kill the enemy you challenged. They got bored waiting for you and left.\n");
-						player.getRoomResetEntities();
-					}
-					currentTrial = null;
-					completingTrial = false;
-				}
+				try {
+					if (command.getCommand().equals("go") && command.getContextWord().equals("down")) {
+						if (player.getRoomHasEnemies()) {
+							System.out.print(""); // needed because it breaks?
+							Utils.formattedPrint(false, "You did not kill the enemy you challenged. They got bored waiting for you and left.\n");
+							player.getRoomResetEntities();
+						}
+						currentTrial = null;
+						completingTrial = false;
+					}	
+				} catch (Exception e) {}
 				finished = processCommand(command);
 			}
 			if (finished) return true;
@@ -314,8 +319,6 @@ class Game {
 				completingTrial = false;
 				return false;
 			}
-			// code here
-
 		} // Trial One
 		else if (currentTrial.toString().equals("Trial One")) {
 			int i = 1;
@@ -367,6 +370,23 @@ class Game {
 					}
 				}
 			}
+		} // Trial Three
+		else if (currentTrial.toString().equals("Trial Three")) {
+			int i = 1;
+			while (completingTrial && !finished) {
+				System.out.println("");
+				Command command = parser.getCommand();
+
+				finished = processCommand(command);
+
+				if (player.getRoomID().equals("3-7")) {
+					currentTrial = trialDriver.trialThree(i);
+					completingTrial = false;
+					return false;
+				}
+			}
+			if (finished) return true;
+			else if (!completingTrial) return false;
 		}
 		return false; // insurance in case everything breaks
 	}
@@ -411,9 +431,15 @@ class Game {
 						System.out.println("You must complete Trial One first!");
 						completingTrial = false;
 					}
-					/* } else if (command.getFirstNumber() == 3) {
-
-				} else if (command.getFirstNumber() == 4) {
+				} else if (command.getFirstNumber() == 3) {
+					if (trialDriver.isFirstTrialComplete()) {
+						currentTrial = trialDriver.trialThree(0);
+						completingTrial = true;
+					} else {
+						System.out.println("You must complete Trial One first!");
+						completingTrial = false;
+					}
+					/*} else if (command.getFirstNumber() == 4) {
 
 				} else if (command.getFirstNumber() == 5) {
 
@@ -470,6 +496,8 @@ class Game {
 						System.out.println("Respawning...");
 						System.out.println("\n"+player.getRoomDescription());
 						player.stats.setCurrentHP(player.stats.getMaximumHP());
+						currentTrial = null;
+						completingTrial = false;
 					} else if (!completingTrial || battleResult == 0) System.out.println("\n" + player.getRoomDescription());
 				}
 			}
@@ -538,7 +566,7 @@ class Game {
 		else if (commandName.equalsIgnoreCase("check")) {
 			if (contextWord.equalsIgnoreCase("equipped")) System.out.println(player.checkEquippedItems());
 			else if (Utils.containsIgnoreCase(contextWord, "money") || Utils.containsIgnoreCase(contextWord, "cash")) System.out.println(player.getMoneyString());
-			else if (Utils.containsIgnoreCase(contextWord, "trial")) System.out.println(trialDriver);
+			else if (Utils.containsIgnoreCase(contextWord, "trial") || Utils.containsIgnoreCase(contextWord, "complete")) System.out.println(trialDriver);
 			else if (Utils.containsIgnoreCase(contextWord, "stat") || Utils.containsIgnoreCase(contextWord, "info")) System.out.println(player.stats);
 			else System.out.println("You cannot check that!");
 		} // equip
@@ -677,7 +705,13 @@ class Game {
 				} else if (nextRoom.toString().equals("Challenge Gate")) {
 					currentTrial = trialDriver.challengeGate(0, 0);
 					completingTrial = true;
-				} else System.out.println(player.getRoomTravelDescription());
+				} else {
+					// Trial Three Special Case
+					if (completingTrial && currentTrial.toString().equals("Trial Three") && !player.getRoomID().equals("3"))
+						if (Math.random() <= 0.5) player.getRoomResetEntities();
+
+					System.out.println(player.getRoomTravelDescription());
+				}
 			} else System.out.println("That's not an option... You might be trapped.");
 		}
 	}

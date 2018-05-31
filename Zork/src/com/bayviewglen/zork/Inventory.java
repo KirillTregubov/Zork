@@ -28,22 +28,22 @@ class Inventory {
 		for(i = 0; i < inventory.size(); i++) {
 			//System.out.println(inventory.get(i));
 			inventoryString += inventory.get(i);
-			
+
 			//System.out.println(x);
 			//System.out.println(inventory.get(i).getAmount());
 			inventoryString += "/" + inventory.get(i).getAmount();
-			
+
 			//System.out.println(inventory.get(i).roomID.toString().replaceAll(",", ""));
 			inventoryString += "/" + inventory.get(i).roomID.toString().replaceAll(",", "");
-			
+
 			//System.out.println(inventory.get(i).pickedUpAmounts.toString().replaceAll(",", ""));
 			inventoryString += "/" + inventory.get(i).pickedUpAmounts.toString().replaceAll(",", "") + ", ";
-			
+
 			/*try {
 				System.out.println(inventory.get(i).pickedUpAmounts.get(0) + " " + inventory.get(i).roomID.get(0));
 			} catch (Exception e) {}*/
 		}
-		
+
 		return inventoryString;
 	}
 

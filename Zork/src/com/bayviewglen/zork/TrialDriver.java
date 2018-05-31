@@ -154,7 +154,7 @@ public class TrialDriver {
 		if (sectionCounter == 0) {
 			player.setCurrentRoom(player.masterRoomMap.get("2"));
 			System.out.println(player.getRoomDescription());
-			
+
 			Utils.formattedPrint(true, "Narrator: You enter a spherical room surrounded by darkness. As you walk into the room you feel your feet lift off the ground."
 					+ " The room has no gravity. On the other side of the room you notice George, the hotel concierge sitting on an office chair next to a desk, floating"
 					+ " around the room. There is a small door on the other side of the room. You make your way to George by pushing off the wall behind you. George"
@@ -162,7 +162,7 @@ public class TrialDriver {
 			Utils.formattedPrint(true, "George: Hey there! Welcome to the second trial! I'm hoping you aren't challenging this trial before doing the first one. That"
 					+ " wouldn't be very smart. Anyways if you still want to continue, just head on through. Oh, and... You might want to take the heal potions over there."
 					+ " They might help. Good luck!");
-			
+
 			// Return Trial
 			return new Trial(3, "Trial Two", "");  // change int
 		} else if (sectionCounter == 1) {
@@ -182,7 +182,32 @@ public class TrialDriver {
 			trialTwoComplete = true;
 			return null;
 		}
-		
+
+		return null;
+	}
+
+	public Trial trialThree(int sectionCounter) {
+		if (sectionCounter == 0) {
+			player.setCurrentRoom(player.masterRoomMap.get("3"));
+			System.out.println(player.getRoomDescription());
+
+			Utils.formattedPrint(true, "Narrator: As you pass through the trial door you feel a cold breeze brush past you. You pass through the door and you see a long"
+					+ " dark tunnel ahead of you. It is pitch dark and you cannot see the other end. To your left stands George. He stands up to speak to you. ");
+			Utils.formattedPrint(true, "George: Greetings! I hope you are doing well with your trials. In this trial you must make it to the other end of the tunnel"
+					+ " without being dismembered by the other contestants who have lost their minds in the tunnel. If you make it to the other end, you will be awarded"
+					+ " with another trial key! Good luck!");
+
+			// Return Trial
+			return new Trial(2, "Trial Three", "The lunatic is blocking your path! Try battling him.");  // change int
+		} else if (sectionCounter == 1) {
+			Utils.formattedPrint(true, "Narrator: You have reached the end of the tunnel and rid the tunnel of lunatics. Congratulations! You are being teleported back to the"
+					+ " contest hall. On your trial keychain the trial 3 key appears.");
+			player.setDefaultRoom();
+			System.out.println("\n" + player.getRoomTravelDescription());
+			trialThreeComplete = true;
+			return null;
+		}
+
 		return null;
 	}
 
@@ -271,12 +296,12 @@ public class TrialDriver {
 					player.getRoomAddEntity(hardEnt4);
 					enemyName = hardEnt4.name;
 				}
-				
+
 			}
 			else {
 				System.out.println("No difficulty specified.");
 			}
-			
+
 			if (!difficultyString.isEmpty()) {
 				Utils.formattedPrint(false, "You selected the " + difficultyString + " difficulty. You will now face " + enemyName + "!");
 			}

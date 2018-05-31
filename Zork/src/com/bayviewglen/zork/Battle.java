@@ -27,7 +27,7 @@ public class Battle {
 		consumableUsageCounter = 0;
 		critHitCounter = 0;
 	}
-	
+
 	public ArrayList<Integer> getCounters() {
 		ArrayList<Integer> counters = new ArrayList<Integer>();
 		counters.add(attackCounter);

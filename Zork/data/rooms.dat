@@ -23,7 +23,7 @@ Trial:
 Entities:
 
 ID: 1
-Name: First Room of Trial 1
+Name: Entrance to Trial 1
 Description: 
 Exits: U=1-1
 Items: 
@@ -31,7 +31,7 @@ Trial:
 Entities: 
 
 ID: 1 1
-Name: Second Room of Trial 1
+Name: First Room of Trial 1
 Description: 
 Exits: U=1-2
 Items: 
@@ -39,7 +39,7 @@ Trial:
 Entities: Squire <Enemy> <10,10,1,0,1,0.7,0.0>
 
 ID: 1 10
-Name: Third Room of Trial 1
+Name: Second Room of Trial 1
 Description: 
 Exits: U=0-0
 Items:
@@ -47,7 +47,7 @@ Trial:
 Entities: Samurai King <Boss> <10,10,1,0,1,0.8,0.0>
 
 ID: 10
-Name: First Room of Trial 2
+Name: Entrance to Trial 2
 Description: 
 Exits: U=2-1
 Items: 29-2
@@ -55,7 +55,7 @@ Trial:
 Entities: 
 
 ID: 10 1
-Name: Second Room of Trial 2
+Name: First Room of Trial 2
 Description: 
 Exits: W=2-2, U=2-3, E=2-4
 Items: 
@@ -65,7 +65,7 @@ Entities:
 ID: 10 10
 Name: West Room of Trial 2
 Description: 
-Exits: D=2
+Exits: 
 Items: 
 Trial:
 Entities: The Living Shadow <Boss> <20,20,3,1,2,0.8,0.0>
@@ -73,7 +73,7 @@ Entities: The Living Shadow <Boss> <20,20,3,1,2,0.8,0.0>
 ID: 10 11
 Name: Top Room of Trial 2
 Description: 
-Exits: D=2
+Exits: 
 Items: 
 Trial:
 Entities: Sky-Night Warrior <Boss> <22,22,4,1,2,0.8,0.0>
@@ -81,23 +81,71 @@ Entities: Sky-Night Warrior <Boss> <22,22,4,1,2,0.8,0.0>
 ID: 10 100
 Name: East Room of Trial 2
 Description: 
-Exits: D=2
+Exits: 
 Items: 
 Trial:
 Entities: The Pharaoh <Boss> <15,15,3,2,1,0.8,0.0>
 
 ID: 11
-Name: Trial 3 Start
-Description: Welcome to Trial 3. (instructions)
-Exits: D=2
+Name: Entrance to Trial 3
+Description: 
+Exits: U=3-1
 Items: 
 Trial:
 Entities: 
 
-ID: 100
-Name: Trial 4 Start
-Description: Welcome to Trial 4. (instructions)
-Exits: D=2
+ID: 11 1
+Name: First Room of Trial 3
+Description: 
+Exits: U=3-2
+Items: 
+Trial:
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+
+ID: 11 10
+Name: Second Room of Trial 3
+Description: 
+Exits: U=3-3
+Items: 
+Trial:
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+
+ID: 11 11
+Name: Third Room of Trial 3
+Description: 
+Exits: U=3-4
+Items: 
+Trial:
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+
+ID: 11 100
+Name: Fourth Room of Trial 3
+Description: 
+Exits: U=3-5
+Items: 
+Trial:
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+
+ID: 11 101
+Name: Fifth Room of Trial 3
+Description: 
+Exits: U=3-6
+Items: 
+Trial:
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+
+ID: 11 110
+Name: Sixth Room of Trial 3
+Description: 
+Exits: U=3-7
+Items: 
+Trial:
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+
+ID: 11 111
+Name: Seventh Room of Trial 3
+Description: 
+Exits: 
 Items: 
 Trial:
 Entities: 

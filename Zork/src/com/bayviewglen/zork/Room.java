@@ -98,7 +98,7 @@ class Room {
 	public String longDescription() {
 		String returnString = "Currently in: " + roomName;
 		if (description.length() > 1) returnString += "\n" + description;
-		returnString += "\n" + listExits(); // hide trial exits if (!roomID.equals("2-1")) 
+		if (hasExits()) returnString += "\n" + listExits(); // hide trial exits if (!roomID.equals("2-1")) 
 		if (hasItems()) returnString += "\n" + listItems();
 		if (hasEnemies()) returnString += "\n" + listEnemies();
 		if (hasBosses()) returnString += "\n" + listBosses();
@@ -112,7 +112,7 @@ class Room {
 	public String travelDescription() {
 		String returnString = "Going to: " + roomName;
 		if (description.length() > 1) returnString += "\n" + description;
-		returnString += "\n" + listExits(); // hide trial exits
+		if (hasExits()) returnString += "\n" + listExits(); // hide trial exits
 		if (hasItems()) returnString += "\n" + listItems();
 		if (hasEnemies()) returnString += "\n" + listEnemies();
 		if (hasBosses()) returnString += "\n" + listBosses();
@@ -124,11 +124,16 @@ class Room {
 	 * "Exits: north west ".
 	 */
 	private String listExits() {
-		String returnString = "Exits:";
+		String returnString = "Available Directions:";
 		Set<String> keys = exits.keySet();
 		for(Iterator<String> iter = keys.iterator(); iter.hasNext(); )
 			returnString += " " + iter.next();
 		return returnString;
+	}
+
+	private boolean hasExits() {
+		if (exits.size() > 0) return true;
+		else return false;
 	}
 
 	private boolean hasItems() {
@@ -296,7 +301,7 @@ class Room {
 	public void updateItems(Player player, String roomID) {
 		for (int i = 0; i < items.size(); i++) {
 			if (player.inventory.hasItem(items.get(i).toString()) && player.didPickUpItem(items.get(i).toString(), roomID)) {
-				
+
 				if (items.get(i).isStackable) {
 					Item oldItem = new Item(items.get(i));
 					oldItem.setAmount(originalItemAmounts.get(i)
@@ -364,11 +369,11 @@ class Room {
 		}
 		return returnString;
 	}
-	
+
 	public void resetEntities() {
-		enemies = null;
-		bosses = null;
-		npcs = null;
+		enemies = new ArrayList<Entity>();
+		bosses = new ArrayList<Entity>();
+		npcs = new ArrayList<Entity>();
 	}
 
 	public ArrayList<Entity> getRoomEnemies() {
@@ -461,7 +466,7 @@ class Room {
 
 		Battle currentBattle = new Battle(player, enemy);
 		battleResult = currentBattle.startBattle();
-		
+
 		liveCheck(); // Removes dead enemies
 		return battleResult;
 	}
@@ -481,7 +486,7 @@ class Room {
 			}
 		}
 	}
-	
+
 	public void addEntity(Entity entity) {
 		if (entity.getType().equals(Entity.TYPES[Entity.ENEMY_INDEX])) {
 			getRoomEnemies().add(entity);
