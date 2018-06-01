@@ -41,9 +41,10 @@ class CommandWords {
 
 	private static final String validBattleCommands[][] = {
 			{"help", "assist aid", "help", "IGNORE"},
-			{"run", "flee escape", "run", ""},
-			{"attack", "hit swing slash stab strike bludgeon", "attack", ""},
-			{"consume", "use ingest", "item", ""},
+			{"run", "flee escape", "run", "Allows you to escape the battle you are in. Usage: \"run\""},
+			{"attack", "hit swing slash stab strike bludgeon", "attack", "Allows you to strike the enemy you are fighting. Usage: \"hit\""},
+			{"consume", "use ingest", "item", "Allows you to consume a consumable item. Usage \"consume small heal potion\""},
+			{"mute", "silence deafen", "mute", "Mutes the game's sound. Usage: \"mute game\""},
 			{"quit", "stop terminate", "quit", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}
 	};
 
@@ -57,8 +58,8 @@ class CommandWords {
 
 	private static final String validRiddleCommands[][] = {
 			{"help", "assist aid", "help", "IGNORE"},
-			{"answer", "reply ", "answer", ""},
-			{"abandon", "stop surrender leave", "default", ""},
+			{"answer", "reply ", "answer", "Allows you to submit an answer to a question. Usage:\"answer (your answer)\""},
+			{"abandon", "stop surrender leave", "abandon", "Abandon a trial. Usage: \"abandon trial one\", \"abandon trial 2\""},
 			{"quit", "stop terminate", "quit", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}
 	};
 

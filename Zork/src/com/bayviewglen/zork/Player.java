@@ -353,7 +353,6 @@ public class Player extends Entity {
 		return currentRoom.findNPC(this, npcName);
 	}
 
-
 	public int getRoomStartBattle(String enemyName) {
 		return currentRoom.startCustomBattle(this, enemyName);
 	}

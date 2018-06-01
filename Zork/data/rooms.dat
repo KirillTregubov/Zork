@@ -26,9 +26,9 @@ ID: 1
 Name: Entrance to Trial 1
 Description: 
 Exits: N=1-1
-Items: 
+Items: 29-2
 Trial:
-Entities: George <NPC> <> <Welcome to Trial 1, the first of 8 trials! My name is George, your guide through your trial adventure! There is only one direction you can go and that’s north through the door behind me, however, you can also choose to go back to the main room using the abandon command. Remember, you can't leave a trial once you begin fighting the boss. The only way you get out of that is in a coffin or if you win! Good Luck!>
+Entities: George <NPC> <> <Welcome to Trial 1, the first of 8 trials! My name is George, your guide through your trial adventure! There is only one direction you can go and that’s north through the door behind me, however, you can also choose to go back to the main room using the abandon command. Remember, you can't leave a trial once you begin fighting the boss. The only way you get out of that is in a coffin or if you win! Oh, and... You might want to take the heal potions over there. They might help. Good Luck!>
 
 ID: 1 1
 Name: First Room of Trial 1
@@ -50,20 +50,20 @@ ID: 10
 Name: Entrance to Trial 2
 Description: 
 Exits: N=2-1
-Items: 29-2
+Items:
 Trial:
-Entities: George <NPC> <> <Hey there! Welcome to the second trial! I'm hoping you aren't challenging this trial before doing the first one. That wouldn't be very smart. Anyways if you still want to continue, just head on through. Oh, and... You might want to take the heal potions over there. They might help. Good luck!>
+Entities: George <NPC> <> <Hey there! Welcome to the second trial! I'm hoping you aren't challenging this trial before doing the first one. That wouldn't be very smart. Anyways if you still want to continue, just head on through. Good luck!>
 
 ID: 10 1
 Name: First Room of Trial 2
 Description: 
-Exits: W=2-2, N=2-3, E=2-4
+Exits: E=2-2, W=2-3, N=2-4
 Items: 
 Trial:
 Entities: 
 
 ID: 10 10
-Name: West Room of Trial 2
+Name: East Room of Trial 2
 Description: 
 Exits: 
 Items: 
@@ -71,7 +71,7 @@ Trial:
 Entities: The Living Shadow <Boss> <20,20,3,1,2,0.8,0.0> <>
 
 ID: 10 11
-Name: Top Room of Trial 2
+Name: West Room of Trial 2
 Description: 
 Exits: 
 Items: 
@@ -79,7 +79,7 @@ Trial:
 Entities: Sky-Night Warrior <Boss> <22,22,4,1,2,0.8,0.0> <>
 
 ID: 10 100
-Name: East Room of Trial 2
+Name: North Room of Trial 2
 Description: 
 Exits: 
 Items: 

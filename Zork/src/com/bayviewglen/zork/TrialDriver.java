@@ -138,7 +138,7 @@ public class TrialDriver {
 			System.out.println("\nWelcome to the shop! We offer the best items at the lowest possible prices!" + shop.displayItems());
 			return new Trial(2, "Shop", "");
 		} else if (sectionCounter == 1) {
-			Utils.formattedPrint(false, "Leave Shop"); // print before going east?
+			Utils.formattedPrint(false, "Thank you for leaving the shop! Please come again!"); // print before going east?
 			player.setDefaultRoom();
 			System.out.println("\n" + player.getRoomTravelDescription());
 			return null;
