@@ -28,6 +28,7 @@ class CommandWords {
 			{"consume", "use ingest", "item", "Allows you to consume stuff. Usage: \"consume apple\", \"consume sword\""},
 
 			{"battle", "fight attack strike challenge", "battle", "Starts a battle with an enemy. Usage: \"battle the man\", \"battle some dude\""},
+			{"talk", "converse discuss communicate speak chat", "enemy", "Talk to an NPC. Usage: \"talk to George\""},
 			{"start", "begin commence", "trial", "Starts a trial. Usage: \"start trial one\", \"start trial 2\""},
 			{"abandon", "stop surrender leave", "default", "Abandon a trial. Usage: \"abandon trial one\", \"abandon trial 2\""},
 

@@ -1,7 +1,7 @@
 ID: 0 1
 Name: Tutorial Room
 Description: Day 7,205 – Contest: 209<br><br>Surrounded by millions of other contestants just like you, you stand awaiting what you know is your destiny. Here, in the contest you are given one chance to prove yourself worthy of a better life. Like you, everyone gets this chance, 1% of people pass and are granted access to the utopia of the new world while the 99% who fail, remain here in the desolation of the rest of the earth surrounded by poverty, disease, hunger and death. As you stand, waiting in the enormous circular room known as the theatre you can’t help but wonder if you are going to pass or not. However, there is no room for that type of thinking. You will pass. You must pass if you want to live a better life.<br><br>A man steps up to the podium to speak. Everyone quiets down to listen to him.<br><br>“Good morning everyone! Welcome to Contest 209. I know how long you have all been waiting for this day to come and how long you have all been preparing, so I will only give you some brief instructions before I send you on your way. Here, in the contest, you cannot die thanks to our brilliant science team. You may stay in the contest for as long as you would like, die as many times as you would like however there is a 100-coin deduction for every death. Coins are the currency we use here in the contest which you can use to purchase items in the shop. The contest is structured in trials which are tasks that you must complete while taking part in the contest. There are 7 of these trials, each challenging you in a different way. Once you complete all 7 you will face the gate keeper who will determine whether or not you may pass into the new world. Certain trials may only be accessed once you complete other previous trials. As an example, you must complete the first trial before progressing onto any others. You will quickly discover which trials you have access to as if you approach a door of a trial that you do not have access to, it will not open. Furthermore, you may also choose to go the trade center where you may trade any items you have collected within the trials with other contestants. Lastly, if you would like to face enemies without having to enter trials, you may choose to go to the challenge gate where you can face a random enemy in exchange for items. You may leave a trial at any time as long as you are not engaged in any combat with an enemy. The only exception is if you are fighting a boss which you encounter in trials 1, 5 and 7. Remember, there is only one way to fail the contest and that is by doing something that is unforgivable in the society of the new world. You fail by giving up. If you give up you will be sent back to the old world to stay there forever, no exceptions. You will each now be teleported to your own private rooms where you will face a training robot that will teach you the basics of battle.”
-Exits: U=0-2
+Exits: N=0-2
 Items:
 Trial: tutorial
 Entities: 
@@ -9,58 +9,58 @@ Entities:
 ID: 0 10
 Name: Small White Room
 Description: 
-Exits: U=0-0
+Exits: N=0-0
 Items:
 Trial:
-Entities: Sparring Robot <Enemy> <10,10,1,0,1,0.5,0.0>
+Entities: Sparring Robot <Enemy> <10,10,1,0,1,0.5,0.0> <>
 
 ID: 0 0
 Name: Contest Hall
 Description: A grand hall with many contestants hurrying around, trying to complete all the trials.
-Exits: U=13, W=11, E=12
+Exits: N=13, W=11, E=12
 Items:
 Trial:
-Entities:
+Entities: 
 
 ID: 1
 Name: Entrance to Trial 1
 Description: 
-Exits: U=1-1
+Exits: N=1-1
 Items: 
 Trial:
-Entities: 
+Entities: George <NPC> <> <Welcome to Trial 1, the first of 8 trials! My name is George, your guide through your trial adventure! There is only one direction you can go and that’s north through the door behind me, however, you can also choose to go back to the main room using the abandon command. Remember, you can't leave a trial once you begin fighting the boss. The only way you get out of that is in a coffin or if you win! Good Luck!>
 
 ID: 1 1
 Name: First Room of Trial 1
 Description: 
-Exits: U=1-2
+Exits: N=1-2
 Items: 
 Trial:
-Entities: Squire <Enemy> <10,10,1,0,1,0.7,0.0>
+Entities: Squire <Enemy> <10,10,1,0,1,0.7,0.0> <>
 
 ID: 1 10
 Name: Second Room of Trial 1
 Description: 
-Exits: U=0-0
+Exits: N=0-0
 Items:
 Trial:
-Entities: Samurai King <Boss> <10,10,1,0,1,0.8,0.0>
+Entities: Samurai King <Boss> <10,10,1,0,1,0.8,0.0> <>
 
 ID: 10
 Name: Entrance to Trial 2
 Description: 
-Exits: U=2-1
+Exits: N=2-1
 Items: 29-2
 Trial:
-Entities: 
+Entities: George <NPC> <> <Hey there! Welcome to the second trial! I'm hoping you aren't challenging this trial before doing the first one. That wouldn't be very smart. Anyways if you still want to continue, just head on through. Oh, and... You might want to take the heal potions over there. They might help. Good luck!>
 
 ID: 10 1
 Name: First Room of Trial 2
 Description: 
-Exits: W=2-2, U=2-3, E=2-4
+Exits: W=2-2, N=2-3, E=2-4
 Items: 
 Trial:
-Entities:
+Entities: 
 
 ID: 10 10
 Name: West Room of Trial 2
@@ -68,7 +68,7 @@ Description:
 Exits: 
 Items: 
 Trial:
-Entities: The Living Shadow <Boss> <20,20,3,1,2,0.8,0.0>
+Entities: The Living Shadow <Boss> <20,20,3,1,2,0.8,0.0> <>
 
 ID: 10 11
 Name: Top Room of Trial 2
@@ -76,7 +76,7 @@ Description:
 Exits: 
 Items: 
 Trial:
-Entities: Sky-Night Warrior <Boss> <22,22,4,1,2,0.8,0.0>
+Entities: Sky-Night Warrior <Boss> <22,22,4,1,2,0.8,0.0> <>
 
 ID: 10 100
 Name: East Room of Trial 2
@@ -84,63 +84,63 @@ Description:
 Exits: 
 Items: 
 Trial:
-Entities: The Pharaoh <Boss> <15,15,3,2,1,0.8,0.0>
+Entities: The Pharaoh <Boss> <15,15,3,2,1,0.8,0.0> <>
 
 ID: 11
 Name: Entrance to Trial 3
 Description: 
-Exits: U=3-1
+Exits: N=3-1
 Items: 
 Trial:
-Entities: 
+Entities: George <NPC> <> <Greetings! I hope you are doing well with your trials. In this trial you must make it to the other end of the tunnel without being dismembered by the other contestants who have lost their minds in the tunnel. If you make it to the other end, you will be awarded with another trial key! Good luck!>
 
 ID: 11 1
 Name: First Room of Trial 3
 Description: 
-Exits: U=3-2
+Exits: N=3-2
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
 
 ID: 11 10
 Name: Second Room of Trial 3
 Description: 
-Exits: U=3-3
+Exits: N=3-3
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
 
 ID: 11 11
 Name: Third Room of Trial 3
 Description: 
-Exits: U=3-4
+Exits: N=3-4
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
 
 ID: 11 100
 Name: Fourth Room of Trial 3
 Description: 
-Exits: U=3-5
+Exits: N=3-5
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
 
 ID: 11 101
 Name: Fifth Room of Trial 3
 Description: 
-Exits: U=3-6
+Exits: N=3-6
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
 
 ID: 11 110
 Name: Sixth Room of Trial 3
 Description: 
-Exits: U=3-7
+Exits: N=3-7
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
 
 ID: 11 111
 Name: Seventh Room of Trial 3
@@ -150,10 +150,18 @@ Items:
 Trial:
 Entities: 
 
+ID: 100
+Name: Entrance to Trial 4
+Description: 
+Exits: 
+Items: 
+Trial:
+Entities: Robo-George <NPC> <> <Answer 3 questions correctly to complete the trial. If you fail, you will be executed... painfully. Best of luck!>
+
 ID: 101
 Name: Trial 5 Start
 Description: Welcome to Trial 5. (instructions)
-Exits: D=2
+Exits: S=2
 Items: 
 Trial:
 Entities: 
@@ -161,7 +169,7 @@ Entities:
 ID: 110
 Name: Trial 6 Start
 Description: Welcome to Trial 6. (instructions)
-Exits: D=2
+Exits: S=2
 Items: 
 Trial:
 Entities: 
@@ -169,7 +177,7 @@ Entities:
 ID: 111
 Name: Trial 7 Start
 Description: Welcome to Trial 7. (instructions)
-Exits: D=2
+Exits: S=2
 Items: 
 Trial:
 Entities: 
@@ -177,7 +185,7 @@ Entities:
 ID: 1000
 Name: Trial 8 Start
 Description: Welcome to Trial 8. (instructions)
-Exits: D=2
+Exits: S=2
 Items: 
 Trial:
 Entities:
@@ -185,7 +193,7 @@ Entities:
 ID: 1001
 Name: Trial 9 Start
 Description: Welcome to Trial 9. (instructions)
-Exits: D=2
+Exits: S=2
 Items: 
 Trial:
 Entities:
@@ -193,7 +201,7 @@ Entities:
 ID: 1010
 Name: Trial 10 Start
 Description: Welcome to Trial 10. (instructions)
-Exits: D=2
+Exits: S=2
 Items: 
 Trial:
 Entities:
@@ -217,7 +225,7 @@ Entities:
 ID: 1101
 Name: Challenge Gate
 Description: Welcome to the Challenge Gate. (instructions)
-Exits: D=0-0
+Exits: S=0-0
 Items: 
 Trial:
 Entities:

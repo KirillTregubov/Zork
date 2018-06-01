@@ -100,6 +100,7 @@ class Room {
 		if (description.length() > 1) returnString += "\n" + description;
 		if (hasExits()) returnString += "\n" + listExits(); // hide trial exits if (!roomID.equals("2-1")) 
 		if (hasItems()) returnString += "\n" + listItems();
+		if (hasNPCs()) returnString += "\n" + listNPCs();
 		if (hasEnemies()) returnString += "\n" + listEnemies();
 		if (hasBosses()) returnString += "\n" + listBosses();
 		return returnString;
@@ -114,6 +115,7 @@ class Room {
 		if (description.length() > 1) returnString += "\n" + description;
 		if (hasExits()) returnString += "\n" + listExits(); // hide trial exits
 		if (hasItems()) returnString += "\n" + listItems();
+		if (hasNPCs()) returnString += "\n" + listNPCs();
 		if (hasEnemies()) returnString += "\n" + listEnemies();
 		if (hasBosses()) returnString += "\n" + listBosses();
 		return returnString;
@@ -138,6 +140,11 @@ class Room {
 
 	private boolean hasItems() {
 		if (items.size() > 0) return true;
+		else return false;
+	}
+	
+	public boolean hasNPCs() { // doesn't account for NPCs -> fix?
+		if (getRoomNPCs()!=null && getRoomNPCs().size() > 0) return true;
 		else return false;
 	}
 
@@ -338,6 +345,22 @@ class Room {
 	/*
 	 *  Battle Method
 	 */
+	public String listNPCs() {
+		liveCheck();
+		String returnString = "";
+		if (hasNPCs()) {
+			returnString = "NPCs in this room: ";
+
+			for (int i = 0; i < getRoomNPCs().size(); i++) {
+				returnString += getRoomNPCs().get(i).toString();
+
+				if (i == getRoomNPCs().size() - 1) returnString += ".";
+				else returnString += ", ";
+			}
+		}
+		return returnString;
+	}
+	
 	public String listEnemies() {
 		liveCheck();
 		String returnString = "";
@@ -392,7 +415,7 @@ class Room {
 		this.bosses = bosses;
 	}
 
-	public ArrayList<Entity> getRoomNPC() {
+	public ArrayList<Entity> getRoomNPCs() {
 		return npcs;
 	}
 
@@ -414,22 +437,22 @@ class Room {
 	public void liveCheck() {
 		// Enemy
 		if (getRoomEnemies()!=null) {
-			int eSize = getRoomEnemies().size();
-			for (int i=0;i<eSize;i++) {
-				if (getRoomEnemies().get(i).isAlive()==false) {
+			int enemyAmt = getRoomEnemies().size();
+			for (int i = 0; i < enemyAmt; i++) {
+				if (getRoomEnemies().get(i).isAlive() == false) {
 					getRoomEnemies().remove(i);
-					eSize--;
+					enemyAmt--;
 					i--;
 				}
 			}
 		}
 		// Boss
-		if (getRoomBosses()!=null) {
-			int bSize = getRoomBosses().size();
-			for (int i=0;i<bSize;i++) {
-				if (getRoomBosses().get(i).isAlive()==false) {
+		if (getRoomBosses() != null) {
+			int bossAmt = getRoomBosses().size();
+			for (int i = 0; i < bossAmt; i++) {
+				if (getRoomBosses().get(i).isAlive() == false) {
 					getRoomBosses().remove(i);
-					bSize--;
+					bossAmt--;
 					i--;
 				}
 			}
@@ -450,6 +473,13 @@ class Room {
 			if (Utils.containsIgnoreCase(entity.toString(), entityName)) return entity;
 		}
 		for (Entity entity : getRoomBosses()) {
+			if (Utils.containsIgnoreCase(entity.toString(), entityName)) return entity;
+		}
+		return null;
+	}
+	
+	public Entity findNPC(Player player, String entityName) {
+		for (Entity entity : getRoomNPCs()) {
 			if (Utils.containsIgnoreCase(entity.toString(), entityName)) return entity;
 		}
 		return null;
@@ -479,7 +509,7 @@ class Room {
 				else if (ent[1][i].compareTo("Boss") == 0)
 					getRoomBosses().add(new Entity(ent[0][i],Entity.BOSS_INDEX,ent[2][i]));
 				else if (ent[1][i].compareTo("NPC") == 0) {
-
+					getRoomNPCs().add(new Entity(ent[0][i],Entity.NPC_INDEX,"",ent[3][i]));
 				}
 				else
 					System.out.println("Loading entities has failed");

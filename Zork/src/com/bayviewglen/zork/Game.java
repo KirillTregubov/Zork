@@ -168,14 +168,15 @@ class Game {
 						String[] entityString;
 						entityString = roomEntities.split("/ ");
 						// Enemy, type
-						String[][] entities = new String[3][entityString.length];
+						String[][] entities = new String[4][entityString.length];
 						String[] entitiesStrings;
-
+						
 						for (int i=0;i<entityString.length;i++) {
 							entitiesStrings = entityString[i].split(" <");
 							entities[0][i] = entitiesStrings[0];
 							entities[1][i] = entitiesStrings[1].substring(0, entitiesStrings[1].length()-1);
 							entities[2][i] = entitiesStrings[2].substring(0,entitiesStrings[2].length()-1);
+							entities[3][i] = entitiesStrings[3].substring(0,entitiesStrings[3].length()-1);
 						}
 						room.setEntities(entities);
 					}
@@ -299,9 +300,9 @@ class Game {
 				System.out.println("");
 				Command command = parser.getCommand();
 				try {
-					if (command.getCommand().equals("go") && command.getContextWord().equals("down")) {
+					System.out.print(""); // needed to stop code from breaking
+					if (command.getCommand().equals("go") && command.getContextWord().equals("south")) {
 						if (player.getRoomHasEnemies()) {
-							System.out.print(""); // needed because it breaks?
 							Utils.formattedPrint(false, "You did not kill the enemy you challenged. They got bored waiting for you and left.\n");
 							player.getRoomResetEntities();
 						}
@@ -387,6 +388,23 @@ class Game {
 			}
 			if (finished) return true;
 			else if (!completingTrial) return false;
+		} // Trial Four
+		else if (currentTrial.toString().equals("Trial Four")) {
+			int i = 1;
+			while (completingTrial && !finished) {
+				System.out.println("");
+				Command command = parser.getCommand();
+
+				finished = processCommand(command);
+
+				if (player.getRoomID().equals("3-7")) {
+					currentTrial = trialDriver.trialThree(i);
+					completingTrial = false;
+					return false;
+				}
+			}
+			if (finished) return true;
+			else if (!completingTrial) return false;
 		}
 		return false; // insurance in case everything breaks
 	}
@@ -439,9 +457,15 @@ class Game {
 						System.out.println("You must complete Trial One first!");
 						completingTrial = false;
 					}
-					/*} else if (command.getFirstNumber() == 4) {
-
-				} else if (command.getFirstNumber() == 5) {
+				} else if (command.getFirstNumber() == 4) {
+					if (trialDriver.isFirstTrialComplete()) {
+						currentTrial = trialDriver.trialFour(0);
+						completingTrial = true;
+					} else {
+						System.out.println("You must complete Trial One first!");
+						completingTrial = false;
+					}
+				/*} else if (command.getFirstNumber() == 5) {
 
 				} else if (command.getFirstNumber() == 6) {
 
@@ -484,7 +508,9 @@ class Game {
 			if (contextWord == null) {
 				System.out.println("You cannot battle that!");
 			} else {
-				if (player.getRoomHasRepeatedEnemies(contextWord)) {
+				if (contextWord.equals("NPC"))
+					System.out.println("You cannot battle an NPC! They wouldn't want to hurt you.");
+				else if (player.getRoomHasRepeatedEnemies(contextWord)) {
 					System.out.println("There are multiple enemies in this room with that name! Please be more specific!");
 				} else if (player.getRoomHasEnemies() && player.getRoomFindEnemy(contextWord).getType().equals(Entity.TYPES[Entity.BOSS_INDEX])) {
 					System.out.println("You must defeat all enemies before challenging the boss!");
@@ -499,6 +525,17 @@ class Game {
 						currentTrial = null;
 						completingTrial = false;
 					} else if (!completingTrial || battleResult == 0) System.out.println("\n" + player.getRoomDescription());
+				}
+			}
+		} // talk
+		else if (commandName.equalsIgnoreCase("talk")) {
+			if (contextWord == null) {
+				System.out.println("You cannot talk to that!");
+			} else {
+				if (contextWord.equalsIgnoreCase("ENEMY"))
+					Utils.formattedPrint(false, "You cannot peacefully talk with an enemy! Engage in battle with them instead!");
+				else {
+					Utils.formattedPrint(false, player.getRoomFindNPC(contextWord).name + ": " + player.getRoomFindNPC(contextWord).getDialogue());
 				}
 			}
 		} // eat

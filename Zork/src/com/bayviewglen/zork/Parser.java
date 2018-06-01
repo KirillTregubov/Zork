@@ -162,6 +162,11 @@ class Parser {
 						String enemy = findEnemy(inputArr);
 						if (enemy != null) return new Command(command, commandType, enemy);
 						else return new Command(command, commandType, null);
+					} // Enemy
+					else if (commandType.equals("enemy")) {
+						String enemy = findNPC(inputArr);
+						if (enemy != null) return new Command(command, commandType, enemy);
+						else return new Command(command, commandType, null);
 					}
 				}
 			}
@@ -431,13 +436,33 @@ class Parser {
 	}
 
 	public String findEnemy(String inputArr[]) {
-		if (player.getRoomHasEnemies() || player.getRoomHasBosses()) {
+		if (player.getRoomHasEnemies() || player.getRoomHasBosses() || player.getRoomHasNPCs()) {
 			for (String inputWord : inputArr) {
 				for (Entity enemy : player.getRoomEnemies()) {
 					if (Utils.containsIgnoreCase(enemy.toString(), inputWord)) return inputWord;
 				}
 				for (Entity boss: player.getRoomBosses()) {
 					if (Utils.containsIgnoreCase(boss.toString(), inputWord)) return inputWord;
+				}
+				for (Entity npc: player.getRoomNPCs()) {
+					if (Utils.containsIgnoreCase(npc.toString(), inputWord)) return "NPC";
+				}
+			}
+		}
+		return null;
+	}
+	
+	public String findNPC(String inputArr[]) {
+		if (player.getRoomHasEnemies() || player.getRoomHasBosses() || player.getRoomHasNPCs()) {
+			for (String inputWord : inputArr) {
+				for (Entity npc: player.getRoomNPCs()) {
+					if (Utils.containsIgnoreCase(npc.toString(), inputWord)) return inputWord;
+				}
+				for (Entity enemy : player.getRoomEnemies()) {
+					if (Utils.containsIgnoreCase(enemy.toString(), inputWord)) return "ENEMY";
+				}
+				for (Entity boss: player.getRoomBosses()) {
+					if (Utils.containsIgnoreCase(boss.toString(), inputWord)) return "ENEMY";
 				}
 			}
 		}

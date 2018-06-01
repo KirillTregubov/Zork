@@ -15,12 +15,18 @@ public class Entity {
 	public final static int PLAYER_INDEX = 0;
 	public final static int ENEMY_INDEX = 1;
 	public final static int BOSS_INDEX = 2;
-	public final static int NPC_INDEX = 2;
+	public final static int NPC_INDEX = 3;
 	public Stats stats;
+	private String dialogue;
 
 
 	public Entity(String name) {
 		this.name = name;
+	}
+	
+	public Entity(String name, int type) {
+		this.name = name;
+		this.type = TYPES[type];
 	}
 
 	public Entity(String name, int type, String stats) {
@@ -28,9 +34,19 @@ public class Entity {
 		this.type = TYPES[type];
 		this.stats = new Stats(Stats.ENTITY_INDEX, type, stats);
 	}
+	
+	public Entity(String name, int type, String stats, String dialogue) {
+		this.name = name;
+		this.type = TYPES[type];
+		this.dialogue = dialogue;
+	}
 
 	public String getType() {
 		return type;
+	}
+	
+	public String getDialogue() {
+		return dialogue;
 	}
 
 	// Getters and Setters

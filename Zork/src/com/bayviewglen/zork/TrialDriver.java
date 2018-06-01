@@ -100,23 +100,20 @@ public class TrialDriver {
 	public Trial trialOne(int sectionCounter) {
 		if (sectionCounter == 0) {
 			player.setCurrentRoom(player.masterRoomMap.get("1"));
-			System.out.println(player.getRoomDescription());
+			System.out.println(player.getRoomTravelDescription());
 
 			Utils.formattedPrint(true, "Narrator: You enter what looks like a hotel lobby. The building looks very medieval yet has a very artificial look to it. The lobby is"
 					+ " covered in red and gold paint with a single hotel staff member working at the concierge. There are elevators or any other exits besides"
 					+ " the way you came in. You approach the concierge and he begins to speak. As you approach him you see a single red door with a golden door"
-					+ " handle with a large roman numeral 1. The concierge begins to speak:");
-			Utils.formattedPrint(true, "George: Welcome to Trial 1, the first of 8 trials! My name is George, your guide through your trial adventure! There is only one"
-					+ " direction you can go and that’s forward through the door behind me, however, you can also choose to go back to the main room using the abandon command."
-					+ " Remember, you can't leave a trial once you begin fighting the boss. The only way you get out of that is in a coffin or if you win! Good Luck!");
-			return new Trial(5, "Trial One", "You must battle the Squire before continuing!"); // change int
+					+ " handle with a large roman numeral 1. You should talk to George before continuing!");
+			return new Trial(5, "Trial One", ""); // change int
 		} else if (sectionCounter == 1) {
 			Utils.formattedPrint(true, "Narrator: You enter a circular room completely different from the first one. You are in what looks like a dungeon which is built"
 					+ " entirely out of gray bricks. The wall is lined with torches that burn through the darkness. In the center of the room is a knight in shining"
 					+ " silver armor holding a large attack sword. He raises his sword posing to fight.");
 			return new Trial(5, "Trial One", "You must battle the Squire before continuing!"); // change int
 		} else if (sectionCounter == 2) {
-			System.out.println("\nNarrator: You can now proceed up to the next room."
+			System.out.println("\nNarrator: You can now proceed north towards the next room."
 					+ "\n\nYou hear an unsheathing sword through the door.");
 			return new Trial(5, "Trial One", "");
 		} else if (sectionCounter == 3) {
@@ -153,15 +150,12 @@ public class TrialDriver {
 	public Trial trialTwo(int sectionCounter) {
 		if (sectionCounter == 0) {
 			player.setCurrentRoom(player.masterRoomMap.get("2"));
-			System.out.println(player.getRoomDescription());
+			System.out.println(player.getRoomTravelDescription());
 
 			Utils.formattedPrint(true, "Narrator: You enter a spherical room surrounded by darkness. As you walk into the room you feel your feet lift off the ground."
 					+ " The room has no gravity. On the other side of the room you notice George, the hotel concierge sitting on an office chair next to a desk, floating"
 					+ " around the room. There is a small door on the other side of the room. You make your way to George by pushing off the wall behind you. George"
-					+ " notices you and motions for you to come to him.");
-			Utils.formattedPrint(true, "George: Hey there! Welcome to the second trial! I'm hoping you aren't challenging this trial before doing the first one. That"
-					+ " wouldn't be very smart. Anyways if you still want to continue, just head on through. Oh, and... You might want to take the heal potions over there."
-					+ " They might help. Good luck!");
+					+ " notices you and motions for you to come to him. Oh... and don't forget to talk to George!");
 
 			// Return Trial
 			return new Trial(3, "Trial Two", "");  // change int
@@ -189,14 +183,10 @@ public class TrialDriver {
 	public Trial trialThree(int sectionCounter) {
 		if (sectionCounter == 0) {
 			player.setCurrentRoom(player.masterRoomMap.get("3"));
-			System.out.println(player.getRoomDescription());
+			System.out.println(player.getRoomTravelDescription());
 
 			Utils.formattedPrint(true, "Narrator: As you pass through the trial door you feel a cold breeze brush past you. You pass through the door and you see a long"
 					+ " dark tunnel ahead of you. It is pitch dark and you cannot see the other end. To your left stands George. He stands up to speak to you. ");
-			Utils.formattedPrint(true, "George: Greetings! I hope you are doing well with your trials. In this trial you must make it to the other end of the tunnel"
-					+ " without being dismembered by the other contestants who have lost their minds in the tunnel. If you make it to the other end, you will be awarded"
-					+ " with another trial key! Good luck!");
-
 			// Return Trial
 			return new Trial(2, "Trial Three", "The lunatic is blocking your path! Try battling him.");  // change int
 		} else if (sectionCounter == 1) {
@@ -210,7 +200,29 @@ public class TrialDriver {
 
 		return null;
 	}
+	
+	public Trial trialFour(int sectionCounter) {
+		if (sectionCounter == 0) {
+			player.setCurrentRoom(player.masterRoomMap.get("4"));
+			System.out.println(player.getRoomDescription());
 
+			Utils.formattedPrint(true, "Narrator: You walk into an orange room. There is nothing in the room, and it is entirely orange. A robot is standing in the center of the room -"
+					+ " it speaks in a monotone voice, which strangely resembles the voice of George. The robot has a touch screen panel on its body. You should talk to it.");
+
+			// Return Trial
+			return new Trial(2, "Trial Four", "");  // change int
+		} else if (sectionCounter == 1) {
+			Utils.formattedPrint(true, "Narrator: You have reached the end of the tunnel and rid the tunnel of lunatics. Congratulations! You are being teleported back to the"
+					+ " contest hall. On your trial keychain the trial 3 key appears.");
+			player.setDefaultRoom();
+			System.out.println("\n" + player.getRoomTravelDescription());
+			trialThreeComplete = true;
+			return null;
+		}
+
+		return null;
+	}
+	
 	public Trial challengeGate(int sectionCounter, int difficulty) {
 		if (sectionCounter == 0) {
 			Utils.formattedPrint(false, "Welcome to the Challenge Gate! Please select a difficulty: easy, medium, or hard.");

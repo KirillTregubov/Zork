@@ -316,6 +316,10 @@ public class Player extends Entity {
 	public boolean getRoomHasItem(String itemName) {
 		return currentRoom.hasItem(Item.getItem(itemName));
 	}
+	
+	public ArrayList<Entity> getRoomNPCs() {
+		return currentRoom.getRoomNPCs();
+	}
 
 	public ArrayList<Entity> getRoomEnemies() {
 		return currentRoom.getRoomEnemies();
@@ -323,6 +327,10 @@ public class Player extends Entity {
 
 	public ArrayList<Entity> getRoomBosses() {
 		return currentRoom.getRoomBosses();
+	}
+	
+	public boolean getRoomHasNPCs() {
+		return currentRoom.hasNPCs();
 	}
 
 	public boolean getRoomHasEnemies() {
@@ -340,6 +348,11 @@ public class Player extends Entity {
 	public Entity getRoomFindEnemy(String enemyName) {
 		return currentRoom.findEnemy(this, enemyName);
 	}
+	
+	public Entity getRoomFindNPC(String npcName) {
+		return currentRoom.findNPC(this, npcName);
+	}
+
 
 	public int getRoomStartBattle(String enemyName) {
 		return currentRoom.startCustomBattle(this, enemyName);

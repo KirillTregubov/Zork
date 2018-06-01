@@ -44,8 +44,8 @@ public class Stats {
 	// Default Variables
 	public final static String[] STAT_NAMES = {"Level", "Experience Points", "Attribute Points", "Current HP", "Maximum HP", "Attack", "Defense",
 			"Speed", "Accuracy", "Critical Hit Chance", "Heal Points", "Damage Reduction", "Life Steal", "Damage Reflection"};
-	private final static int DEFAULT_STAT_VALUE = 10;
-	private final static int NULL_STAT_VALUE = 10;
+	//private final static int DEFAULT_STAT_VALUE = 10;
+	//private final static int NULL_STAT_VALUE = 10;
 	public final static int STATS_AMOUNT = STAT_NAMES.length;
 	// Default Indexes of Stats
 	public final static int LVL_INDEX = 0;
