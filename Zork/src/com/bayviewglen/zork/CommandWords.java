@@ -18,7 +18,7 @@ class CommandWords {
 	// A constant array that holds all valid commands, their types, and their descriptions
 	private static final String validCommands[][] = {
 			{"help", "assist aid", "default", "Prints the help message. Usage: \"help\""},
-			{"list", "", "default", "Lists things. Usage: \"list commands\""}, // add an example if list gains more uses
+			{"list", "", "default", "Lists things, such as available commands. Usage: \"list commands\""}, // add an example if list gains more uses
 
 			{"go", "walk move advance", "place", "Allows you to go places. Usage: \"go west\", \"go down\""},
 			{"look", "glance inspect examine explore", "inventory item place enemy", "Allows you to look at things. Usage: \"look at inventory\", \"look at red apple\""},
@@ -36,21 +36,30 @@ class CommandWords {
 			{"mute", "silence deafen", "default", "Mutes the game's sound. Usage: \"mute game\""},
 			{"unmute", "resume", "default", "Unmutes the game's sound. Usage: \"unmute game\""},
 			{"save", "record store", "default", "Saves the current state of your playthrough. Usage: \"save\""},
-			{"quit", "", "default", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}, {"stop", "default", "Stops playing the game. Usage: \"stop game\", \"stop playing\""}
+			{"quit", "stop terminate", "default", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}
 	};
 
 	private static final String validBattleCommands[][] = {
-			{"run", "flee escape stop", "run", ""},
+			{"help", "assist aid", "help", "IGNORE"},
+			{"run", "flee escape", "run", ""},
 			{"attack", "hit swing slash stab strike bludgeon", "attack", ""},
 			{"consume", "use ingest", "item", ""},
-			{"help", "assist aid", "help", "IGNORE"},
+			{"quit", "stop terminate", "quit", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}
 	};
 
 	private static final String validShopCommands[][] = {
+			{"help", "assist aid", "help", "IGNORE"},
 			{"buy", "purchase", "buy", "Please use the full item names when buying! Usage: \"buy medium heal potion\""},
 			{"check", "look inspect price cost", "check price", "Please use the full item names when checking their price! Usage: \"check medium heal potion\", \"check my money\""},
 			{"go", "walk move advance", "place", "Allows you to go places. Usage: \"go west\", \"go down\""},
+			{"quit", "stop terminate", "quit", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}
+	};
+
+	private static final String validRiddleCommands[][] = {
 			{"help", "assist aid", "help", "IGNORE"},
+			{"answer", "reply ", "answer", ""},
+			{"abandon", "stop surrender leave", "default", ""},
+			{"quit", "stop terminate", "quit", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}
 	};
 
 	/**
@@ -94,6 +103,17 @@ class CommandWords {
 	}
 
 	/**
+	 * Return all riddle command names as an array
+	 **/
+	public String[] getValidRiddleCommands() {
+		String returnCommands[] = new String[validRiddleCommands.length];
+		for (int i = 0; i < validRiddleCommands.length; i++) {
+			returnCommands[i] = validRiddleCommands[i][0];
+		}
+		return returnCommands;
+	}
+
+	/**
 	 * Return the type of a given command (using the name of it)
 	 **/
 	public String[] getCommandAlternatives(String commandName) {
@@ -116,12 +136,23 @@ class CommandWords {
 	}
 
 	/**
-	 * Return the type of a given battle command (using the name of it)
+	 * Return the type of a given shop command (using the name of it)
 	 **/
 	public String[] getShopCommandAlternatives(String shopCommandName) { // change this
 		for (int i = 0; i < validShopCommands.length; i++) {
 			if (validShopCommands[i][0] == shopCommandName)
 				return validShopCommands[i][1].split(" ");
+		}
+		return null;
+	}
+
+	/**
+	 * Return the type of a given riddle command (using the name of it)
+	 **/
+	public String[] getRiddleCommandAlternatives(String riddleCommandName) { // change this
+		for (int i = 0; i < validRiddleCommands.length; i++) {
+			if (validRiddleCommands[i][0] == riddleCommandName)
+				return validRiddleCommands[i][1].split(" ");
 		}
 		return null;
 	}
@@ -149,12 +180,23 @@ class CommandWords {
 	}
 
 	/**
-	 * Return the type of a given battle command (using the name of it)
+	 * Return the type of a given shop command (using the name of it)
 	 **/
 	public String getShopCommandType(String shopCommandName) {
 		for (int i = 0; i < validShopCommands.length; i++) {
 			if (validShopCommands[i][0] == shopCommandName)
 				return validShopCommands[i][2];
+		}
+		return null;
+	}
+
+	/**
+	 * Return the type of a given riddle command (using the name of it)
+	 **/
+	public String getRiddleCommandType(String riddleCommandName) {
+		for (int i = 0; i < validRiddleCommands.length; i++) {
+			if (validRiddleCommands[i][0] == riddleCommandName)
+				return validRiddleCommands[i][2];
 		}
 		return null;
 	}
@@ -196,6 +238,16 @@ class CommandWords {
 		String returnString = "";
 		for(int i = 0; i < validShopCommands.length; i++)
 			if (validShopCommands[i][3] != "IGNORE") returnString = returnString + validShopCommands[i][0] + " - " + validShopCommands[i][3] + "\n";
+		return returnString;
+	}
+
+	/*
+	 * Returns a string of all available battle commands and their description
+	 */
+	public String listRiddleCommands() {
+		String returnString = "";
+		for(int i = 0; i < validRiddleCommands.length; i++)
+			if (validRiddleCommands[i][3] != "IGNORE") returnString = returnString + validRiddleCommands[i][0] + " - " + validRiddleCommands[i][3] + "\n";
 		return returnString;
 	}
 }

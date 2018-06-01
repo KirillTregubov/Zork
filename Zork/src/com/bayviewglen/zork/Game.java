@@ -170,7 +170,7 @@ class Game {
 						// Enemy, type
 						String[][] entities = new String[4][entityString.length];
 						String[] entitiesStrings;
-						
+
 						for (int i=0;i<entityString.length;i++) {
 							entitiesStrings = entityString[i].split(" <");
 							entities[0][i] = entitiesStrings[0];
@@ -276,6 +276,8 @@ class Game {
 				String contextWord = command.getContextWord();
 				if (commandType == null)
 					System.out.println("You cannot do that...");
+				else if (commandType.equals("quit"))
+					return true;
 				else if (commandType.equals("buy"))
 					shop.purchaseItem(contextWord);
 				else if (commandType.equals("check"))
@@ -294,7 +296,7 @@ class Game {
 		} // Challenge Gate
 		else if (currentTrial.toString().equals("Challenge Gate")) {
 			int i = 1;
-			currentTrial = trialDriver.challengeGate(i, currentTrial.getDifficulty());
+			currentTrial = trialDriver.challengeGate(i, currentTrial.getNumber());
 			System.out.println("\n" + player.getRoomDescription());
 			while (!finished && player.getRoomID().equals("13")) {
 				System.out.println("");
@@ -375,10 +377,7 @@ class Game {
 		else if (currentTrial.toString().equals("Trial Three")) {
 			int i = 1;
 			while (completingTrial && !finished) {
-				System.out.println("");
-				Command command = parser.getCommand();
-
-				finished = processCommand(command);
+				finished = executeCommand();
 
 				if (player.getRoomID().equals("3-7")) {
 					currentTrial = trialDriver.trialThree(i);
@@ -391,287 +390,303 @@ class Game {
 		} // Trial Four
 		else if (currentTrial.toString().equals("Trial Four")) {
 			int i = 1;
-			while (completingTrial && !finished) {
-				System.out.println("");
-				Command command = parser.getCommand();
-
-				finished = processCommand(command);
-
-				if (player.getRoomID().equals("3-7")) {
-					currentTrial = trialDriver.trialThree(i);
+			while (completingTrial && !finished && player.getRoomID().equals("4")) finished = executeCommand();
+			if (finished) return true;
+			else if (!completingTrial) return false;
+			else {
+				currentTrial = trialDriver.trialFour(i);
+				while (completingTrial && !finished) {
+					int j = 0;
+					System.out.println("");
+					Command command = parser.getRiddleCommand(j);
+					String commandType = command.getCommandType();
+					String contextWord = command.getContextWord();
+					System.out.println(commandType + " " + contextWord);
+					
+					if (commandType == null)
+						System.out.println("You cannot do that...");
+					else if (commandType.equals("quit"))
+						return true;
+					else if (commandType.equals("help")) {
+						System.out.println("Here are the commands you can use while completing Trial Four:");
+						System.out.print(parser.listRiddleCommands());
+					}
+				}
+				if (finished) return true;
+				else if (!completingTrial) return false;
+				else { 
+					currentTrial = trialDriver.trialTwo(++i);
 					completingTrial = false;
 					return false;
 				}
 			}
-			if (finished) return true;
-			else if (!completingTrial) return false;
 		}
-		return false; // insurance in case everything breaks
+		return false; // if all else breaks
 	}
 
-	/*
-	 * Work in Progress
-	 */
-	private boolean processCommand(Command command) {
-		if(command.isUnknown()) {
-			System.out.println("You cannot do that...");
-			return false;
-		}
-
-		String commandName = command.getCommand();
-		String commandType = command.getCommandType();
-		String contextWord = command.getContextWord();
-		Integer numbers[] = command.getNumbers();
-		//System.out.println(commandName + "\n" + commandType + "\n" + contextWord);
-
-		// help
-		if (commandName.equalsIgnoreCase("help")) printHelp();
-		// list
-		else if (commandName.equalsIgnoreCase("list")) printCommands(); // might need to add contextWord
-		// go
-		else if (commandName.equalsIgnoreCase("go")) { 
-			goRoom(command, commandName);
-		} // start
-		else if (commandType.equalsIgnoreCase("trial")) {
-			if (completingTrial) {
-				System.out.println("You cannot start a trial while completing one.");
+		/*
+		 * Work in Progress
+		 */
+		private boolean processCommand(Command command) {
+			if(command.isUnknown()) {
+				System.out.println("You cannot do that...");
 				return false;
 			}
-			try {
-				if (command.getFirstNumber() == 1) {
-					currentTrial = trialDriver.trialOne(0);
-					completingTrial = true;
-				} else if (command.getFirstNumber() == 2) {
-					if (trialDriver.isFirstTrialComplete()) {
-						currentTrial = trialDriver.trialTwo(0);
+
+			String commandName = command.getCommand();
+			String commandType = command.getCommandType();
+			String contextWord = command.getContextWord();
+			Integer numbers[] = command.getNumbers();
+			//System.out.println(commandName + "\n" + commandType + "\n" + contextWord);
+
+			// help
+			if (commandName.equalsIgnoreCase("help")) printHelp();
+			// list
+			else if (commandName.equalsIgnoreCase("list")) printCommands(); // might need to add contextWord
+			// go
+			else if (commandName.equalsIgnoreCase("go")) { 
+				goRoom(command, commandName);
+			} // start
+			else if (commandType.equalsIgnoreCase("trial")) {
+				if (completingTrial) {
+					System.out.println("You cannot start a trial while completing one.");
+					return false;
+				}
+				try {
+					if (command.getFirstNumber() == 1) {
+						currentTrial = trialDriver.trialOne(0);
 						completingTrial = true;
-					} else {
-						System.out.println("You must complete Trial One first!");
-						completingTrial = false;
-					}
-				} else if (command.getFirstNumber() == 3) {
-					if (trialDriver.isFirstTrialComplete()) {
-						currentTrial = trialDriver.trialThree(0);
-						completingTrial = true;
-					} else {
-						System.out.println("You must complete Trial One first!");
-						completingTrial = false;
-					}
-				} else if (command.getFirstNumber() == 4) {
-					if (trialDriver.isFirstTrialComplete()) {
-						currentTrial = trialDriver.trialFour(0);
-						completingTrial = true;
-					} else {
-						System.out.println("You must complete Trial One first!");
-						completingTrial = false;
-					}
-				/*} else if (command.getFirstNumber() == 5) {
+					} else if (command.getFirstNumber() == 2) {
+						if (trialDriver.isFirstTrialComplete()) {
+							currentTrial = trialDriver.trialTwo(0);
+							completingTrial = true;
+						} else {
+							System.out.println("You must complete Trial One first!");
+							completingTrial = false;
+						}
+					} else if (command.getFirstNumber() == 3) {
+						if (trialDriver.isFirstTrialComplete()) {
+							currentTrial = trialDriver.trialThree(0);
+							completingTrial = true;
+						} else {
+							System.out.println("You must complete Trial One first!");
+							completingTrial = false;
+						}
+					} else if (command.getFirstNumber() == 4) {
+						if (trialDriver.isFirstTrialComplete()) {
+							currentTrial = trialDriver.trialFour(0);
+							completingTrial = true;
+						} else {
+							System.out.println("You must complete Trial One first!");
+							completingTrial = false;
+						}
+						/*} else if (command.getFirstNumber() == 5) {
 
 				} else if (command.getFirstNumber() == 6) {
 
 				} else if (command.getFirstNumber() == 7) {
 
-					 */
-				} else {
+						 */
+					} else {
+						System.out.println("Unable to start that trial! Please try again.");
+						return false;
+					}
+				} catch (Exception e) {
 					System.out.println("Unable to start that trial! Please try again.");
 					return false;
 				}
-			} catch (Exception e) {
-				System.out.println("Unable to start that trial! Please try again.");
-				return false;
-			}
-		} // abandon
-		else if (commandName.equalsIgnoreCase("abandon")) {
-			if (!completingTrial) {
-				System.out.println("There is nothing to abandon!");
-				return false;
-			}
-			if (currentTrial.toString().equals("tutorial")) {
-				System.out.println("You cannot abandon the tutorial!");
-				return false;
-			}
-			System.out.println("Are you sure you want to abandon your current trial?");
-			if (Parser.getYesNoAnswer()) {
-				System.out.println("You have abandoned " + currentTrial.toString() + ".");
-				currentTrial = null;
-				completingTrial = false;
+			} // abandon
+			else if (commandName.equalsIgnoreCase("abandon")) {
+				if (!completingTrial) {
+					System.out.println("There is nothing to abandon!");
+					return false;
+				}
+				if (currentTrial.toString().equals("tutorial")) {
+					System.out.println("You cannot abandon the tutorial!");
+					return false;
+				}
+				System.out.println("Are you sure you want to abandon your current trial?");
+				if (Parser.getYesNoAnswer()) {
+					System.out.println("You have abandoned " + currentTrial.toString() + ".");
+					currentTrial = null;
+					completingTrial = false;
 
-				player.setDefaultRoom();
-				System.out.println("\n" + player.getRoomTravelDescription());
-			} return false;
-		} // heal
-		else if (commandName.equalsIgnoreCase("heal")) {
-			if (player.getRoomID().equals("12")) new HealingCenter(player);
-			else System.out.println("You are not in the Healing Center, therefore you cannot be healed!");
-		} // battle
-		else if (commandType.equalsIgnoreCase("battle")) { // || commandName.equalsIgnoreCase("fight") || commandName.equalsIgnoreCase("challenge") || commandName.equalsIgnoreCase("attack")
-			if (contextWord == null) {
-				System.out.println("You cannot battle that!");
-			} else {
-				if (contextWord.equals("NPC"))
-					System.out.println("You cannot battle an NPC! They wouldn't want to hurt you.");
-				else if (player.getRoomHasRepeatedEnemies(contextWord)) {
-					System.out.println("There are multiple enemies in this room with that name! Please be more specific!");
-				} else if (player.getRoomHasEnemies() && player.getRoomFindEnemy(contextWord).getType().equals(Entity.TYPES[Entity.BOSS_INDEX])) {
-					System.out.println("You must defeat all enemies before challenging the boss!");
-				}
-				else {
-					int battleResult = player.getRoomStartBattle(contextWord);
-					if (battleResult == 2) {
-						player.setDefaultRoom();
-						System.out.println("Respawning...");
-						System.out.println("\n"+player.getRoomDescription());
-						player.stats.setCurrentHP(player.stats.getMaximumHP());
-						currentTrial = null;
-						completingTrial = false;
-					} else if (!completingTrial || battleResult == 0) System.out.println("\n" + player.getRoomDescription());
-				}
-			}
-		} // talk
-		else if (commandName.equalsIgnoreCase("talk")) {
-			if (contextWord == null) {
-				System.out.println("You cannot talk to that!");
-			} else {
-				if (contextWord.equalsIgnoreCase("ENEMY"))
-					Utils.formattedPrint(false, "You cannot peacefully talk with an enemy! Engage in battle with them instead!");
-				else {
-					Utils.formattedPrint(false, player.getRoomFindNPC(contextWord).name + ": " + player.getRoomFindNPC(contextWord).getDialogue());
-				}
-			}
-		} // eat
-		else if (commandName.equalsIgnoreCase("consume")) { // add check if it's consumable - add joke
-			if (contextWord != null) {
-				try {
-					try {
-						if (command.getFirstNumber() != null) {
-							System.out.println("You can only consume one thing at a time! How big do you think your mouth is?!");
-							return false;
-						}
-					} catch (Exception e) {
+					player.setDefaultRoom();
+					System.out.println("\n" + player.getRoomTravelDescription());
+				} return false;
+			} // heal
+			else if (commandName.equalsIgnoreCase("heal")) {
+				if (player.getRoomID().equals("12")) new HealingCenter(player);
+				else System.out.println("You are not in the Healing Center, therefore you cannot be healed!");
+			} // battle
+			else if (commandType.equalsIgnoreCase("battle")) { // || commandName.equalsIgnoreCase("fight") || commandName.equalsIgnoreCase("challenge") || commandName.equalsIgnoreCase("attack")
+				if (contextWord == null) {
+					System.out.println("You cannot battle that!");
+				} else {
+					if (contextWord.equals("NPC"))
+						System.out.println("You cannot battle an NPC! They wouldn't want to hurt you.");
+					else if (player.getRoomHasRepeatedEnemies(contextWord)) {
+						System.out.println("There are multiple enemies in this room with that name! Please be more specific!");
+					} else if (player.getRoomHasEnemies() && player.getRoomFindEnemy(contextWord).getType().equals(Entity.TYPES[Entity.BOSS_INDEX])) {
+						System.out.println("You must defeat all enemies before challenging the boss!");
 					}
-					if (player.consumeItem(contextWord)) {
-						System.out.println("You consumed " + Item.getItem(contextWord));
-					} else if (!player.inventory.hasItem(contextWord)) System.out.println("That item is not in your inventory!");
-					else System.out.println("You cannot consume that.");
-				} catch (Exception e) {
-					System.out.println("That's not an item! Even if it was, do you really think you should be consuming something at a time like this?");
-				}
-			} else System.out.println("What would you like to consume?");
-		} // look
-		else if (commandName.equalsIgnoreCase("look")) { // might want to add look around?
-			if (contextWord != null) {
-				if (commandType.contains(" ")) System.out.println("You cannot look at that! Please be more specific.");
-				// Item
-				if (commandType.equals("item")) {
-					if (contextWord.equalsIgnoreCase("equipped")) System.out.println(player.checkEquippedItems());
-					String check = player.itemCanBeLookedAt(contextWord);
-					if (check.equals("roomrepeated")) System.out.println("Please be more specific. There are multiple items with this name!");
-					else if (check.equals("contains")) System.out.println(Item.getItem(contextWord).getDescription() + "\n" + Item.getItem(contextWord).stats);
-					else System.out.println("That item is not in your inventory or in the " + player.getRoomName() + ".");
-				} // Inventory
-				else if (commandType.equals("inventory")) {
-					if (player.inventory.isEmpty()) System.out.println("Your inventory is empty!");
-					else Utils.formattedPrint(false, "Your inventory contains:" + player.inventory);
-				} // Place
-				else if (commandType.equals("place")) {
-					if (contextWord.equals("")) System.out.println(player.getRoomDescription());
 					else {
-						int count = 0;
-						String roomName = null;
-						for (String key : player.masterRoomMap.keySet()) {
-							Room roomTemp = player.masterRoomMap.get(key);
-							if (Utils.containsIgnoreCase(roomTemp.getRoomName(), contextWord)) {
-								roomName = roomTemp.getRoomName();
-								count++;
-							}
-						}
-						if (count == 1) {
-							if (roomName.equals(player.getRoomName()))  // doesn't work well / at all
-								System.out.println(player.getRoomDescription());
-							else System.out.println("In the future, you will be able to get directions to the " + roomName); // implement more
-						}
-						else System.out.println("You cannot look at that! Please be more specific.");
-					}		
-				} // Enemy
-				else if (commandType.equals("enemy")) {
-					Entity enemy = player.getRoomEnemy(contextWord);
-					if (enemy != null) System.out.println(enemy.toString() + "'s stats are: " + "\n" + enemy.stats);
-					else System.out.println("You cannot look at that! Please be more specific.");
-				}
-			} else System.out.print("What would you like to look at?");
-		} // check
-		else if (commandName.equalsIgnoreCase("check")) {
-			if (contextWord.equalsIgnoreCase("equipped")) System.out.println(player.checkEquippedItems());
-			else if (Utils.containsIgnoreCase(contextWord, "money") || Utils.containsIgnoreCase(contextWord, "cash")) System.out.println(player.getMoneyString());
-			else if (Utils.containsIgnoreCase(contextWord, "trial") || Utils.containsIgnoreCase(contextWord, "complete")) System.out.println(trialDriver);
-			else if (Utils.containsIgnoreCase(contextWord, "stat") || Utils.containsIgnoreCase(contextWord, "info")) System.out.println(player.stats);
-			else System.out.println("You cannot check that!");
-		} // equip
-		else if (commandName.equalsIgnoreCase("equip")) {
-			if (Item.isItem(contextWord)) {
-				if (player.inventory.hasItem(contextWord)) {
-					if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.WEAPON_INDEX])) {
-						player.setEquippedWeapon(player.inventory.getItem(contextWord));
-						System.out.println("You successfully equipped " + player.inventory.getItem(contextWord) + "!");
-					} else if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.WEAPON_INDEX])) {
-						player.setEquippedArmor(player.inventory.getItem(contextWord));
-						System.out.println("You successfully equipped " + player.inventory.getItem(contextWord) + "!");
-					} else System.out.println("The given item is not a piece of armor, or a weapon.");
-				} else System.out.println("You can only equip items in your inventory!");
-			} else System.out.println("What would you like to equip?");
-		} // take
-		else if (commandName.equalsIgnoreCase("take") || (commandName.equalsIgnoreCase("pickup") || (commandName.equalsIgnoreCase("grab")))) { // add way to pick up amounts of stackable items
-			if (contextWord != null) {
-				if (player.itemCanBePickedUp(contextWord).equals("roomrepeated"))
-					System.out.println("Please be more specific. There are multiple items with this name!");
-				else if (player.itemCanBePickedUp(contextWord).equals("inventorycontains")) //may be needed in the future
-					System.out.println("This item is already in your inventory!");
-				else if (player.itemCanBePickedUp(contextWord).equals("roomnotcontains"))
-					System.out.println("There is no " + Item.getItem(contextWord) + " in this room!");
-
-				else if (player.itemCanBePickedUp(contextWord).isEmpty()) {
-					if (numbers != null) {
-						if (player.pickUpItem(contextWord, player.getRoomID(), numbers) == null) {
-							player.updateItems(player, player.getRoomID());
-							if (numbers[0] > 1) System.out.println(numbers[0] + " " + Item.getItem(contextWord) + "s were added to your inventory!");
-							else System.out.println(numbers[0] + " " + Item.getItem(contextWord) + " was added to your inventory!");
-						}
-						else if (player.pickUpItem(contextWord, player.getRoomID(), numbers) == "toomuch") System.out.println("TOO MUCH");
-						else System.out.println("Encountered an error while adding the item to your inventory!");
-					} else {
-						if (player.pickUpItem(contextWord, player.getRoomID()) == null) {
-							player.updateItems(player, player.getRoomID());
-							System.out.println("A " + Item.getItem(contextWord) + " was added to your inventory!");
-						}
-						else if (player.pickUpItem(contextWord, player.getRoomID()) == "toomuch") System.out.println("TOO MUCH");
-						else System.out.println("Encountered an error while adding the item to your inventory!");
+						int battleResult = player.getRoomStartBattle(contextWord);
+						if (battleResult == 2) {
+							player.setDefaultRoom();
+							System.out.println("Respawning...");
+							System.out.println("\n"+player.getRoomDescription());
+							player.stats.setCurrentHP(player.stats.getMaximumHP());
+							currentTrial = null;
+							completingTrial = false;
+						} else if (!completingTrial || battleResult == 0) System.out.println("\n" + player.getRoomDescription());
 					}
-				} else System.out.println("You cannot take that! Please be more specific.");
-			} else {
-				System.out.print("You cannot");
-				if (commandName.equalsIgnoreCase("take")) System.out.println("take that.");
-				else System.out.println("pick up that.");
-			}
-		} // mute
-		else if (commandName.equalsIgnoreCase("mute")) {
-			musicMainTheme.pause();
-			System.out.println("Game sound has been muted.");
-		} // unmute
-		else if (commandName.equalsIgnoreCase("unmute")) {
-			musicMainTheme.loop();
-			System.out.println("Game sound has been enabled.");
-		} // save
-		else if (commandName.equalsIgnoreCase("save")) save();
-		// quit
-		else if (commandName.equalsIgnoreCase("quit") || commandName.equalsIgnoreCase("stop")) { // player wants to quit
-			return true;
-		} // wrong command
-		else System.out.println("The command " + commandName + " has been unaccounted for. Kirill, please fix!");
-		return false;
-	}
+				}
+			} // talk
+			else if (commandName.equalsIgnoreCase("talk")) {
+				if (contextWord == null) {
+					System.out.println("You cannot talk to that!");
+				} else {
+					if (contextWord.equalsIgnoreCase("ENEMY"))
+						Utils.formattedPrint(false, "You cannot peacefully talk with an enemy! Engage in battle with them instead!");
+					else {
+						Utils.formattedPrint(false, player.getRoomFindNPC(contextWord).name + ": " + player.getRoomFindNPC(contextWord).getDialogue());
+					}
+				}
+			} // eat
+			else if (commandName.equalsIgnoreCase("consume")) { // add check if it's consumable - add joke
+				if (contextWord != null) {
+					try {
+						try {
+							if (command.getFirstNumber() != null) {
+								System.out.println("You can only consume one thing at a time! How big do you think your mouth is?!");
+								return false;
+							}
+						} catch (Exception e) {
+						}
+						if (player.consumeItem(contextWord)) {
+							System.out.println("You consumed " + Item.getItem(contextWord));
+						} else if (!player.inventory.hasItem(contextWord)) System.out.println("That item is not in your inventory!");
+						else System.out.println("You cannot consume that.");
+					} catch (Exception e) {
+						System.out.println("That's not an item! Even if it was, do you really think you should be consuming something at a time like this?");
+					}
+				} else System.out.println("What would you like to consume?");
+			} // look
+			else if (commandName.equalsIgnoreCase("look")) { // might want to add look around?
+				if (contextWord != null) {
+					if (commandType.contains(" ")) System.out.println("You cannot look at that! Please be more specific.");
+					// Item
+					if (commandType.equals("item")) {
+						if (contextWord.equalsIgnoreCase("equipped")) System.out.println(player.checkEquippedItems());
+						String check = player.itemCanBeLookedAt(contextWord);
+						if (check.equals("roomrepeated")) System.out.println("Please be more specific. There are multiple items with this name!");
+						else if (check.equals("contains")) System.out.println(Item.getItem(contextWord).getDescription() + "\n" + Item.getItem(contextWord).stats);
+						else System.out.println("That item is not in your inventory or in the " + player.getRoomName() + ".");
+					} // Inventory
+					else if (commandType.equals("inventory")) {
+						if (player.inventory.isEmpty()) System.out.println("Your inventory is empty!");
+						else Utils.formattedPrint(false, "Your inventory contains:" + player.inventory);
+					} // Place
+					else if (commandType.equals("place")) {
+						if (contextWord.equals("")) System.out.println(player.getRoomDescription());
+						else {
+							int count = 0;
+							String roomName = null;
+							for (String key : player.masterRoomMap.keySet()) {
+								Room roomTemp = player.masterRoomMap.get(key);
+								if (Utils.containsIgnoreCase(roomTemp.getRoomName(), contextWord)) {
+									roomName = roomTemp.getRoomName();
+									count++;
+								}
+							}
+							if (count == 1) {
+								if (roomName.equals(player.getRoomName()))  // doesn't work well / at all
+									System.out.println(player.getRoomDescription());
+								else System.out.println("In the future, you will be able to get directions to the " + roomName); // implement more
+							}
+							else System.out.println("You cannot look at that! Please be more specific.");
+						}		
+					} // Enemy
+					else if (commandType.equals("enemy")) {
+						Entity enemy = player.getRoomEnemy(contextWord);
+						if (enemy != null) System.out.println(enemy.toString() + "'s stats are: " + "\n" + enemy.stats);
+						else System.out.println("You cannot look at that! Please be more specific.");
+					}
+				} else System.out.print("What would you like to look at?");
+			} // check
+			else if (commandName.equalsIgnoreCase("check")) {
+				if (contextWord.equalsIgnoreCase("equipped")) System.out.println(player.checkEquippedItems());
+				else if (Utils.containsIgnoreCase(contextWord, "money") || Utils.containsIgnoreCase(contextWord, "cash")) System.out.println(player.getMoneyString());
+				else if (Utils.containsIgnoreCase(contextWord, "trial") || Utils.containsIgnoreCase(contextWord, "complete")) System.out.println(trialDriver);
+				else if (Utils.containsIgnoreCase(contextWord, "stat") || Utils.containsIgnoreCase(contextWord, "info")) System.out.println(player.stats);
+				else System.out.println("You cannot check that!");
+			} // equip
+			else if (commandName.equalsIgnoreCase("equip")) {
+				if (Item.isItem(contextWord)) {
+					if (player.inventory.hasItem(contextWord)) {
+						if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.WEAPON_INDEX])) {
+							player.setEquippedWeapon(player.inventory.getItem(contextWord));
+							System.out.println("You successfully equipped " + player.inventory.getItem(contextWord) + "!");
+						} else if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.WEAPON_INDEX])) {
+							player.setEquippedArmor(player.inventory.getItem(contextWord));
+							System.out.println("You successfully equipped " + player.inventory.getItem(contextWord) + "!");
+						} else System.out.println("The given item is not a piece of armor, or a weapon.");
+					} else System.out.println("You can only equip items in your inventory!");
+				} else System.out.println("What would you like to equip?");
+			} // take
+			else if (commandName.equalsIgnoreCase("take") || (commandName.equalsIgnoreCase("pickup") || (commandName.equalsIgnoreCase("grab")))) { // add way to pick up amounts of stackable items
+				if (contextWord != null) {
+					if (player.itemCanBePickedUp(contextWord).equals("roomrepeated"))
+						System.out.println("Please be more specific. There are multiple items with this name!");
+					else if (player.itemCanBePickedUp(contextWord).equals("inventorycontains")) //may be needed in the future
+						System.out.println("This item is already in your inventory!");
+					else if (player.itemCanBePickedUp(contextWord).equals("roomnotcontains"))
+						System.out.println("There is no " + Item.getItem(contextWord) + " in this room!");
 
-	/**
-	 * Processes a given command, assuming a related command was previously entered
+					else if (player.itemCanBePickedUp(contextWord).isEmpty()) {
+						if (numbers != null) {
+							if (player.pickUpItem(contextWord, player.getRoomID(), numbers) == null) {
+								player.updateItems(player, player.getRoomID());
+								if (numbers[0] > 1) System.out.println(numbers[0] + " " + Item.getItem(contextWord) + "s were added to your inventory!");
+								else System.out.println(numbers[0] + " " + Item.getItem(contextWord) + " was added to your inventory!");
+							}
+							else if (player.pickUpItem(contextWord, player.getRoomID(), numbers) == "toomuch") System.out.println("TOO MUCH");
+							else System.out.println("Encountered an error while adding the item to your inventory!");
+						} else {
+							if (player.pickUpItem(contextWord, player.getRoomID()) == null) {
+								player.updateItems(player, player.getRoomID());
+								System.out.println("A " + Item.getItem(contextWord) + " was added to your inventory!");
+							}
+							else if (player.pickUpItem(contextWord, player.getRoomID()) == "toomuch") System.out.println("TOO MUCH");
+							else System.out.println("Encountered an error while adding the item to your inventory!");
+						}
+					} else System.out.println("You cannot take that! Please be more specific.");
+				} else {
+					System.out.print("You cannot");
+					if (commandName.equalsIgnoreCase("take")) System.out.println("take that.");
+					else System.out.println("pick up that.");
+				}
+			} // mute
+			else if (commandName.equalsIgnoreCase("mute")) {
+				musicMainTheme.pause();
+				System.out.println("Game sound has been muted.");
+			} // unmute
+			else if (commandName.equalsIgnoreCase("unmute")) {
+				musicMainTheme.loop();
+				System.out.println("Game sound has been enabled.");
+			} // save
+			else if (commandName.equalsIgnoreCase("save")) save();
+			// quit
+			else if (commandName.equalsIgnoreCase("quit") || commandName.equalsIgnoreCase("stop")) { // player wants to quit
+				return true;
+			} // wrong command
+			else System.out.println("The command " + commandName + " has been unaccounted for. Kirill, please fix!");
+			return false;
+		}
+
+		/**
+		 * Processes a given command, assuming a related command was previously entered
 	@Deprecated
 	private void continueCommand(String originalCommand) { // work in progress??
 		Command command = parser.getSecondaryCommand(player);
@@ -689,28 +704,28 @@ class Game {
 		else System.out.println("You cannot do that...");
 	}*/
 
-	// User Commands
+		// User Commands
 
-	/**
-	 * Print list of commands used
-	 */
-	private void printHelp() {
-		System.out.println("You are lost. You are alone. You wander..."
-				+ "\nTo find out what commands are available, type in \"list commands\"");
-		if (completingTrial) System.out.println("If you are stuck in a trial, you can always use the 'abandon' command.");
-		else System.out.println("You can use the 'start' command anywhere to start completing a trial.");
-	}
+		/**
+		 * Print list of commands used
+		 */
+		private void printHelp() {
+			System.out.println("You are lost. You are alone. You wander..."
+					+ "\nTo find out what commands are available, type in \"list commands\"");
+			if (completingTrial) System.out.println("If you are stuck in a trial, you can always use the 'abandon' command.");
+			else System.out.println("You can use the 'start' command anywhere to start completing a trial.");
+		}
 
-	private void printCommands() {
-		System.out.println("All available commands:");
-		System.out.print(parser.listCommands());
-	}
+		private void printCommands() {
+			System.out.println("All available commands:");
+			System.out.print(parser.listCommands());
+		}
 
-	/** 
-	 * Go to specified room (in the specified direction)
-	 */
-	private void goRoom(Command command, String givenCommand) {
-		/*for (Entry<String, Room> entry : player.masterRoomMap.entrySet()) {
+		/** 
+		 * Go to specified room (in the specified direction)
+		 */
+		private void goRoom(Command command, String givenCommand) {
+			/*for (Entry<String, Room> entry : player.masterRoomMap.entrySet()) {
 			String key = entry.getKey();
 			System.out.println(key);
 			Room value = entry.getValue();
@@ -720,144 +735,144 @@ class Game {
 			}
 		}*/
 
-		if (command.getContextWord() == null) {
-			System.out.print("Please indicate a direction you would like to ");
-			if (givenCommand.equalsIgnoreCase("walk")) System.out.println("walk in.");
-			else System.out.println("go in.");
-			return;
-		}
-		String direction = command.getContextWord();
-
-		if (completingTrial && (player.getRoomHasEnemies() || player.getRoomHasBosses()))
-			System.out.println(currentTrial.getLeaveReason());
-		else {
-			// Try to leave current room.
-			Room nextRoom = player.getNextRoom(direction);
-			if (nextRoom != null) {
-				player.setCurrentRoom(nextRoom);
-				player.updateItems(player, nextRoom.getRoomID());
-				if (nextRoom.toString().equals("Shop")) {
-					currentTrial = trialDriver.shop(0, shop);
-					completingTrial = true;
-				} else if (nextRoom.toString().equals("Challenge Gate")) {
-					currentTrial = trialDriver.challengeGate(0, 0);
-					completingTrial = true;
-				} else {
-					// Trial Three Special Case
-					if (completingTrial && currentTrial.toString().equals("Trial Three") && !player.getRoomID().equals("3"))
-						if (Math.random() <= 0.5) player.getRoomResetEntities();
-
-					System.out.println(player.getRoomTravelDescription());
-				}
-			} else System.out.println("That's not an option... You might be trapped.");
-		}
-	}
-
-	/*
-	 * Save Method
-	 */
-	public void save() { // save money, player stats
-		if (completingTrial) {
-			System.out.println("You cannot save while completing a trial!");
-			return;
-		}
-		try {
-			writer = new BufferedWriter(new FileWriter(FILE_LOCATION + "save.dat", true));
-			writer.write("Name: " + player.name + "; ");	// save room currently in
-			writer.write("Room: " + player.getRoomID() + "; ");	// save room currently in
-			writer.write("Inventory: " + player.inventory.saveInventory() + "; ");	// save inventory	
-			writer.write("Money: " + player.getMoney() + "; ");
-			writer.write("Stats: " + player.stats.save() + "; ");
-			writer.write("Time Saved: " + LocalDateTime.now() + "; ");
-			if(trialDriver.areAnyTrialsComplete()) writer.write(trialDriver.toString());
-			writer.newLine();
-			writer.close();
-			System.out.println("Your game has been successfully saved!");
-		} catch(IOException e) {
-			System.out.println("Error Saving: " + e);
-		}
-	}
-
-	/*
-	 * Boolean that checks if game has been saved
-	 */
-	public boolean gameIsSaved() {
-		try {
-			reader = new BufferedReader(new FileReader(FILE_LOCATION + "save.dat"));
-			return reader.readLine() != null;
-		} catch(IOException e) {
-			return false;
-		}
-	}
-
-	/*
-	 * Returns time the last time the game was saved
-	 */
-	public String timeGameWasSaved() {
-		try {
-			if (gameIsSaved()) {
-				String saveFile = null, line;
-				reader = new BufferedReader(new FileReader(FILE_LOCATION + "save.dat"));
-				while ((line = reader.readLine()) != null) {
-					saveFile = line;
-				}
-
-				return saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6)+13, Utils.ordinalIndexOf(saveFile, ":", 6)+21)
-						+ " on " + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6) + 10, Utils.ordinalIndexOf(saveFile, ":", 6) + 12)
-						+ "/" + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6) + 7, Utils.ordinalIndexOf(saveFile, ":", 6) + 9)
-						+ "/" + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6) + 2, Utils.ordinalIndexOf(saveFile, ":", 6) + 6);
+			if (command.getContextWord() == null) {
+				System.out.print("Please indicate a direction you would like to ");
+				if (givenCommand.equalsIgnoreCase("walk")) System.out.println("walk in.");
+				else System.out.println("go in.");
+				return;
 			}
-		} catch(IOException e) { }
-		return null;
-	}
+			String direction = command.getContextWord();
 
-	/*
-	 * Load Method - loads save file (if it exists)
-	 */
-	public void load() {
-		String saveFile = null, line;
-		try {
-			if (gameIsSaved()) {
-				reader = new BufferedReader(new FileReader(FILE_LOCATION + "save.dat"));
-				while ((line = reader.readLine()) != null) {	// while loop to determine last line in save file
-					saveFile = line; // assigns the latest save to variable saveFile
-				}
-				reader.close();
+			if (completingTrial && (player.getRoomHasEnemies() || player.getRoomHasBosses()))
+				System.out.println(currentTrial.getLeaveReason());
+			else {
+				// Try to leave current room.
+				Room nextRoom = player.getNextRoom(direction);
+				if (nextRoom != null) {
+					player.setCurrentRoom(nextRoom);
+					player.updateItems(player, nextRoom.getRoomID());
+					if (nextRoom.toString().equals("Shop")) {
+						currentTrial = trialDriver.shop(0, shop);
+						completingTrial = true;
+					} else if (nextRoom.toString().equals("Challenge Gate")) {
+						currentTrial = trialDriver.challengeGate(0, 0);
+						completingTrial = true;
+					} else {
+						// Trial Three Special Case
+						if (completingTrial && currentTrial.toString().equals("Trial Three") && !player.getRoomID().equals("3"))
+							if (Math.random() <= 0.5) player.getRoomResetEntities();
 
-				// Find and assign currentRoom to the room in the save file
-				player.setName(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 1) + 2, Utils.ordinalIndexOf(saveFile, ";", 1)));
-				player.setCurrentRoom(player.masterRoomMap.get(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 2) + 2, Utils.ordinalIndexOf(saveFile, ";", 2))));
-
-				// Find and load inventory
-				int x = 0, index = 0;
-				for (int i = 1; x != -1; i++) {
-					index = i;
-					x = Utils.ordinalIndexOf(saveFile, ",", index);
-					if (x == -1)
-						index -= 2;
-				}
-				String[] savedInventory = new String[index];
-				for (int i = 0; i < index; i++) { // assign saved inventory to an array
-					if (i == 0)
-						savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 3)+2, Utils.ordinalIndexOf(saveFile, ",", i));
-					else
-						savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ",", i)+2, Utils.ordinalIndexOf(saveFile, ",", i+1));
-				}
-
-				player.inventory.loadInventory(savedInventory);
-				player.updateItems(player, player.getRoomID());
-
-
-				player.loadMoney(Integer.parseInt(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 4)+2, Utils.ordinalIndexOf(saveFile, ";", 4))));
-				player.stats.loadStats(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 5)+2, Utils.ordinalIndexOf(saveFile, ";", 5)));
-
-				completingTrial = false;
-				if (saveFile.substring(saveFile.lastIndexOf(':')-16, saveFile.lastIndexOf(':')).equals("Completed Trials"))
-					trialDriver.loadTrials(saveFile.substring(saveFile.lastIndexOf(':')+2));
-				// completed trials
+						System.out.println(player.getRoomTravelDescription());
+					}
+				} else System.out.println("That's not an option... You might be trapped.");
 			}
-		} catch(IOException e) {
-			System.out.println("Error Loading Save: " + e);
+		}
+
+		/*
+		 * Save Method
+		 */
+		public void save() { // save money, player stats
+			if (completingTrial) {
+				System.out.println("You cannot save while completing a trial!");
+				return;
+			}
+			try {
+				writer = new BufferedWriter(new FileWriter(FILE_LOCATION + "save.dat", true));
+				writer.write("Name: " + player.name + "; ");	// save room currently in
+				writer.write("Room: " + player.getRoomID() + "; ");	// save room currently in
+				writer.write("Inventory: " + player.inventory.saveInventory() + "; ");	// save inventory	
+				writer.write("Money: " + player.getMoney() + "; ");
+				writer.write("Stats: " + player.stats.save() + "; ");
+				writer.write("Time Saved: " + LocalDateTime.now() + "; ");
+				if(trialDriver.areAnyTrialsComplete()) writer.write(trialDriver.toString());
+				writer.newLine();
+				writer.close();
+				System.out.println("Your game has been successfully saved!");
+			} catch(IOException e) {
+				System.out.println("Error Saving: " + e);
+			}
+		}
+
+		/*
+		 * Boolean that checks if game has been saved
+		 */
+		public boolean gameIsSaved() {
+			try {
+				reader = new BufferedReader(new FileReader(FILE_LOCATION + "save.dat"));
+				return reader.readLine() != null;
+			} catch(IOException e) {
+				return false;
+			}
+		}
+
+		/*
+		 * Returns time the last time the game was saved
+		 */
+		public String timeGameWasSaved() {
+			try {
+				if (gameIsSaved()) {
+					String saveFile = null, line;
+					reader = new BufferedReader(new FileReader(FILE_LOCATION + "save.dat"));
+					while ((line = reader.readLine()) != null) {
+						saveFile = line;
+					}
+
+					return saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6)+13, Utils.ordinalIndexOf(saveFile, ":", 6)+21)
+							+ " on " + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6) + 10, Utils.ordinalIndexOf(saveFile, ":", 6) + 12)
+							+ "/" + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6) + 7, Utils.ordinalIndexOf(saveFile, ":", 6) + 9)
+							+ "/" + saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 6) + 2, Utils.ordinalIndexOf(saveFile, ":", 6) + 6);
+				}
+			} catch(IOException e) { }
+			return null;
+		}
+
+		/*
+		 * Load Method - loads save file (if it exists)
+		 */
+		public void load() {
+			String saveFile = null, line;
+			try {
+				if (gameIsSaved()) {
+					reader = new BufferedReader(new FileReader(FILE_LOCATION + "save.dat"));
+					while ((line = reader.readLine()) != null) {	// while loop to determine last line in save file
+						saveFile = line; // assigns the latest save to variable saveFile
+					}
+					reader.close();
+
+					// Find and assign currentRoom to the room in the save file
+					player.setName(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 1) + 2, Utils.ordinalIndexOf(saveFile, ";", 1)));
+					player.setCurrentRoom(player.masterRoomMap.get(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 2) + 2, Utils.ordinalIndexOf(saveFile, ";", 2))));
+
+					// Find and load inventory
+					int x = 0, index = 0;
+					for (int i = 1; x != -1; i++) {
+						index = i;
+						x = Utils.ordinalIndexOf(saveFile, ",", index);
+						if (x == -1)
+							index -= 2;
+					}
+					String[] savedInventory = new String[index];
+					for (int i = 0; i < index; i++) { // assign saved inventory to an array
+						if (i == 0)
+							savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 3)+2, Utils.ordinalIndexOf(saveFile, ",", i));
+						else
+							savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ",", i)+2, Utils.ordinalIndexOf(saveFile, ",", i+1));
+					}
+
+					player.inventory.loadInventory(savedInventory);
+					player.updateItems(player, player.getRoomID());
+
+
+					player.loadMoney(Integer.parseInt(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 4)+2, Utils.ordinalIndexOf(saveFile, ";", 4))));
+					player.stats.loadStats(saveFile.substring(Utils.ordinalIndexOf(saveFile, ":", 5)+2, Utils.ordinalIndexOf(saveFile, ";", 5)));
+
+					completingTrial = false;
+					if (saveFile.substring(saveFile.lastIndexOf(':')-16, saveFile.lastIndexOf(':')).equals("Completed Trials"))
+						trialDriver.loadTrials(saveFile.substring(saveFile.lastIndexOf(':')+2));
+					// completed trials
+				}
+			} catch(IOException e) {
+				System.out.println("Error Loading Save: " + e);
+			}
 		}
 	}
-}

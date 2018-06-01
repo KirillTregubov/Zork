@@ -223,7 +223,7 @@ class Parser {
 			inputArr = inputLine.split(" ");
 
 			if (commandType != null) {
-				if (commandType.equals("attack") || commandType.equals("run") || commandType.equals("help")) return new Command(command, commandType);
+				if (commandType.equals("attack") || commandType.equals("run") || commandType.equals("help") || commandType.equals("quit")) return new Command(command, commandType);
 				else if (commandType.equals("item")) {
 					String item = findItem(command, inputArr);
 					if (item != null) return new Command(command, commandType, item.toLowerCase());
@@ -293,9 +293,11 @@ class Parser {
 						return new Command (command, "price", inputLine.toLowerCase());
 					}
 
-				} else if (commandType.equals("help")) {
+				} else if (commandType.equals("quit"))
 					return new Command(command, commandType, inputLine.toLowerCase());
-				} else if (commandType.equals("place")) {
+				else if (commandType.equals("help"))
+					return new Command(command, commandType, inputLine.toLowerCase());
+				else if (commandType.equals("place")) {
 					if (command.equals("teleport") || command.equals("tp")) {
 						String room = findRoomToTeleport(inputArr);
 						if (room != null) return new Command(command, commandType, room.toLowerCase());
@@ -324,6 +326,59 @@ class Parser {
 				for (String alternativeCommand : commands.getShopCommandAlternatives(validCommand)) {
 					if (inputString.equalsIgnoreCase(alternativeCommand))
 						return new Command(true, validCommand, commands.getShopCommandType(validCommand), alternativeCommand);
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Command getRiddleCommand(int riddleIndex) {
+		try {
+			// Initialize variables
+			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+			String inputLine = null; // will hold the full input line
+			String command = null; // holds the command
+			String actualCommand = null;
+			String commandType = null; // holds command type
+
+			// Take input
+			System.out.print("> "); // print prompt
+			try {
+				inputLine = reader.readLine();
+			} catch(java.io.IOException e) {
+				System.out.println ("There was an error reading input: " + e.getMessage());
+			}
+
+			// Format Input String
+			String inputArr[] = inputLine.split(" ");
+			Command inputCommand = getRiddleCommandInString(inputArr);
+			command = inputCommand.getCommand();
+			commandType = inputCommand.getCommandType();
+			if (inputCommand.hasActualCommand()) actualCommand = inputCommand.getActualCommand();
+
+			// Update inputLine
+			inputLine = inputLine.replaceAll("\\d","").replaceAll(" +", " ");
+			if (actualCommand == null) inputLine = Utils.removeBeforeSubstring(inputLine, command);
+			else inputLine = Utils.removeBeforeSubstring(inputLine, actualCommand);
+			inputArr = inputLine.split(" ");
+
+			if (commandType != null) {
+				// check answer
+				return new Command(command, commandType, inputLine.toLowerCase());
+			}
+		} catch (Exception e) {}
+		return new Command(null, null);
+	}
+
+	public Command getRiddleCommandInString(String[] inputArr) {
+		// Format Input String
+		for (String inputString : inputArr) {
+			for (String validCommand : commands.getValidRiddleCommands()) {
+				if (inputString.equalsIgnoreCase(validCommand))
+					return new Command(validCommand, commands.getRiddleCommandType(validCommand));
+				for (String alternativeCommand : commands.getRiddleCommandAlternatives(validCommand)) {
+					if (inputString.equalsIgnoreCase(alternativeCommand))
+						return new Command(true, validCommand, commands.getRiddleCommandType(validCommand), alternativeCommand);
 				}
 			}
 		}
@@ -477,16 +532,23 @@ class Parser {
 	}
 
 	/*
-	 * Print out a list of valid command words.
+	 * Print out a list of valid battle command words.
 	 */
 	public String listBattleCommands() {
 		return commands.listBattleCommands();
 	}
 
 	/*
-	 * Print out a list of valid command words.
+	 * Print out a list of valid shop command words.
 	 */
 	public String listShopCommands() {
 		return commands.listShopCommands();
+	}
+	
+	/*
+	 * Print out a list of valid riddle command words.
+	 */
+	public String listRiddleCommands() {
+		return commands.listRiddleCommands();
 	}
 }

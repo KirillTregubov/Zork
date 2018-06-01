@@ -109,6 +109,10 @@ public class Battle {
 		if (commandName == null) {
 			System.out.println("You cannot do that...\n");
 			processUserInput();
+		} else if (commandType.equals("quit")) {
+			// End Game
+			System.out.println("Thank you for playing. Goodbye!");
+			System.exit(0);
 		} else if (commandType.equals("help")) {
 			System.out.println("Here are all the commands you can use in battle:");
 			System.out.println(parser.listBattleCommands());

@@ -153,10 +153,18 @@ Entities:
 ID: 100
 Name: Entrance to Trial 4
 Description: 
+Exits: N=4-1
+Items: 
+Trial:
+Entities: Robo-George <NPC> <> <Answer 3 questions correctly to complete the trial. If you fail, you will be executed... painfully. Best of luck! Please follow me north, into the next room.>
+
+ID: 100 1
+Name: First Room of Trial 4
+Description: 
 Exits: 
 Items: 
 Trial:
-Entities: Robo-George <NPC> <> <Answer 3 questions correctly to complete the trial. If you fail, you will be executed... painfully. Best of luck!>
+Entities: Robo-George <NPC> <> <>
 
 ID: 101
 Name: Trial 5 Start

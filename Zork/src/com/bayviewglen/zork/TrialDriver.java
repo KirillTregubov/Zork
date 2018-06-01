@@ -188,7 +188,7 @@ public class TrialDriver {
 			Utils.formattedPrint(true, "Narrator: As you pass through the trial door you feel a cold breeze brush past you. You pass through the door and you see a long"
 					+ " dark tunnel ahead of you. It is pitch dark and you cannot see the other end. To your left stands George. He stands up to speak to you. ");
 			// Return Trial
-			return new Trial(2, "Trial Three", "The lunatic is blocking your path! Try battling him.");  // change int
+			return new Trial(2, "Trial Three", "A lunatic is blocking your path! Try battling him.");  // change int
 		} else if (sectionCounter == 1) {
 			Utils.formattedPrint(true, "Narrator: You have reached the end of the tunnel and rid the tunnel of lunatics. Congratulations! You are being teleported back to the"
 					+ " contest hall. On your trial keychain the trial 3 key appears.");
@@ -210,8 +210,14 @@ public class TrialDriver {
 					+ " it speaks in a monotone voice, which strangely resembles the voice of George. The robot has a touch screen panel on its body. You should talk to it.");
 
 			// Return Trial
-			return new Trial(2, "Trial Four", "");  // change int
+			return new Trial(3, "Trial Four", "");  // change int
 		} else if (sectionCounter == 1) {
+			System.out.println("Robo-George: Let the questioning begin!"
+					+ "\n\nQuestion number one: There are 30 cows and 28 chickens. How many didn't?"
+					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
+			
+			return new Trial(3, "Trial Four", "");  // change int
+		} else if (sectionCounter == 2) {
 			Utils.formattedPrint(true, "Narrator: You have reached the end of the tunnel and rid the tunnel of lunatics. Congratulations! You are being teleported back to the"
 					+ " contest hall. On your trial keychain the trial 3 key appears.");
 			player.setDefaultRoom();
