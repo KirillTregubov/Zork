@@ -160,6 +160,14 @@ public class Player extends Entity {
 		}
 		else return false;
 	}
+	
+	public Item getEquippedWeapon() {
+		return equippedWeapon;
+	}
+	
+	public Item getEquippedArmor() {
+		return equippedArmor;
+	}
 
 	public String checkEquippedItems() {
 		return "Equipped Weapon: " + equippedWeapon + "\nEquipped Armor: " + equippedArmor;

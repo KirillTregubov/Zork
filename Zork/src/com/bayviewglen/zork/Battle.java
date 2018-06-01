@@ -152,11 +152,14 @@ public class Battle {
 				// Critical Hit (50% more)
 				if (didHit(enemy.stats.getCriticalChance())) {
 					System.out.println("and lands a critical hit, dealing " + (int) (enemy.stats.getAttack() * 1.5) + " damage.");
-					player.stats.setCurrentHP((int) (player.stats.getCurrentHP() - enemy.stats.getAttack() * 1.5));
+					if (enemy.stats.getAttack() * 1.5 - player.getEquippedArmor().stats.getDefense() > 0)
+						player.stats.setCurrentHP((int) (player.stats.getCurrentHP() - (enemy.stats.getAttack() * 1.5 - player.getEquippedArmor().stats.getDefense())));
+					else 
+						player.stats.setCurrentHP((int) (player.stats.getCurrentHP() - 1));
 				} // Normal Attack
-				else if (enemy.stats.getAttack() - player.stats.getDefense() > 1) {
-					System.out.println("and deals " + enemy.stats.getAttack() + " damage.");
-					player.stats.setCurrentHP((int) (player.stats.getCurrentHP() - enemy.stats.getAttack()));
+				else if (enemy.stats.getAttack() - (player.stats.getDefense() + player.getEquippedArmor().stats.getDefense()) > 1) {
+					System.out.println("and deals " + (enemy.stats.getAttack() - player.getEquippedArmor().stats.getDefense()) + " damage.");
+					player.stats.setCurrentHP((int) (player.stats.getCurrentHP() - (enemy.stats.getAttack() - player.getEquippedArmor().stats.getDefense())));
 				} // Base Attack because too much armor / damage
 				else {
 					System.out.println("and deals 1 damage.");
@@ -167,19 +170,19 @@ public class Battle {
 			if (didHit(player.stats.getAccuracy())) {
 				// Critical Hit (50% more)
 				if (didHit(player.stats.getCriticalChance())) {
-					System.out.println("and land a critical hit, dealing " + (int) (player.stats.getAttack() * 1.5) + " damage.");
-					enemy.stats.setCurrentHP((int) (enemy.stats.getCurrentHP() - player.stats.getAttack() * 1.5));
+					System.out.println("and land a critical hit, dealing " + (int) (player.stats.getAttack() + player.getEquippedWeapon().stats.getAttack() * 1.5) + " damage.");
+					enemy.stats.setCurrentHP((int) (enemy.stats.getCurrentHP() - (player.stats.getAttack() + player.getEquippedWeapon().stats.getAttack() * 1.5)));
 					attackCounter++;
 					critHitCounter++;
 				} // Normal Attack
-				else if (player.stats.getAttack() - enemy.stats.getDefense() > 1) {
-					System.out.println("and deal " + player.stats.getAttack() + " damage.");
-					enemy.stats.setCurrentHP((int) (enemy.stats.getCurrentHP() - player.stats.getAttack()));
+				else if ((player.stats.getAttack() + player.getEquippedWeapon().stats.getAttack()) - enemy.stats.getDefense() > 1) {
+					System.out.println("and deal " + (player.stats.getAttack() + player.getEquippedWeapon().stats.getAttack()) + " damage.");
+					enemy.stats.setCurrentHP((int) (enemy.stats.getCurrentHP() - (player.stats.getAttack() + player.getEquippedWeapon().stats.getAttack())));
 					attackCounter++;
 				} // Base Attack because too much armor / damage
 				else {
 					System.out.println("and deal 1 damage.");
-					enemy.stats.setCurrentHP(enemy.stats.getCurrentHP()-1);
+					enemy.stats.setCurrentHP(enemy.stats.getCurrentHP() - 1);
 					attackCounter++;
 				}
 			} else System.out.println("but miss your attack!");
