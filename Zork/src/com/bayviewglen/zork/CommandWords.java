@@ -44,10 +44,7 @@ class CommandWords {
 			{"run", "flee escape", "run", "Allows you to escape the battle you are in. Usage: \"run\""},
 			{"attack", "hit swing slash stab strike bludgeon", "attack", "Allows you to strike the enemy you are fighting. Usage: \"hit\""},
 			{"consume", "use ingest", "item", "Allows you to consume a consumable item. Usage \"consume small heal potion\""},
-<<<<<<< HEAD
 			{"mute", "silence deafen", "mute", "Mutes the game's sound. Usage: \"mute game\""},
-=======
->>>>>>> branch 'master' of https://github.com/KTregubov/Zork
 			{"quit", "stop terminate", "quit", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}
 	};
 
