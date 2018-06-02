@@ -223,7 +223,7 @@ class Parser {
 			inputArr = inputLine.split(" ");
 
 			if (commandType != null) {
-				if (commandType.equals("attack") || commandType.equals("run") || commandType.equals("help") || commandType.equals("quit")) return new Command(command, commandType);
+				if (commandType.equals("attack") || commandType.equals("run") || commandType.equals("help") || commandType.equals("quit") || commandType.equals("mute") || commandType.equals("unmute")) return new Command(command, commandType);
 				else if (commandType.equals("item")) {
 					String item = findItem(command, inputArr);
 					if (item != null) return new Command(command, commandType, item.toLowerCase());
@@ -363,10 +363,30 @@ class Parser {
 			inputArr = inputLine.split(" ");
 
 			if (commandType != null) {
-				System.out.println(commandType);
+				//System.out.println(commandType);
 				if (commandType.equals("answer")) {
 					if (riddleIndex == 1) {
-						if (Utils.containsIgnoreCase("10", inputLine) || Utils.containsIgnoreCase("ten", inputLine))
+						if (Utils.containsCompareBoth("10", inputLine) || Utils.containsCompareBoth("ten", inputLine))
+							return new Command(command, commandType, inputLine.toLowerCase());
+						else
+							return new Command(command, commandType, null);
+					} else if (riddleIndex == 2) {
+						if (Utils.containsCompareBoth(inputLine, "tow"))
+							return new Command(command, commandType, inputLine.toLowerCase());
+						else
+							return new Command(command, commandType, null);
+					} else if (riddleIndex == 3) {
+						if (Utils.containsCompareBoth(inputLine, "riv") || Utils.containsCompareBoth(inputLine, "ver"))
+							return new Command(command, commandType, inputLine.toLowerCase());
+						else
+							return new Command(command, commandType, null);
+					} else if (riddleIndex == 4) {
+						if (Utils.containsCompareBoth(inputLine, "silen") || Utils.containsCompareBoth(inputLine, "quiet"))
+							return new Command(command, commandType, inputLine.toLowerCase());
+						else
+							return new Command(command, commandType, null);
+					} else if (riddleIndex == 5) {
+						if (Utils.containsCompareBoth(inputLine, "0") || Utils.containsCompareBoth(inputLine, "zero"))
 							return new Command(command, commandType, inputLine.toLowerCase());
 						else
 							return new Command(command, commandType, null);

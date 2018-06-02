@@ -471,6 +471,7 @@ public class Player extends Entity {
 			String answer = input.nextLine().toLowerCase();
 			if (answer.equals("yes")||answer.equals("sure")||answer.equals("ok")||answer.equals("fine")||answer.equals("sure thing")||answer.equals("why not")||answer.equals("why not?")||answer.equals("accept")||answer.equals("y"))
 				attributeSpender();
+			System.out.println("");
 		}
 	}	
 

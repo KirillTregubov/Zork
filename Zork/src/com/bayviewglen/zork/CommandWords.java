@@ -45,6 +45,7 @@ class CommandWords {
 			{"attack", "hit swing slash stab strike bludgeon", "attack", "Allows you to strike the enemy you are fighting. Usage: \"hit\""},
 			{"consume", "use ingest", "item", "Allows you to consume a consumable item. Usage \"consume small heal potion\""},
 			{"mute", "silence deafen", "mute", "Mutes the game's sound. Usage: \"mute game\""},
+			{"unmute", "resume", "unmute", "Unmutes the game's sound. Usage: \"unmute game\""},
 			{"quit", "stop terminate", "quit", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}
 	};
 
@@ -60,6 +61,8 @@ class CommandWords {
 			{"help", "assist aid", "help", "IGNORE"},
 			{"answer", "reply", "answer", "Allows you to submit an answer to a question. Usage:\"answer (your answer)\""},
 			{"abandon", "stop surrender leave", "abandon", "Abandon a trial. Usage: \"abandon trial one\", \"abandon trial 2\""},
+			{"mute", "silence deafen", "default", "Mutes the game's sound. Usage: \"mute game\""},
+			{"unmute", "resume", "default", "Unmutes the game's sound. Usage: \"unmute game\""},
 			{"quit", "stop terminate", "quit", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}
 	};
 

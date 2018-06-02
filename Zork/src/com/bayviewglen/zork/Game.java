@@ -130,10 +130,10 @@ class Game {
 					entitiesString.add(line);
 				}
 			}
-			
+
 			for (Room room : player.masterRoomMap.values()) {
 				String roomEntities = entitiesString.get(roomIDs.indexOf(room.getRoomID()));
-				
+
 				if (roomEntities.contains("Entities: ") && roomEntities.split(":")[1].trim().length() > 0) {
 					roomEntities = roomEntities.split(":")[1].trim();
 
@@ -454,27 +454,47 @@ class Game {
 			else if (!completingTrial) return false;
 			else {
 				currentTrial = trialDriver.trialFour(i);
+				int failCounter = 0;
 				while (completingTrial && !finished) {
+					if (failCounter >= 2) {
+						System.out.println("The floor opens beneath you and you fall into a pool of hydrochloric acid. You have died a painful death.\nRespawning...");
+						player.setDefaultRoom();
+						System.out.println("\n" + player.getRoomTravelDescription());
+						currentTrial = null;
+						completingTrial = false;
+					}
+
 					System.out.println("");
 					Command command = parser.getRiddleCommand(i); // change
 					String commandType = command.getCommandType();
 					String contextWord = command.getContextWord();
 
-					System.out.println(commandType + " " + contextWord);
+					//System.out.println(commandType + " " + contextWord);
 
 					if (commandType == null)
 						System.out.println("You cannot do that...");
 					else if (commandType.equals("quit"))
 						return true;
-					else if (commandType.equals("answer")) {
+					else if (commandType.equals("mute")) {
+						isMuted = true;
+						musicMainTheme.pause();
+						System.out.println("Game sound has been muted.");
+					} else if (commandType.equals("unmute")) {
+						isMuted = false;
+						musicMainTheme.loop();
+						System.out.println("Game sound has been enabled.");
+					} else if (commandType.equals("answer")) {
 						if (contextWord == null) {
-							System.out.println("The floor opens beneath you and you fall into a pool of hydrochloric acid. You have died a painful death.\nRespawning...");
-							player.setDefaultRoom();
-							System.out.println("\n" + player.getRoomTravelDescription());
-							currentTrial = null;
-							completingTrial = false;
-						} else {
+							failCounter++;
+							System.out.println("You answered incorrectly!");
 							currentTrial = trialDriver.trialFour(++i);
+							if (i >= 5)
+								System.out.println("exit finally");
+						} else {
+							System.out.println("You answered correctly!");
+							currentTrial = trialDriver.trialFour(++i);
+							if (i >= 5)
+								System.out.println("exit finally");
 						}
 					}
 					else if (commandType.equals("abandon")) {
@@ -946,7 +966,7 @@ class Game {
 					else
 						savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ",", i)+2, Utils.ordinalIndexOf(saveFile, ",", i+1));
 				}
-				
+
 				player.inventory.loadInventory(savedInventory);
 				player.updateItems(player, player.getRoomID());
 

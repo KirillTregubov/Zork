@@ -210,14 +210,38 @@ public class TrialDriver {
 					+ " it speaks in a monotone voice, which strangely resembles the voice of George. The robot has a touch screen panel on its body. You should talk to it.");
 
 			// Return Trial
-			return new Trial(3, "Trial Four", "");  // change int
+			return new Trial(7, "Trial Four", "");  // change int
 		} else if (sectionCounter == 1) {
-			System.out.println("Robo-George: Let the questioning begin!"
-					+ "\n\nQuestion number one: There are 30 cows and 28 chickens. How many didn't?"
+			System.out.println("\nRobo-George: Let the questioning begin!"
+					+ "\nQuestion number one: There are 30 cows and 28 chickens. How many didn't?"
 					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
 			
-			return new Trial(3, "Trial Four", "");  // change int
+			return new Trial(7, "Trial Four", "");  // change int
 		} else if (sectionCounter == 2) {
+			System.out.println("\nRobo-George: Here is another!"
+					+ "\nQuestion number two: What gets wetter the more you dry with it?"
+					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
+			
+			return new Trial(7, "Trial Four", "");  // change int
+		} else if (sectionCounter == 3) {
+			System.out.println("\nRobo-George: Let the questioning begin!"
+					+ "\nQuestion number three: What has a mouth but never talks, a bed that never sleeps and runs but never walks?"
+					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
+			
+			return new Trial(7, "Trial Four", "");  // change int
+		} else if (sectionCounter == 4) {
+			System.out.println("\nRobo-George: Let the questioning begin!"
+					+ "\nQuestion number four: What do you break when you say it?"
+					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
+			
+			return new Trial(7, "Trial Four", "");  // change int
+		} else if (sectionCounter == 5) {
+			System.out.println("\nRobo-George: Let the questioning begin!"
+					+ "\nQuestion number five: How many computer programmers does it take to change a lightbulb?"
+					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
+			
+			return new Trial(7, "Trial Four", "");  // change int
+		} else if (sectionCounter == 6) {
 			Utils.formattedPrint(true, "Narrator: You have reached the end of the tunnel and rid the tunnel of lunatics. Congratulations! You are being teleported back to the"
 					+ " contest hall. On your trial keychain the trial 3 key appears.");
 			player.setDefaultRoom();
