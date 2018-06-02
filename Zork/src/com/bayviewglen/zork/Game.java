@@ -872,7 +872,7 @@ class Game {
 			writer.write("Stats: " + player.stats.save() + "; ");
 			writer.write("isMuted: " + isMuted + "; ");
 			writer.write("Time Saved: " + LocalDateTime.now() + "; ");
-			if(trialDriver.areAnyTrialsComplete()) writer.write(trialDriver.toString());
+			if(trialDriver.areAnyTrialsComplete()) writer.write(trialDriver.toString().replaceAll(",", ""));
 			writer.newLine();
 			writer.close();
 			System.out.println("Your game has been successfully saved!");
