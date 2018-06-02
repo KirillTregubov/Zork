@@ -136,7 +136,10 @@ public class Battle {
 				player.consumeItem(contextWord);
 				consumableUsageCounter++;
 				System.out.println("You have successfully consumed " + Item.getItem(contextWord) + "!");
-			} else System.out.println("There is no " + Item.getItem(contextWord) + " in your inventory...");
+			} else {
+				System.out.println("There is no " + Item.getItem(contextWord) + " in your inventory...\n");
+				processUserInput();
+			}
 		} else { // should be unreachable
 			System.out.println("You cannot do that...\n");
 			processUserInput();
