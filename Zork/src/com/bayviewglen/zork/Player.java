@@ -398,7 +398,7 @@ public class Player extends Entity {
 		this.currentRoom = masterRoomMap.get("0-0");
 	}
 
-	public void expCalculator(int battleResult, ArrayList<Integer> counters, int enemyType) {
+	public void expCalculator(int battleResult, ArrayList<Integer> counters, int enemyType, Drops drops) {
 		int expGained = 0;
 		int moneyGained = 0;
 		int attackCounter = counters.get(0) - counters.get(2);
@@ -429,8 +429,13 @@ public class Player extends Entity {
 
 		stats.setExp(stats.getExp() + expGained);
 		System.out.print("earned $" + moneyGained + ", gained " + expGained + " exp");
+		
 		addMoney(moneyGained);
 		levelUp();
+		
+		if (battleResult == 1) {
+			System.out.println(drops.calculate(this));
+		}
 	}
 
 	public int nextLevelExp() {

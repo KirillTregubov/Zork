@@ -78,7 +78,7 @@ public class Battle {
 		else if (!enemy.isAlive()) {
 			System.out.print("\nYou have defeated " + enemy.toString() + ""
 					+ "\nYou have " + player.stats.getCurrentHP() + " health remaining, ");
-			player.expCalculator(1, getCounters(), Entity.ENEMY_INDEX);
+			player.expCalculator(1, getCounters(), Entity.ENEMY_INDEX, enemy.getDrops());
 			Game.battleMusic.pause();
 			Game.battleMusic.reset();
 			Game.musicMainTheme.reset();
@@ -87,7 +87,7 @@ public class Battle {
 		}
 		else if (!player.isAlive()) {
 			System.out.print("\nYou have been defeated by " + enemy.toString() + ", ");
-			player.expCalculator(2, getCounters(), Entity.ENEMY_INDEX);
+			player.expCalculator(2, getCounters(), Entity.ENEMY_INDEX, enemy.getDrops());
 			enemy.stats.setCurrentHP(enemy.stats.getMaximumHP()); // reset enemy HP
 			player.setDefaultRoom(); // teleport to Contest Hall
 			System.out.println("You have been returned to the " + player.getRoomName() + ".");

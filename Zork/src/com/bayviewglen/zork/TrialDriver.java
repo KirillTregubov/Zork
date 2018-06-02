@@ -331,7 +331,7 @@ public class TrialDriver {
 			
 			player.setDefaultRoom();
 			System.out.println("\n" + player.getRoomTravelDescription());
-			trialFiveComplete = true;
+			trialSevenComplete = true;
 			return null;
 		}
 		return null;

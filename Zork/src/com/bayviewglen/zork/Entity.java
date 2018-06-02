@@ -18,6 +18,7 @@ public class Entity {
 	public final static int NPC_INDEX = 3;
 	public Stats stats;
 	private String dialogue;
+	private Drops drops;
 
 
 	public Entity(String name) {
@@ -35,10 +36,15 @@ public class Entity {
 		this.stats = new Stats(Stats.ENTITY_INDEX, type, stats);
 	}
 	
-	public Entity(String name, int type, String stats, String dialogue) {
+	public Entity(String name, int type, String stats, String extraString) {
 		this.name = name;
 		this.type = TYPES[type];
-		this.dialogue = dialogue;
+		if (type == NPC_INDEX)
+			dialogue = extraString;
+		else {
+			this.stats = new Stats(Stats.ENTITY_INDEX, type, stats);
+			drops = new Drops(extraString);	
+		}
 	}
 
 	public String getType() {
@@ -52,6 +58,10 @@ public class Entity {
 	// Getters and Setters
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public Drops getDrops() {
+		return drops;
 	}
 
 	public boolean isAlive() {

@@ -86,7 +86,7 @@ class Inventory {
 	public void forceAdd(Item item) {
 		inventory.add(item);
 	}
-	
+
 	public void forceAdd(String itemName) {
 		Item item = new Item(Item.getItem(itemName));
 		if (!hasItem(itemName) || !item.isStackable)
@@ -94,6 +94,20 @@ class Inventory {
 		else {
 			getItem(itemName).setAmount(getItem(itemName).getAmount()+1);
 		}
+	}
+
+	public boolean addDrop(String itemName) {
+		Item item = new Item(Item.getItem(itemName));
+
+		if (hasItem(itemName) && !item.isStackable)
+			return false;
+		else if (!hasItem(itemName)) {
+			if (!item.isStackable)
+				inventory.add(item);
+			else
+				getItem(itemName).setAmount(getItem(itemName).getAmount()+1);
+		}
+		return true;
 	}
 
 	public void addToInventory(Item item, String itemName, String roomID) { // work on this

@@ -505,9 +505,9 @@ class Room {
 		if (ent != null && ent[0][0]!=null) { //String _name,int _type,String _stats
 			for (int i=0;i<ent[0].length;i++) {
 				if (ent[1][i].compareTo("Enemy") == 0)
-					getRoomEnemies().add(new Entity(ent[0][i],Entity.ENEMY_INDEX,ent[2][i]));
+					getRoomEnemies().add(new Entity(ent[0][i],Entity.ENEMY_INDEX,ent[2][i],ent[3][i]));
 				else if (ent[1][i].compareTo("Boss") == 0)
-					getRoomBosses().add(new Entity(ent[0][i],Entity.BOSS_INDEX,ent[2][i]));
+					getRoomBosses().add(new Entity(ent[0][i],Entity.BOSS_INDEX,ent[2][i],ent[3][i]));
 				else if (ent[1][i].compareTo("NPC") == 0) {
 					getRoomNPCs().add(new Entity(ent[0][i],Entity.NPC_INDEX,"",ent[3][i]));
 				}

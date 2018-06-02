@@ -407,7 +407,8 @@ class Game {
 			else {
 				currentTrial = trialDriver.trialFour(i);
 				int failCounter = 0;
-				while (completingTrial && !finished) {
+				boolean isComplete = false;
+				while (completingTrial && !finished && !isComplete) {
 					if (failCounter >= 2) {
 						System.out.println("\nThe floor opens beneath you and you fall into a pool of hydrochloric acid. You have died a painful death.\nRespawning...");
 						player.setDefaultRoom();
@@ -440,13 +441,13 @@ class Game {
 							failCounter++;
 							System.out.println("You answered incorrectly!");
 							currentTrial = trialDriver.trialFour(++i);
-							if (i >= 5)
-								System.out.println("exit finally");
+							if (i >= 6)
+								isComplete = true;
 						} else {
 							System.out.println("You answered correctly!");
 							currentTrial = trialDriver.trialFour(++i);
-							if (i >= 5)
-								System.out.println("exit finally");
+							if (i >= 6)
+								isComplete = true;
 						}
 					}
 					else if (commandType.equals("abandon")) {
@@ -778,7 +779,7 @@ class Game {
 					if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.WEAPON_INDEX])) {
 						player.setEquippedWeapon(player.inventory.getItem(contextWord));
 						System.out.println("You successfully equipped " + player.inventory.getItem(contextWord) + "!");
-					} else if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.WEAPON_INDEX])) {
+					} else if (Item.getItem(contextWord).type.equals(Item.TYPES[Item.ARMOR_INDEX])) {
 						player.setEquippedArmor(player.inventory.getItem(contextWord));
 						System.out.println("You successfully equipped " + player.inventory.getItem(contextWord) + "!");
 					} else System.out.println("The given item is not a piece of armor, or a weapon.");
