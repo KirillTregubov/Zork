@@ -38,9 +38,7 @@ public class Battle {
 
 	public int startBattle() {
 		Game.musicMainTheme.pause();
-		if (!Game.isMuted) {
-			Game.battleMusic.loop();
-		}
+		Game.battleMusic.loop();
 		if (enemy.getType().equals(Entity.TYPES[Entity.BOSS_INDEX])) {
 			enemy.stats.setSpeed(999);
 		}
@@ -71,32 +69,31 @@ public class Battle {
 
 		if (didRunAway) {
 			System.out.println("You fled the battle in panic.");
-			Game.battleMusic.EndStop();
-			if (!Game.isMuted) {
-				Game.musicMainTheme.reset();
-				Game.musicMainTheme.loop();	
-			}
+			Game.battleMusic.pause();
+			Game.battleMusic.reset();
+			Game.musicMainTheme.reset();
+			Game.musicMainTheme.loop();
 			return 0; // Retreat integer
 		}
 		else if (!enemy.isAlive()) {
 			System.out.print("\nYou have defeated " + enemy.toString() + ""
 					+ "\nYou have " + player.stats.getCurrentHP() + " health remaining, ");
 			player.expCalculator(1, getCounters(), Entity.ENEMY_INDEX);
-			Game.battleMusic.EndStop();
-			if (!Game.isMuted) {
-				Game.musicMainTheme.reset();
-				Game.musicMainTheme.loop();
-			}
+			Game.battleMusic.pause();
+			Game.battleMusic.reset();
+			Game.musicMainTheme.reset();
+			Game.musicMainTheme.loop();
 			return 1; // Victory integer
 		}
 		else if (!player.isAlive()) {
-			System.out.print("\nYou have been defeated by " + enemy.toString() + ", ");
+			System.out.print("\nYou have been defeated by " + enemy.toString() + ",");
 			player.expCalculator(2, getCounters(), Entity.ENEMY_INDEX);
 			enemy.stats.setCurrentHP(enemy.stats.getMaximumHP()); // reset enemy HP
 			player.setDefaultRoom(); // teleport to Contest Hall
 			System.out.println("You have been returned to the " + player.getRoomName() + ".");
 			// might want to reset trial as well
-			Game.battleMusic.EndStop();
+			Game.battleMusic.pause();
+			Game.musicMainTheme.loop();
 			return 2; // Loss integer
 		}
 		return 0; // Retreat integer (or in case everything breaks and you somehow get here)
@@ -115,14 +112,6 @@ public class Battle {
 		if (commandName == null) {
 			System.out.println("You cannot do that...\n");
 			processUserInput();
-		} else if (commandType.equals("quit")) {
-			// End Game
-			System.out.println("Thank you for playing. Goodbye!");
-			System.exit(0);
-		} else if (commandType.equals("quit")) {
-			// End Game
-			System.out.println("Thank you for playing. Goodbye!");
-			System.exit(0);
 		} else if (commandType.equals("help")) {
 			System.out.println("Here are all the commands you can use in battle:");
 			System.out.println(parser.listBattleCommands());
@@ -136,10 +125,7 @@ public class Battle {
 				player.consumeItem(contextWord);
 				consumableUsageCounter++;
 				System.out.println("You have successfully consumed " + Item.getItem(contextWord) + "!");
-			} else {
-				System.out.println("There is no " + Item.getItem(contextWord) + " in your inventory...\n");
-				processUserInput();
-			}
+			} else System.out.println("There is no " + Item.getItem(contextWord) + " in your inventory...");
 		} else { // should be unreachable
 			System.out.println("You cannot do that...\n");
 			processUserInput();
@@ -155,14 +141,11 @@ public class Battle {
 				// Critical Hit (50% more)
 				if (didHit(enemy.stats.getCriticalChance())) {
 					System.out.println("and lands a critical hit, dealing " + (int) (enemy.stats.getAttack() * 1.5) + " damage.");
-					if (enemy.stats.getAttack() * 1.5 - player.getEquippedArmor().stats.getDefense() > 0)
-						player.stats.setCurrentHP((int) (player.stats.getCurrentHP() - (enemy.stats.getAttack() * 1.5 - player.getEquippedArmor().stats.getDefense())));
-					else 
-						player.stats.setCurrentHP((int) (player.stats.getCurrentHP() - 1));
+					player.stats.setCurrentHP((int) (player.stats.getCurrentHP() - enemy.stats.getAttack() * 1.5));
 				} // Normal Attack
-				else if (enemy.stats.getAttack() - (player.stats.getDefense() + player.getEquippedArmor().stats.getDefense()) > 1) {
-					System.out.println("and deals " + (enemy.stats.getAttack() - player.getEquippedArmor().stats.getDefense()) + " damage.");
-					player.stats.setCurrentHP((int) (player.stats.getCurrentHP() - (enemy.stats.getAttack() - player.getEquippedArmor().stats.getDefense())));
+				else if (enemy.stats.getAttack() - player.stats.getDefense() > 1) {
+					System.out.println("and deals " + enemy.stats.getAttack() + " damage.");
+					player.stats.setCurrentHP((int) (player.stats.getCurrentHP() - enemy.stats.getAttack()));
 				} // Base Attack because too much armor / damage
 				else {
 					System.out.println("and deals 1 damage.");
@@ -173,19 +156,19 @@ public class Battle {
 			if (didHit(player.stats.getAccuracy())) {
 				// Critical Hit (50% more)
 				if (didHit(player.stats.getCriticalChance())) {
-					System.out.println("and land a critical hit, dealing " + (int) (player.stats.getAttack() + player.getEquippedWeapon().stats.getAttack() * 1.5) + " damage.");
-					enemy.stats.setCurrentHP((int) (enemy.stats.getCurrentHP() - (player.stats.getAttack() + player.getEquippedWeapon().stats.getAttack() * 1.5)));
+					System.out.println("and land a critical hit, dealing " + (int) (player.stats.getAttack() * 1.5) + " damage.");
+					enemy.stats.setCurrentHP((int) (enemy.stats.getCurrentHP() - player.stats.getAttack() * 1.5));
 					attackCounter++;
 					critHitCounter++;
 				} // Normal Attack
-				else if ((player.stats.getAttack() + player.getEquippedWeapon().stats.getAttack()) - enemy.stats.getDefense() > 1) {
-					System.out.println("and deal " + (player.stats.getAttack() + player.getEquippedWeapon().stats.getAttack()) + " damage.");
-					enemy.stats.setCurrentHP((int) (enemy.stats.getCurrentHP() - (player.stats.getAttack() + player.getEquippedWeapon().stats.getAttack())));
+				else if (player.stats.getAttack() - enemy.stats.getDefense() > 1) {
+					System.out.println("and deal " + player.stats.getAttack() + " damage.");
+					enemy.stats.setCurrentHP((int) (enemy.stats.getCurrentHP() - player.stats.getAttack()));
 					attackCounter++;
 				} // Base Attack because too much armor / damage
 				else {
 					System.out.println("and deal 1 damage.");
-					enemy.stats.setCurrentHP(enemy.stats.getCurrentHP() - 1);
+					enemy.stats.setCurrentHP(enemy.stats.getCurrentHP()-1);
 					attackCounter++;
 				}
 			} else System.out.println("but miss your attack!");
