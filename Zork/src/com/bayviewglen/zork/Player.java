@@ -69,7 +69,7 @@ public class Player extends Entity {
 			new Item("Enchanted Steel Armor", "Magical steel Armor that deflects damage.", Item.ARMOR_INDEX, "7,0.25", new int[]{ Stats.DMG_REFLECT_INDEX }),
 			new Item("Enchanted Force Field", "A powerful force field that blocks and deflects damage.", Item.ARMOR_INDEX, "10,0.25", new int[]{ Stats.DMG_REFLECT_INDEX }),
 			new Item("Skynight Armor", "An armor suit forged in the heart of the skynight forgery.", Item.ARMOR_INDEX, "12,0.33", new int[]{ Stats.DMG_REFLECT_INDEX }),
-			new Item("Enchanted Steel Armor", "A suit of armor taken from the dark angels.", Item.ARMOR_INDEX, "15,0.33", new int[]{ Stats.DMG_REFLECT_INDEX }),
+			new Item("Dark Angel Armor", "A suit of armor taken from the dark angels.", Item.ARMOR_INDEX, "15,0.33", new int[]{ Stats.DMG_REFLECT_INDEX }),
 			new Item("Enchanted Steel Armor", "A suit crafted from vibranium that has been enchanted with deflection properties.", Item.ARMOR_INDEX, "20,0.33", new int[]{ Stats.DMG_REFLECT_INDEX }),
 
 			//Healing Items / Other Consumables - MSG: ADD ATK+ FOR COMBAT POTION
