@@ -98,14 +98,15 @@ class Inventory {
 
 	public boolean addDrop(String itemName) {
 		Item item = new Item(Item.getItem(itemName));
-
-		if (hasItem(itemName) && !item.isStackable)
-			return false;
-		else if (!hasItem(itemName)) {
+		System.out.println(itemName);
+		if (hasItem(itemName)) {
 			if (!item.isStackable)
-				inventory.add(item);
+				return false;
 			else
 				getItem(itemName).setAmount(getItem(itemName).getAmount()+1);
+		}
+		else if (!hasItem(itemName)) {
+			inventory.add(item);
 		}
 		return true;
 	}
