@@ -466,6 +466,17 @@ class Game {
 						System.out.println("You cannot do that...");
 					else if (commandType.equals("quit"))
 						return true;
+					else if (commandType.equals("answer")) {
+						if (contextWord == null) {
+							System.out.println("The floor opens beneath you and you fall into a pool of hydrochloric acid. You have died a painful death.\nRespawning...");
+							player.setDefaultRoom();
+							System.out.println("\n" + player.getRoomTravelDescription());
+							currentTrial = null;
+							completingTrial = false;
+						} else {
+							currentTrial = trialDriver.trialFour(++i);
+						}
+					}
 					else if (commandType.equals("abandon")) {
 						if (!completingTrial) {
 							System.out.println("There is nothing to abandon!");
@@ -926,7 +937,7 @@ class Game {
 					index = i;
 					x = Utils.ordinalIndexOf(saveFile, ",", index);
 					if (x == -1)
-						index -= 2;
+						index --;
 				}
 				String[] savedInventory = new String[index];
 				for (int i = 0; i < index; i++) { // assign saved inventory to an array
@@ -935,7 +946,7 @@ class Game {
 					else
 						savedInventory[i] = saveFile.substring(Utils.ordinalIndexOf(saveFile, ",", i)+2, Utils.ordinalIndexOf(saveFile, ",", i+1));
 				}
-
+				
 				player.inventory.loadInventory(savedInventory);
 				player.updateItems(player, player.getRoomID());
 

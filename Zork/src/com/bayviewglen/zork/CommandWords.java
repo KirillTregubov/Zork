@@ -58,7 +58,7 @@ class CommandWords {
 
 	private static final String validRiddleCommands[][] = {
 			{"help", "assist aid", "help", "IGNORE"},
-			{"answer", "reply ", "answer", "Allows you to submit an answer to a question. Usage:\"answer (your answer)\""},
+			{"answer", "reply", "answer", "Allows you to submit an answer to a question. Usage:\"answer (your answer)\""},
 			{"abandon", "stop surrender leave", "abandon", "Abandon a trial. Usage: \"abandon trial one\", \"abandon trial 2\""},
 			{"quit", "stop terminate", "quit", "Quits playing the game. Usage: \"quit game\", \"quit playing\""}
 	};

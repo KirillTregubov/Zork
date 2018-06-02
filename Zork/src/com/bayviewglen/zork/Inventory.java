@@ -86,6 +86,15 @@ class Inventory {
 	public void forceAdd(Item item) {
 		inventory.add(item);
 	}
+	
+	public void forceAdd(String itemName) {
+		Item item = new Item(Item.getItem(itemName));
+		if (!hasItem(itemName) || !item.isStackable)
+			inventory.add(item);
+		else {
+			getItem(itemName).setAmount(getItem(itemName).getAmount()+1);
+		}
+	}
 
 	public void addToInventory(Item item, String itemName, String roomID) { // work on this
 		if (hasItem(itemName)) {

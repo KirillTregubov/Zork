@@ -44,7 +44,7 @@ Description:
 Exits: N=0-0
 Items:
 Trial:
-Entities: Samurai King <Boss> <10,10,1,0,1,0.8,0.0> <>
+Entities: Samurai King <Boss> <15,15,2,0,1,0.8,0.0> <>
 
 ID: 10
 Name: Entrance to Trial 2

@@ -69,18 +69,16 @@ public class Shop {
 
 		if (player.getMoney() < shopItemPrices.get(shopItems.indexOf(inputItem)))
 			System.out.println("You do not have enough money to purchase this item.");
-		else if (player.inventory.hasItem(inputItem))
-			System.out.print("You already own this item.");
+		else if (player.inventory.hasItem(inputItem) && !inputItem.isStackable)
+			System.out.println("You already own this item.");
 		else {
 			int cost = shopItemPrices.get(shopItems.indexOf(inputItem));
 			player.subtractMoney(cost);
-			removeItem(itemName);
+			//removeItem(itemName);
 			System.out.println("You successfully bought " + Item.getItem(itemName) + " for $" + cost + ".");
 			System.out.println(player.getMoneyString());
 			
-			if (inputItem.type.equals(Item.TYPES[Item.CONSUMABLE_INDEX])) {
-				// assign to inventory with stack-able possibility
-			} else; // assign to inventory 
+			player.inventory.forceAdd(itemName);
 		}
 	}
 }

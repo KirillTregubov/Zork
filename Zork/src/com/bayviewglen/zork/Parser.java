@@ -331,7 +331,7 @@ class Parser {
 		}
 		return null;
 	}
-	
+
 	public Command getRiddleCommand(int riddleIndex) {
 		try {
 			// Initialize variables
@@ -363,6 +363,15 @@ class Parser {
 			inputArr = inputLine.split(" ");
 
 			if (commandType != null) {
+				System.out.println(commandType);
+				if (commandType.equals("answer")) {
+					if (riddleIndex == 1) {
+						if (Utils.containsIgnoreCase("10", inputLine) || Utils.containsIgnoreCase("ten", inputLine))
+							return new Command(command, commandType, inputLine.toLowerCase());
+						else
+							return new Command(command, commandType, null);
+					}
+				}
 				// check answer
 				return new Command(command, commandType, inputLine.toLowerCase());
 			}
@@ -506,7 +515,7 @@ class Parser {
 		}
 		return null;
 	}
-	
+
 	public String findNPC(String inputArr[]) {
 		if (player.getRoomHasEnemies() || player.getRoomHasBosses() || player.getRoomHasNPCs()) {
 			for (String inputWord : inputArr) {
@@ -544,7 +553,7 @@ class Parser {
 	public String listShopCommands() {
 		return commands.listShopCommands();
 	}
-	
+
 	/*
 	 * Print out a list of valid riddle command words.
 	 */

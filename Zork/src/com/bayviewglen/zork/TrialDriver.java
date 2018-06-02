@@ -135,7 +135,7 @@ public class TrialDriver {
 
 	public Trial shop(int sectionCounter, Shop shop) {
 		if (sectionCounter == 0) {
-			System.out.println("\nWelcome to the shop! We offer the best items at the lowest possible prices!" + shop.displayItems());
+			System.out.println("Welcome to the shop! We offer the best items at the lowest possible prices!" + shop.displayItems());
 			return new Trial(2, "Shop", "");
 		} else if (sectionCounter == 1) {
 			Utils.formattedPrint(false, "Thank you for leaving the shop! Please come again!"); // print before going east?
