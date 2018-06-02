@@ -12,7 +12,7 @@ Description:
 Exits: N=0-0
 Items:
 Trial:
-Entities: Sparring Robot <Enemy> <10,10,1,0,1,0.5,0.0> <>
+Entities: Sparring Robot <Enemy> <10,10,1,0,1,0.6,0.0> <>
 
 ID: 0 0
 Name: Contest Hall
@@ -44,7 +44,7 @@ Description:
 Exits: N=0-0
 Items:
 Trial:
-Entities: Samurai King <Boss> <15,15,2,0,1,0.8,0.0> <>
+Entities: Samurai King <Boss> <15,15,2,0,1,0.9,0.1> <>
 
 ID: 10
 Name: Entrance to Trial 2
@@ -68,7 +68,7 @@ Description:
 Exits: 
 Items: 
 Trial:
-Entities: The Living Shadow <Boss> <20,20,3,1,2,0.8,0.0> <>
+Entities: The Living Shadow <Boss> <20,20,3,1,2,0.9,0.1> <>
 
 ID: 10 11
 Name: West Room of Trial 2
@@ -76,7 +76,7 @@ Description:
 Exits: 
 Items: 
 Trial:
-Entities: Sky-Night Warrior <Boss> <22,22,4,1,2,0.8,0.0> <>
+Entities: Sky-Night Warrior <Boss> <22,22,4,1,2,0.9,0.1> <>
 
 ID: 10 100
 Name: North Room of Trial 2
@@ -84,7 +84,7 @@ Description:
 Exits: 
 Items: 
 Trial:
-Entities: The Pharaoh <Boss> <15,15,3,2,1,0.8,0.0> <>
+Entities: The Pharaoh <Boss> <15,15,3,2,1,0.9,0.1> <>
 
 ID: 11
 Name: Entrance to Trial 3
@@ -100,7 +100,7 @@ Description:
 Exits: N=3-2
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <>
 
 ID: 11 10
 Name: Second Room of Trial 3
@@ -108,7 +108,7 @@ Description:
 Exits: N=3-3
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <>
 
 ID: 11 11
 Name: Third Room of Trial 3
@@ -116,7 +116,7 @@ Description:
 Exits: N=3-4
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <>
 
 ID: 11 100
 Name: Fourth Room of Trial 3
@@ -124,7 +124,7 @@ Description:
 Exits: N=3-5
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <>
 
 ID: 11 101
 Name: Fifth Room of Trial 3
@@ -132,7 +132,7 @@ Description:
 Exits: N=3-6
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <>
 
 ID: 11 110
 Name: Sixth Room of Trial 3
@@ -140,7 +140,7 @@ Description:
 Exits: N=3-7
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.0> <>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <>
 
 ID: 11 111
 Name: Seventh Room of Trial 3
@@ -167,57 +167,81 @@ Trial:
 Entities: Robo-George <NPC> <> <>
 
 ID: 101
-Name: Trial 5 Start
-Description: Welcome to Trial 5. (instructions)
-Exits: S=2
+Name: Room of Trial 5
+Description: 
+Exits: 
+Items: 
+Trial:
+Entities: Eyeless Child <Boss> <40,40,6,4,2,0.9,0.2> <>
+
+ID: 110
+Name: Entrance to Trial 6
+Description: 
+Exits: E=6-1, W=6-2
+Items: 
+Trial:
+Entities: George <NPC> <> <Bud, bud, bud... you got to help me out man! I've been out here for years, YEARS! HELP ME PLEASE! HELP ME!>
+
+ID: 110 1
+Name: First East Room of Trial 6
+Description: 
+Exits: 
 Items: 
 Trial:
 Entities: 
 
-ID: 110
-Name: Trial 6 Start
-Description: Welcome to Trial 6. (instructions)
-Exits: S=2
+ID: 110 10
+Name: First West Room of Trial 6
+Description: 
+Exits: E=6-3, W=6-4
+Items: 
+Trial:
+Entities: 
+
+ID: 110 11
+Name: Second West Room of Trial 6
+Description: 
+Exits: 
+Items: 
+Trial:
+Entities: 
+
+ID: 110 100
+Name: Second East Room of Trial 6
+Description: 
+Exits: 
 Items: 
 Trial:
 Entities: 
 
 ID: 111
-Name: Trial 7 Start
-Description: Welcome to Trial 7. (instructions)
-Exits: S=2
+Name: Room of Trial 7
+Description: 
+Exits: 
 Items: 
 Trial:
-Entities: 
+Entities: Titan King Kronos <Boss> <45,45,10,6,0,0.9,0.3> <>
 
 ID: 1000
-Name: Trial 8 Start
-Description: Welcome to Trial 8. (instructions)
-Exits: S=2
+Name: Gatekeeper Room - Room of Trial 8
+Description: 
+Exits: 
 Items: 
 Trial:
-Entities:
+Entities: Our Lord and Saviour George <Boss> <60,60,15,8,0,0.95,0.4> <>
 
 ID: 1001
-Name: Trial 9 Start
-Description: Welcome to Trial 9. (instructions)
-Exits: S=2
-Items: 
-Trial:
-Entities:
-
-ID: 1010
-Name: Trial 10 Start
-Description: Welcome to Trial 10. (instructions)
-Exits: S=2
+Name: the New World
+Description: It looks... peaceful. And free. The fresh, clean air fills your nostrils. You did it, you tell yourself. You beat George.
+Exits: 
 Items: 
 Trial:
 Entities:
 
 ID: 1011
 Name: Shop
-Description: Welcome to the Shop. (instructions)
-Exits: E=0-0
+Description: 
+Exits: 
 Items: 
 Trial:
 Entities:
@@ -232,7 +256,7 @@ Entities:
 
 ID: 1101
 Name: Challenge Gate
-Description: Welcome to the Challenge Gate. (instructions)
+Description: Welcome to the Challenge Gate!
 Exits: S=0-0
 Items: 
 Trial:

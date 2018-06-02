@@ -40,7 +40,7 @@ public class Battle {
 		Game.musicMainTheme.pause();
 		Game.battleMusic.loop();
 		if (enemy.getType().equals(Entity.TYPES[Entity.BOSS_INDEX])) {
-			enemy.stats.setSpeed(999);
+			enemy.stats.setSpeed(50);
 		}
 		System.out.println("You have engaged in battle with " + enemy.toString() + "!");
 		System.out.println(enemy.toString() + "'s stats are: " + "\n" + enemy.stats);
@@ -86,7 +86,7 @@ public class Battle {
 			return 1; // Victory integer
 		}
 		else if (!player.isAlive()) {
-			System.out.print("\nYou have been defeated by " + enemy.toString() + ",");
+			System.out.print("\nYou have been defeated by " + enemy.toString() + ", ");
 			player.expCalculator(2, getCounters(), Entity.ENEMY_INDEX);
 			enemy.stats.setCurrentHP(enemy.stats.getMaximumHP()); // reset enemy HP
 			player.setDefaultRoom(); // teleport to Contest Hall

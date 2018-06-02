@@ -176,7 +176,6 @@ public class TrialDriver {
 			trialTwoComplete = true;
 			return null;
 		}
-
 		return null;
 	}
 
@@ -197,10 +196,9 @@ public class TrialDriver {
 			trialThreeComplete = true;
 			return null;
 		}
-
 		return null;
 	}
-	
+
 	public Trial trialFour(int sectionCounter) {
 		if (sectionCounter == 0) {
 			player.setCurrentRoom(player.masterRoomMap.get("4"));
@@ -215,44 +213,161 @@ public class TrialDriver {
 			System.out.println("\nRobo-George: Let the questioning begin!"
 					+ "\nQuestion number one: There are 30 cows and 28 chickens. How many didn't?"
 					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
-			
+
 			return new Trial(7, "Trial Four", "");  // change int
 		} else if (sectionCounter == 2) {
 			System.out.println("\nRobo-George: Here is another!"
 					+ "\nQuestion number two: What gets wetter the more you dry with it?"
 					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
-			
+
 			return new Trial(7, "Trial Four", "");  // change int
 		} else if (sectionCounter == 3) {
 			System.out.println("\nRobo-George: Let the questioning begin!"
 					+ "\nQuestion number three: What has a mouth but never talks, a bed that never sleeps and runs but never walks?"
 					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
-			
+
 			return new Trial(7, "Trial Four", "");  // change int
 		} else if (sectionCounter == 4) {
 			System.out.println("\nRobo-George: Let the questioning begin!"
 					+ "\nQuestion number four: What do you break when you say it?"
 					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
-			
+
 			return new Trial(7, "Trial Four", "");  // change int
 		} else if (sectionCounter == 5) {
 			System.out.println("\nRobo-George: Let the questioning begin!"
 					+ "\nQuestion number five: How many computer programmers does it take to change a lightbulb?"
 					+ "\nAnswer using the 'answer' command. You can ask for help at any time by typing in 'help'.");
-			
+
 			return new Trial(7, "Trial Four", "");  // change int
 		} else if (sectionCounter == 6) {
 			Utils.formattedPrint(true, "Narrator: You have reached the end of the tunnel and rid the tunnel of lunatics. Congratulations! You are being teleported back to the"
 					+ " contest hall. On your trial keychain the trial 3 key appears.");
 			player.setDefaultRoom();
 			System.out.println("\n" + player.getRoomTravelDescription());
-			trialThreeComplete = true;
+			trialFourComplete = true;
 			return null;
 		}
+		return null;
+	}
 
+	public Trial trialFive(int sectionCounter) {
+		if (sectionCounter == 0) {
+			player.setCurrentRoom(player.masterRoomMap.get("5"));
+			System.out.println(player.getRoomTravelDescription());
+
+			Utils.formattedPrint(true, "Narrator: You find yourself standing in a child's bedroom. Across from you is a bed covered in a pink blanket."
+					+ " The rest of the room is a cream color and there are dolls scattered across the floor. You hear whispering in the distance. It begins to get"
+					+ " louder. You see a little girl standing in the corner facing the wall!");
+
+			Utils.formattedPrint(true, "Eyeless Child: He-he-he, I got a time out. You think you can run but you can't. You think you can hide, well, I have no eyes,"
+					+ " so you probably can, but I will FIND YOU!!! If you want the super special key my friends gave me, you got to come and get it. TIME TO PLAY!!!");
+
+			// Return Trial
+			return new Trial(2, "Trial Five", "You must defeat the boss before continuing!");  // change int
+		} else if (sectionCounter == 1) {
+			Utils.formattedPrint(true, "Narator: You have successfully defeated the eyeless child and completed the 5th trial! You are teleported back to the Contest"
+					+ " Hall. On your trial keychain the trial 5 key appears.");
+			player.setDefaultRoom();
+			System.out.println("\n" + player.getRoomTravelDescription());
+			trialFiveComplete = true;
+			return null;
+		}
+		return null;
+	}
+
+	public Trial trialSix(int sectionCounter) {
+		if (sectionCounter == 0) {
+			player.setCurrentRoom(player.masterRoomMap.get("6"));
+			System.out.println(player.getRoomTravelDescription());
+
+			Utils.formattedPrint(true, "Narrator: The door leads you outside of the trial complex. Outside is a vast forest that seems to stretch on forever. You see"
+					+ " George sitting on the floor rocking back and forth. He looks up and sees you. He seems to be very upset, especially since his leg seems to be"
+					+ " very hurt. You should consider talking to him...");
+
+			// Return Trial
+			return new Trial(4, "Trial Six", "");  // change int
+		} else if (sectionCounter == 1) {
+			Utils.formattedPrint(true, "George: HAHA! GOTCHA!\nYou have died! Respawning...");
+
+			// Return Trial
+			return new Trial(4, "Trial Six", "");  // change int
+		} else if (sectionCounter == 2) {
+			Utils.formattedPrint(true, "George: NO! PLEASE! PLEASE..! YOU WON'T PASS ALL THE TRIALS IF YOU BETRAY ME LIKE THIS! I WILL END YOU!!!");
+
+			// Return Trial
+			return new Trial(4, "Trial Six", "");  // change int
+		} else if (sectionCounter == 3) {
+			Utils.formattedPrint(true, "Narrator: Well done! You were not tricked by the evil shapeshifter! You are being teleported back to the Contest Hall. On your trial"
+					+ " keychain the trial 6 key appears.");
+
+			player.setDefaultRoom();
+			System.out.println("\n" + player.getRoomTravelDescription());
+			trialSixComplete = true;
+			return null;
+		}
 		return null;
 	}
 	
+	public Trial trialSeven(int sectionCounter) {
+		if (sectionCounter == 0) {
+			player.setCurrentRoom(player.masterRoomMap.get("7"));
+			System.out.println(player.getRoomTravelDescription());
+
+			Utils.formattedPrint(true, "Narrator: As you enter the final trial, you feel a strong heat against your face. It becomes difficult to breath and it seems"
+					+ " like there is ash floating through the sky. The door behind you vanishes as soon as you pass through it. There is no going back. You push"
+					+ " through the wall of ash and fog to come face to face with a creature of destructive proportion. The giant man like creature stares down at"
+					+ " you holding something, someone in his hand.");
+			Utils.formattedPrint(true, "George: HELP! SOMEONE! " + player.name + "?!");
+			Utils.formattedPrint(true, "Narrator: The giant lava creature crushes George in his hand and who melts away in the creature’s hand. You have no choice."
+					+ " You must fight.");
+
+			// Return Trial
+			return new Trial(2, "Trial Seven", "You must defeat the boss before continuing!");  // change int
+		} else if (sectionCounter == 1) {
+			Utils.formattedPrint(true, "Narrator: Kronos falls to his knees, panting loudly.");
+			Utils.formattedPrint(true, "Kronos: You fought well warrior... I wish you... the best of luck...");
+			Utils.formattedPrint(true, "You are being teleported back to the Contest Hall. On your trial keychain, the final trial 7 key appears. You may face the"
+					+ " gatekeeper to determine whether you are truly worthy of becoming a member of the new world. Good luck!");
+			
+			player.setDefaultRoom();
+			System.out.println("\n" + player.getRoomTravelDescription());
+			trialFiveComplete = true;
+			return null;
+		}
+		return null;
+	}
+	
+	public Trial trialEight(int sectionCounter) {
+		if (sectionCounter == 0) {
+			player.setCurrentRoom(player.masterRoomMap.get("8"));
+			System.out.println(player.getRoomTravelDescription());
+
+			Utils.formattedPrint(true, "Narrator: Before you, stands the final obstacle between you and the paradise of the new world. The gate before you that leads"
+					+ " to the final boss is large, golden with 7 small keyholes. You take the 7 trial keys you have obtained, and you fit them into the corresponding"
+					+ " holes. The gate slowly begins to open. As you walk inside you begin to feel like you are in a familiar place. It looks like a hotel lobby, but"
+					+ " it looks different. It looks much more shiny and clean, more like the new world. You see someone standing behind the concierge desk. You cannot"
+					+ " believe your eyes.");
+			Utils.formattedPrint(true, "George: Well, look who it is! " + player.name + "! You finally made it. Here we are again, in this same situation just like when"
+					+ " you first started the contest. I know what you’re thinking, I am going to tell you all about the boss you are about to fight behind the door"
+					+ " behind me, but unfortunately, that’s not the case. I am the gatekeeper! Now you must show me how powerful you have truly become because if you"
+					+ " don’t, you will never make it to the new world." + player.name + ", I wish you good luck. ");
+			Utils.formattedPrint(true, "Narrator: On George’s right hand you notice that he is wielding a gauntlet. The gauntlet seems to have individual stones inputted"
+					+ " on the back of it. George is wielding the most powerful weapon known to man: The Infinity Gauntlet!");
+
+			// Return Trial
+			return new Trial(2, "Trial Eight", "");  // change int
+		} else if (sectionCounter == 1) {
+			Utils.formattedPrint(true, "Narrator: Congratulations warrior, you are worthy of the new world after all. You will now be teleported to the new world to start"
+					+ " your new life. Welcome to the New World!");
+			
+			player.setCurrentRoom(player.masterRoomMap.get("9"));
+			System.out.println("\n" + player.getRoomDescription());
+			trialEightComplete = true;
+			return null;
+		}
+		return null;
+	}
+
 	public Trial challengeGate(int sectionCounter, int difficulty) {
 		if (sectionCounter == 0) {
 			Utils.formattedPrint(false, "Welcome to the Challenge Gate! Please select a difficulty: easy, medium, or hard.");
@@ -396,6 +511,10 @@ public class TrialDriver {
 
 	public boolean areSixTrialsComplete() {
 		return tutorialComplete && trialOneComplete && trialTwoComplete && trialThreeComplete && trialFourComplete && trialFiveComplete && trialSixComplete;
+	}
+	
+	public boolean areBaseTrialsComplete() {
+		return tutorialComplete && trialOneComplete && trialTwoComplete && trialThreeComplete && trialFourComplete && trialFiveComplete && trialSixComplete && trialSevenComplete;
 	}
 
 	public boolean isGameBeaten() { 

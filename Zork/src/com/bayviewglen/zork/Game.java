@@ -98,6 +98,11 @@ class Game {
 
 		// Player is playing game
 		while (!finished) { // check if in trial mode !!!
+			if (trialDriver.isGameBeaten()) {
+				Utils.formattedPrint(true, "Thank you for playing the game! If you would like to restart, you can simply delete all the contents of your save.dat"
+						+ " file located in " + FILE_LOCATION + "save.dat.");
+				System.exit(0);
+			}
 			if (completingTrial) finished = playTrial();
 			else finished = executeCommand();
 		}
@@ -106,59 +111,6 @@ class Game {
 		System.out.println("Thank you for playing. Goodbye!");
 		musicMainTheme.EndStop();
 		battleMusic.EndStop();
-	}
-
-	private void loadEntitiesInRoom() {
-		BufferedReader reader;
-		try {
-			reader = new BufferedReader(new FileReader(FILE_LOCATION + "rooms.dat"));
-			String line;
-			ArrayList<String> roomIDs = new ArrayList<String>();
-			ArrayList<String> entitiesString = new ArrayList<String>();
-
-			while((line = reader.readLine()) != null) {
-				if (Utils.containsIgnoreCase(line, "ID:")) {
-					String[] rawID = line.split(":")[1].split(" ");
-					String roomID = "";
-					for (int i = 1; i < rawID.length; i++) {
-						roomID += Integer.parseInt(rawID[i], 2);
-						if (i < rawID.length-1) roomID += "-";
-					}
-					roomIDs.add(roomID);
-				}
-				if (Utils.containsIgnoreCase(line, "Entities:")) {
-					entitiesString.add(line);
-				}
-			}
-
-			for (Room room : player.masterRoomMap.values()) {
-				String roomEntities = entitiesString.get(roomIDs.indexOf(room.getRoomID()));
-
-				if (roomEntities.contains("Entities: ") && roomEntities.split(":")[1].trim().length() > 0) {
-					roomEntities = roomEntities.split(":")[1].trim();
-
-					String[] entityString;
-					entityString = roomEntities.split("/ ");
-					// Enemy, type
-					String[][] entities = new String[4][entityString.length];
-					String[] entitiesStrings;
-
-					for (int i=0;i<entityString.length;i++) {
-						entitiesStrings = entityString[i].split(" <");
-						entities[0][i] = entitiesStrings[0];
-						entities[1][i] = entitiesStrings[1].substring(0, entitiesStrings[1].length()-1);
-						entities[2][i] = entitiesStrings[2].substring(0,entitiesStrings[2].length()-1);
-						entities[3][i] = entitiesStrings[3].substring(0,entitiesStrings[3].length()-1);
-					}
-					room.resetEntities();
-					room.setEntities(entities);
-				}
-			}
-
-			reader.close();
-		} catch (Exception e) {
-			System.out.println("The rooms.dat file was not found! Please download one from the game's repository and insert it into " + FILE_LOCATION);
-		}
 	}
 
 	private void initRooms() throws Exception {
@@ -457,7 +409,7 @@ class Game {
 				int failCounter = 0;
 				while (completingTrial && !finished) {
 					if (failCounter >= 2) {
-						System.out.println("The floor opens beneath you and you fall into a pool of hydrochloric acid. You have died a painful death.\nRespawning...");
+						System.out.println("\nThe floor opens beneath you and you fall into a pool of hydrochloric acid. You have died a painful death.\nRespawning...");
 						player.setDefaultRoom();
 						System.out.println("\n" + player.getRoomTravelDescription());
 						currentTrial = null;
@@ -525,6 +477,74 @@ class Game {
 					return false;
 				}
 			}
+		} // Trial Five
+		else if (currentTrial.toString().equals("Trial Five")) {
+			int i = 1;
+			while (completingTrial && !finished && player.getRoomHasBosses()) finished = executeCommand();
+			if (finished) return true;
+			else if (!completingTrial) return false;
+			else { 
+				currentTrial = trialDriver.trialFive(i);
+				completingTrial = false;
+				return false;
+			}
+		} // Trial Six
+		else if (currentTrial.toString().equals("Trial Six")) {
+			int i = 2;
+			while (completingTrial && !finished && player.getRoomID().equals("6")) finished = executeCommand();
+			if (finished) return true;
+			else if (!completingTrial) return false;
+			else { 
+				if (player.getRoomID().equals("6-1")) { 
+					currentTrial = trialDriver.trialSix(1);
+					player.setDefaultRoom();
+					System.out.println("\n" + player.getRoomTravelDescription());
+					currentTrial = null;
+					completingTrial = false;
+				}
+				else {
+					currentTrial = trialDriver.trialSix(i);
+					while (completingTrial && !finished && player.getRoomID().equals("6-2")) finished = executeCommand();
+					if (finished) return true;
+					else if (!completingTrial) return false;
+					else { 
+						if (player.getRoomID().equals("6-3")) { 
+							currentTrial = trialDriver.trialSix(1);
+							player.setDefaultRoom();
+							System.out.println("\n" + player.getRoomTravelDescription());
+							currentTrial = null;
+							completingTrial = false;
+						}
+						else {
+							currentTrial = trialDriver.trialSix(++i);
+							completingTrial = false;
+							return false;
+						}
+					}
+				}
+			}
+		} // Trial Seven
+		else if (currentTrial.toString().equals("Trial Seven")) {
+			int i = 1;
+			while (completingTrial && !finished && player.getRoomHasBosses()) finished = executeCommand();
+			if (finished) return true;
+			else if (!completingTrial) return false;
+			else {
+				currentTrial = trialDriver.trialSeven(i);
+				completingTrial = false;
+				return false;
+			}
+		} // Trial Eight
+		else if (currentTrial.toString().equals("Trial Eight")) {
+			int i = 1;
+			while (completingTrial && !finished && player.getRoomHasBosses()) finished = executeCommand();
+			if (finished) return true;
+			else if (!completingTrial) return false;
+			else {
+				currentTrial = trialDriver.trialEight(i);
+				completingTrial = false;
+				return false;
+			}
 		}
 		return false; // if all else breaks
 	}
@@ -585,14 +605,39 @@ class Game {
 						System.out.println("You must complete Trial One first!");
 						completingTrial = false;
 					}
-					/*} else if (command.getFirstNumber() == 5) {
-
+				} else if (command.getFirstNumber() == 5) {
+					if (trialDriver.isFirstTrialComplete()) {
+						currentTrial = trialDriver.trialFive(0);
+						completingTrial = true;
+					} else {
+						System.out.println("You must complete Trial One first!");
+						completingTrial = false;
+					}
 				} else if (command.getFirstNumber() == 6) {
-
+					if (trialDriver.areFiveTrialsComplete()) {
+						currentTrial = trialDriver.trialSix(0);
+						completingTrial = true;
+					} else {
+						System.out.println("You must complete Trials 1 through 5 first!");
+						completingTrial = false;
+					}
 				} else if (command.getFirstNumber() == 7) {
-
-					 */
-				} else {
+					if (trialDriver.areSixTrialsComplete()) {
+						currentTrial = trialDriver.trialSeven(0);
+						completingTrial = true;
+					} else {
+						System.out.println("You must complete Trials 1 through 6 first!");
+						completingTrial = false;
+					}
+				} else if (command.getFirstNumber() == 8) {
+					if (trialDriver.areBaseTrialsComplete()) {
+						currentTrial = trialDriver.trialEight(0);
+						completingTrial = true;
+					} else {
+						System.out.println("You must complete Trials 1 through 7 first!");
+						completingTrial = false;
+					}
+				}else {
 					System.out.println("Unable to start that trial! Please try again.");
 					return false;
 				}
@@ -820,7 +865,7 @@ class Game {
 		System.out.println("You are lost. You are alone. You wander..."
 				+ "\nTo find out what commands are available, type in \"list commands\"");
 		if (completingTrial) System.out.println("If you are stuck in a trial, you can always use the 'abandon' command.");
-		else System.out.println("You can use the 'start' command anywhere to start completing a trial.");
+		else Utils.formattedPrint(false, "You can use the 'start' command anywhere to start completing a trial. Remember, there are 8 trials!");
 	}
 
 	private void printCommands() {
@@ -872,6 +917,59 @@ class Game {
 					System.out.println(player.getRoomTravelDescription());
 				}
 			} else System.out.println("That's not an option... You might be trapped.");
+		}
+	}
+
+	private void loadEntitiesInRoom() {
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(FILE_LOCATION + "rooms.dat"));
+			String line;
+			ArrayList<String> roomIDs = new ArrayList<String>();
+			ArrayList<String> entitiesString = new ArrayList<String>();
+
+			while((line = reader.readLine()) != null) {
+				if (Utils.containsIgnoreCase(line, "ID:")) {
+					String[] rawID = line.split(":")[1].split(" ");
+					String roomID = "";
+					for (int i = 1; i < rawID.length; i++) {
+						roomID += Integer.parseInt(rawID[i], 2);
+						if (i < rawID.length-1) roomID += "-";
+					}
+					roomIDs.add(roomID);
+				}
+				if (Utils.containsIgnoreCase(line, "Entities:")) {
+					entitiesString.add(line);
+				}
+			}
+
+			for (Room room : player.masterRoomMap.values()) {
+				String roomEntities = entitiesString.get(roomIDs.indexOf(room.getRoomID()));
+
+				if (roomEntities.contains("Entities: ") && roomEntities.split(":")[1].trim().length() > 0) {
+					roomEntities = roomEntities.split(":")[1].trim();
+
+					String[] entityString;
+					entityString = roomEntities.split("/ ");
+					// Enemy, type
+					String[][] entities = new String[4][entityString.length];
+					String[] entitiesStrings;
+
+					for (int i=0;i<entityString.length;i++) {
+						entitiesStrings = entityString[i].split(" <");
+						entities[0][i] = entitiesStrings[0];
+						entities[1][i] = entitiesStrings[1].substring(0, entitiesStrings[1].length()-1);
+						entities[2][i] = entitiesStrings[2].substring(0,entitiesStrings[2].length()-1);
+						entities[3][i] = entitiesStrings[3].substring(0,entitiesStrings[3].length()-1);
+					}
+					room.resetEntities();
+					room.setEntities(entities);
+				}
+			}
+
+			reader.close();
+		} catch (Exception e) {
+			System.out.println("The rooms.dat file was not found! Please download one from the game's repository and insert it into " + FILE_LOCATION);
 		}
 	}
 
