@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /** "Game" Class - the main class of the game.
@@ -65,7 +66,7 @@ class Game {
 			player = new Player();
 			shop = new Shop(player);
 			Shop shop = new Shop(player);
-			initRooms(FILE_LOCATION + "rooms.dat");
+			initRooms();
 			musicMainTheme = new Sound(FILE_LOCATION + "music1.wav");
 			trialDriver = new TrialDriver(player);
 
@@ -107,12 +108,65 @@ class Game {
 		battleMusic.EndStop();
 	}
 
-	private void initRooms(String fileName) throws Exception {
+	private void loadEntitiesInRoom() {
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(FILE_LOCATION + "rooms.dat"));
+			String line;
+			ArrayList<String> roomIDs = new ArrayList<String>();
+			ArrayList<String> entitiesString = new ArrayList<String>();
+
+			while((line = reader.readLine()) != null) {
+				if (Utils.containsIgnoreCase(line, "ID:")) {
+					String[] rawID = line.split(":")[1].split(" ");
+					String roomID = "";
+					for (int i = 1; i < rawID.length; i++) {
+						roomID += Integer.parseInt(rawID[i], 2);
+						if (i < rawID.length-1) roomID += "-";
+					}
+					roomIDs.add(roomID);
+				}
+				if (Utils.containsIgnoreCase(line, "Entities:")) {
+					entitiesString.add(line);
+				}
+			}
+			
+			for (Room room : player.masterRoomMap.values()) {
+				String roomEntities = entitiesString.get(roomIDs.indexOf(room.getRoomID()));
+				
+				if (roomEntities.contains("Entities: ") && roomEntities.split(":")[1].trim().length() > 0) {
+					roomEntities = roomEntities.split(":")[1].trim();
+
+					String[] entityString;
+					entityString = roomEntities.split("/ ");
+					// Enemy, type
+					String[][] entities = new String[4][entityString.length];
+					String[] entitiesStrings;
+
+					for (int i=0;i<entityString.length;i++) {
+						entitiesStrings = entityString[i].split(" <");
+						entities[0][i] = entitiesStrings[0];
+						entities[1][i] = entitiesStrings[1].substring(0, entitiesStrings[1].length()-1);
+						entities[2][i] = entitiesStrings[2].substring(0,entitiesStrings[2].length()-1);
+						entities[3][i] = entitiesStrings[3].substring(0,entitiesStrings[3].length()-1);
+					}
+					room.resetEntities();
+					room.setEntities(entities);
+				}
+			}
+
+			reader.close();
+		} catch (Exception e) {
+			System.out.println("The rooms.dat file was not found! Please download one from the game's repository and insert it into " + FILE_LOCATION);
+		}
+	}
+
+	private void initRooms() throws Exception {
 		player.masterRoomMap = new HashMap<String, Room>();
 		BufferedReader reader;
 		try {
 			HashMap<String, HashMap<String, String>> exits = new HashMap<String, HashMap<String, String>>();
-			reader = new BufferedReader(new FileReader(fileName));
+			reader = new BufferedReader(new FileReader(FILE_LOCATION + "rooms.dat"));
 			String line;
 
 			while((line = reader.readLine()) != null) {
@@ -240,7 +294,7 @@ class Game {
 	}
 
 	private boolean playTrial() {
-		// trialDriver currentTrial completingTrial
+		loadEntitiesInRoom();
 		boolean finished = false;
 		// Tutorial
 		if (currentTrial == null) {
@@ -276,7 +330,7 @@ class Game {
 
 				String commandType = command.getCommandType();
 				String contextWord = command.getContextWord();
-				
+
 				if (commandType == null)
 					System.out.println("You cannot do that...");
 				else if (commandType.equals("quit"))
@@ -405,9 +459,9 @@ class Game {
 					Command command = parser.getRiddleCommand(i); // change
 					String commandType = command.getCommandType();
 					String contextWord = command.getContextWord();
-					
+
 					System.out.println(commandType + " " + contextWord);
-					
+
 					if (commandType == null)
 						System.out.println("You cannot do that...");
 					else if (commandType.equals("quit"))
