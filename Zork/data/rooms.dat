@@ -44,7 +44,7 @@ Description:
 Exits: N=0-0
 Items:
 Trial:
-Entities: Samurai King <Boss> <15,15,2,0,1,0.9,0.1> <Copper Katana-1.0; Silver Longsword-0.4; Small Healing Potion-1.0; Steel Dagger-0.2>
+Entities: Samurai King <Boss> <15,15,2,0,1,0.9,0.1> <Copper Katana-1.0; Silver Longsword-0.4; Small Heal Potion-1.0; Steel Dagger-0.2>
 
 ID: 10
 Name: Entrance to Trial 2
@@ -76,7 +76,7 @@ Description:
 Exits: 
 Items: 
 Trial:
-Entities: Sky-Night Warrior <Boss> <22,22,4,1,2,0.9,0.1> <Iron Spear-0.6; Staff of Life Drain-0.3; Golden Bamboo Sword-0.2; Titanium Blast Plate Armor-0.3; Small Heal Potion-0.6>
+Entities: Sky-Night Warrior <Boss> <22,22,4,1,2,0.9,0.1> <Iron Spear-0.6; Staff of Draining-0.3; Golden Bamboo Sword-0.2; Titanium Blast Plate Armor-0.3; Small Heal Potion-0.6>
 
 ID: 10 100
 Name: North Room of Trial 2
@@ -84,7 +84,7 @@ Description:
 Exits: 
 Items: 
 Trial:
-Entities: The Pharaoh <Boss> <15,15,3,2,1,0.9,0.1> <Steel Dagger-0.4; Cobalt Broadsword-0.3; Knight’s Armor-0.7; Iron Spear-0.2; Small Heal Potion-0.6>
+Entities: The Pharaoh <Boss> <15,15,3,2,1,0.9,0.1> <Steel Dagger-0.4; Cobalt Broadsword-0.3; Knight Armor-0.7; Iron Spear-0.2; Small Heal Potion-0.6>
 
 ID: 11
 Name: Entrance to Trial 3
@@ -100,7 +100,7 @@ Description:
 Exits: N=3-2
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gaunlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gauntlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
 
 ID: 11 10
 Name: Second Room of Trial 3
@@ -108,7 +108,7 @@ Description:
 Exits: N=3-3
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gaunlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gauntlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
 
 ID: 11 11
 Name: Third Room of Trial 3
@@ -116,7 +116,7 @@ Description:
 Exits: N=3-4
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gaunlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gauntlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
 
 ID: 11 100
 Name: Fourth Room of Trial 3
@@ -124,7 +124,7 @@ Description:
 Exits: N=3-5
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gaunlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gauntlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
 
 ID: 11 101
 Name: Fifth Room of Trial 3
@@ -132,7 +132,7 @@ Description:
 Exits: N=3-6
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gaunlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gauntlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
 
 ID: 11 110
 Name: Sixth Room of Trial 3
@@ -140,7 +140,7 @@ Description:
 Exits: N=3-7
 Items: 
 Trial:
-Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gaunlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
+Entities: Lunatic <Enemy> <30,30,5,2,2,0.8,0.1> <Gauntlet of Terror-0.4; Donkey Kong Hammer-0.3; Vile Blade-0.2; Electromagnetic Shield Generator-0.3; Medium Health Potion-0.5>
 
 ID: 11 111
 Name: Seventh Room of Trial 3
