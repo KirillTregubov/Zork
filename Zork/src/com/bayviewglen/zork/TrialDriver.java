@@ -391,9 +391,9 @@ public class TrialDriver {
 			//3.	Samurai King (Boss) (15HP/3ATK/2ARM/2SPD) Drops: Copper Katana 100%, Silver Longsword 40%, Small Healing Potion 100%, Steel Dagger 20%
 			if (difficulty == 0) {
 				difficultyString = "easy";
-				Entity easyEnt1 = new Entity("Training Bot",Entity.ENEMY_INDEX,"10,10,1,0,1,0.7,0.0");
-				Entity easyEnt2 = new Entity("Squire",Entity.ENEMY_INDEX,"10,10,1,1,1,0.7,0.0");
-				Entity easyEnt3 = new Entity("Samurai King",Entity.BOSS_INDEX,"15,15,3,2,2,0.7,0.0");
+				Entity easyEnt1 = new Entity("Training Bot",Entity.ENEMY_INDEX,"10,10,1,0,1,0.7,0.0","");
+				Entity easyEnt2 = new Entity("Squire",Entity.ENEMY_INDEX,"10,10,1,1,1,0.7,0.0","");
+				Entity easyEnt3 = new Entity("Samurai King",Entity.BOSS_INDEX,"15,15,3,2,2,0.7,0.0","");
 				int rand = (int) (Math.random()* 3 + 1);
 				if (rand == 1) {
 					player.getRoomAddEntity(easyEnt1);
@@ -413,9 +413,9 @@ public class TrialDriver {
 			//3.	Sky-night Warrior (22HP/4ATK/2ARM/2SPD) Drops: Titanium Scythe 40%, Gauntlet of Terror 20%, Donkey Kong Hammer 10%, Vibranium Heavy Armor 30%, Small Heal Potion 60%
 			else if (difficulty == 1) {
 				difficultyString = "medium";
-				Entity mediumEnt1 = new Entity("The Pharaoh",Entity.ENEMY_INDEX,"17,17,3,2,1,0.7,0.0");
-				Entity mediumEnt2 = new Entity("The Living Shadow",Entity.ENEMY_INDEX,"20,20,3,2,2,0.7,0.0");
-				Entity mediumEnt3 = new Entity("Sky-night Warrior",Entity.BOSS_INDEX,"22,22,4,2,2,0.7,0.0");
+				Entity mediumEnt1 = new Entity("The Pharaoh",Entity.ENEMY_INDEX,"17,17,3,2,1,0.7,0.0","");
+				Entity mediumEnt2 = new Entity("The Living Shadow",Entity.ENEMY_INDEX,"20,20,3,2,2,0.7,0.0","");
+				Entity mediumEnt3 = new Entity("Sky-night Warrior",Entity.BOSS_INDEX,"22,22,4,2,2,0.7,0.0","");
 				int rand = (int) (Math.random() * 3 + 1);
 				if (rand == 1) {
 					player.getRoomAddEntity(mediumEnt1);
@@ -435,10 +435,10 @@ public class TrialDriver {
 			//6.	Our Lord and Savior George (60HP/15ATK/10ARM/5SPD)
 			else if (difficulty == 2) {
 				difficultyString = "hard";
-				Entity hardEnt1 = new Entity("Lunatic",Entity.ENEMY_INDEX,"35,35,5,2,2,0.9,0.0");
-				Entity hardEnt2 = new Entity("The Pharaoh",Entity.BOSS_INDEX,"40,40,6,4,2,0.9,0.0");
-				Entity hardEnt3 = new Entity("The Living Shadow",Entity.BOSS_INDEX,"45,45,10,5,3,0.9,0.0");
-				Entity hardEnt4 = new Entity("Derp",Entity.BOSS_INDEX,"60,60,15,10,5,0.9,0.0");
+				Entity hardEnt1 = new Entity("Lunatic",Entity.ENEMY_INDEX,"35,35,5,2,2,0.9,0.0","");
+				Entity hardEnt2 = new Entity("The Pharaoh",Entity.BOSS_INDEX,"40,40,6,4,2,0.9,0.0","");
+				Entity hardEnt3 = new Entity("The Living Shadow",Entity.BOSS_INDEX,"45,45,10,5,3,0.9,0.0","");
+				Entity hardEnt4 = new Entity("Derp",Entity.BOSS_INDEX,"60,60,15,10,5,0.9,0.0","");
 				int rand = (int) (Math.random()* 4 + 1);
 				if (rand == 1) {
 					player.getRoomAddEntity(hardEnt1);

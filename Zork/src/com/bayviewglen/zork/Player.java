@@ -434,6 +434,7 @@ public class Player extends Entity {
 		levelUp();
 		
 		if (battleResult == 1) {
+			drops.calculate(this);
 			System.out.println(drops.calculate(this));
 		}
 	}
